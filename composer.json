@@ -1,0 +1,44 @@
+{
+    "name": "shapecode/cron-bundle",
+    "description": "This bundle provides scheduled execution of Symfony2 commands",
+    "keywords": [
+        "cron",
+        "cronjob",
+        "command",
+        "execute",
+        "interval",
+        "schedule",
+        "shapecode",
+        "symfony",
+        "time",
+        "bundle"
+    ],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "homepage": "http://shapecode.de",
+    "support": {
+        "email": "support@nikita-loges.de",
+        "issues": "https://bitbucket.org/shapecode/symfony-cron-bundle/issues",
+        "source": "https://bitbucket.org/shapecode/symfony-cron-bundle/downloads",
+        "wiki": "https://bitbucket.org/shapecode/symfony-cron-bundle/wiki/Home"
+    },
+    "authors": [
+        {
+            "name": "Nikita Loges",
+            "homepage": "http://nikita-loges.de",
+            "email": "develop@nikita-loges.de"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.9",
+        "symfony/framework-bundle": "~2.6",
+        "symfony/twig-bundle": "~2.6",
+        "symfony/yaml": "~2.6",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle": "~1.2"
+    },
+    "autoload": {
+        "psr-0": {"Shapecode\\Bundle\\CronBundle": ""}
+    },
+    "target-dir": "Shapecode/Bundle/CronBundle"
+}
