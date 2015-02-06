@@ -42,8 +42,6 @@ class CronScanCommand extends BaseCommand
         $keepDeleted = $input->getOption("keep-deleted");
         $defaultDisabled = $input->getOption("default-disabled");
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
-
         // Enumerate the known jobs
         $jobRepo = $this->getCronJobRepository();
         $knownJobs = $jobRepo->getKnownJobs()->toArray();
@@ -73,7 +71,7 @@ class CronScanCommand extends BaseCommand
                             $output->writeln('Updated interval for ' . $job . ' to ' . $annotation->value);
                         }
                     } else {
-                        $this->newJobFound($em, $output, $command, $annotation, $defaultDisabled);
+                        $this->newJobFound($output, $command, $annotation, $defaultDisabled);
                     }
                 }
             }
@@ -84,22 +82,21 @@ class CronScanCommand extends BaseCommand
             foreach ($knownJobs as $deletedJob) {
                 $output->writeln('Deleting job: ' . $deletedJob);
                 $jobToDelete = $jobRepo->findOneByCommand($deletedJob);
-                $em->remove($jobToDelete);
+                $this->getEntityManager()->remove($jobToDelete);
             }
         }
 
-        $em->flush();
+        $this->getEntityManager()->flush();
         $output->writeln("Finished scanning for cron jobs");
     }
 
     /**
-     * @param EntityManager $em
      * @param OutputInterface $output
      * @param Command $command
      * @param CronJobAnnotation $annotation
      * @param bool $defaultDisabled
      */
-    protected function newJobFound(EntityManager $em, OutputInterface $output, Command $command, CronJobAnnotation $annotation, $defaultDisabled = false)
+    protected function newJobFound(OutputInterface $output, Command $command, CronJobAnnotation $annotation, $defaultDisabled = false)
     {
         $newJob = new CronJob();
         $newJob->setCommand($command->getName());
@@ -109,6 +106,6 @@ class CronScanCommand extends BaseCommand
         $newJob->calculateNextRun();
 
         $output->writeln("Added the job " . $newJob->getCommand() . " with period " . $newJob->getPeriod());
-        $em->persist($newJob);
+        $this->getEntityManager()->persist($newJob);
     }
 }
