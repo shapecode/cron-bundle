@@ -5,6 +5,7 @@ namespace Shapecode\Bundle\CronBundle\Repository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
+use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobInterface;
 
 /**
  * Class CronJobRepository
@@ -30,8 +31,7 @@ class CronJobRepository extends EntityRepository
     {
         $data = new ArrayCollection($this->findAll());
 
-        return $data->map(function ($o) {
-            /** @var CronJob $o */
+        return $data->map(function (CronJobInterface $o) {
             return $o->getCommand();
         });
     }

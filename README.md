@@ -33,7 +33,6 @@ composer update
 Add the bundle to your application kernel:
 ```
 #!php
-<?php
 // application/ApplicationKernel.php
 public function registerBundles()
 {
@@ -88,7 +87,7 @@ Creating your own tasks with CronBundle couldn't be easier - all you have to do 
 
 ```
 #!php
-<?php
+
 namespace App\DemoBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
