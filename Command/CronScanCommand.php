@@ -2,7 +2,6 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
-use Doctrine\ORM\EntityManager;
 use Shapecode\Bundle\CronBundle\Annotation\CronJob as CronJobAnnotation;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Symfony\Component\Console\Command\Command;
