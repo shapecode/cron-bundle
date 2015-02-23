@@ -27,12 +27,14 @@ Add the bundle to your project as a composer dependency:
 Update your composer installation:
 ```
 #!bash
-composer update
+$ composer update
 ```
 
 Add the bundle to your application kernel:
 ```
 #!php
+<?php
+
 // application/ApplicationKernel.php
 public function registerBundles()
 {
@@ -52,21 +54,21 @@ Update your DB schema ...
 ... with Doctrine standard method ...
 ```
 #!bash
-php php app/console doctrine:schema:update --force
+$ php app/console doctrine:schema:update --force
 ```
 
 ... or with Doctrine Migrations
 ```
 #!bash
-php app/console doctrine:migrations:diff
-php app/console doctrine:migrations:migrate
+$ php app/console doctrine:migrations:diff
+$ php app/console doctrine:migrations:migrate
 ```
 
 Start using the bundle:
 ```
 #!bash
-php app/console cron:scan
-php app/console cron:run
+$ php app/console cron:scan
+$ php app/console cron:run
 ```
 
 Running your cron jobs automatically
@@ -87,6 +89,7 @@ Creating your own tasks with CronBundle couldn't be easier - all you have to do 
 
 ```
 #!php
+<?php
 
 namespace App\DemoBundle\Command;
 
@@ -128,5 +131,5 @@ Update instructions
 Do a [composer](https://getcomposer.org/doc/00-intro.md) update.
 
 ```bash
-composer update
+$ composer update
 ```
