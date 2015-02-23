@@ -30,7 +30,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.9",
+        "php": ">=5.3.10",
         "symfony/framework-bundle": "~2.6",
         "symfony/twig-bundle": "~2.6",
         "symfony/yaml": "~2.6",
