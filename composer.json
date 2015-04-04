@@ -30,7 +30,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.10",
+        "php": ">=5.4",
         "symfony/framework-bundle": "~2.6",
         "symfony/dependency-injection": "~2.6",
         "symfony/http-kernel": "~2.6",
