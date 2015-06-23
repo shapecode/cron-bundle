@@ -2,8 +2,8 @@
 
 namespace Shapecode\Bundle\CronBundle\Entity\Plan;
 
+use Doctrine\Common\Collections\Collection;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
-use Symfony\Component\Validator\Constraints\Collection;
 
 /**
  * Class CronJobInterface
