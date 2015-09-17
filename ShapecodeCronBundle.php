@@ -2,7 +2,6 @@
 
 namespace Shapecode\Bundle\CronBundle;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
