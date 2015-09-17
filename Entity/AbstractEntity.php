@@ -5,11 +5,11 @@ namespace Shapecode\Bundle\CronBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class BaseEntity
+ * Class AbstractEntity
  * @package Shapecode\Bundle\CronBundle\Entity
  * @author Nikita Loges
  */
-abstract class BaseEntity
+abstract class AbstractEntity
 {
 
     /**
@@ -30,7 +30,7 @@ abstract class BaseEntity
     protected $updatedAt;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getId()
     {
@@ -38,7 +38,7 @@ abstract class BaseEntity
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setId($id = null)
     {
@@ -46,7 +46,7 @@ abstract class BaseEntity
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
@@ -54,7 +54,7 @@ abstract class BaseEntity
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCreatedAt()
     {
@@ -66,7 +66,7 @@ abstract class BaseEntity
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setUpdatedAt(\DateTime $updatedAt)
     {
@@ -74,7 +74,7 @@ abstract class BaseEntity
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getUpdatedAt()
     {
@@ -86,7 +86,7 @@ abstract class BaseEntity
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @ORM\PrePersist
      * @ORM\PreUpdate
      */

@@ -21,7 +21,9 @@ class CronJobRepository extends EntityRepository
      */
     public function findOneByCommand($command)
     {
-        return $this->findOneBy(array('command' => $command));
+        return $this->findOneBy(array(
+            'command' => $command
+        ));
     }
 
     /**
@@ -44,7 +46,7 @@ class CronJobRepository extends EntityRepository
         $qb = $this->createQueryBuilder('p');
         $expr = $qb->expr();
         $qb->andWhere($expr->lte('p.nextRun', ':time'));
-        $qb->andWhere($expr->lte('p.isEnable', ':enabled'));
+        $qb->andWhere($expr->lte('p.enable', ':enabled'));
 
         $qb->setParameter('time', new \DateTime());
         $qb->setParameter('enabled', true);

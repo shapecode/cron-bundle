@@ -5,45 +5,45 @@ namespace Shapecode\Bundle\CronBundle\Command;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class CronEnableJobCommand
+ * Class CronJobEditCommand
  * @package Shapecode\Bundle\CronBundle\Command
  * @author Nikita Loges
  */
-class CronEnableJobCommand extends BaseCommand
+class CronJobEditCommand extends BaseCommand
 {
 
     /**
      * @var string
      */
-    protected $commandName = 'shapecode:cron:enable-jon';
+    protected $commandName = 'shapecode:cron:edit';
 
     /**
      * @var string
      */
-    protected $commandDescription = 'Disables a cron job';
+    protected $commandDescription = 'Changes the status of a cron job';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
         parent::configure();
 
         $this->addArgument("job", InputArgument::REQUIRED, 'Name of the job to disable');
+        $this->addOption('enable', 'e', InputOption::VALUE_REQUIRED, 'Enable or disable this cron (y or n)');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $jobName = $input->getArgument('job');
-
         $jobRepo = $this->getCronJobRepository();
-
         $job = $jobRepo->findOneByCommand($jobName);
 
         if (!$job) {
@@ -52,10 +52,16 @@ class CronEnableJobCommand extends BaseCommand
             return CronJobResult::FAILED;
         }
 
-        $job->setIsEnable(true);
+        $enable = ($input->getOption('enable') == 'y') ? true : false;
+
+        $job->setEnable($enable);
         $this->getEntityManager()->persist($job);
         $this->getEntityManager()->flush();
 
-        $output->writeln("Enabled cron job by the name of " . $jobName);
+        if ($enable) {
+            $output->writeln('cron enabled');
+        } else {
+            $output->writeln('cron disabled');
+        }
     }
 }

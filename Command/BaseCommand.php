@@ -27,7 +27,7 @@ abstract class BaseCommand extends ContainerAwareCommand
     protected $commandDescription = '';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -36,7 +36,7 @@ abstract class BaseCommand extends ContainerAwareCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getContainer()
     {

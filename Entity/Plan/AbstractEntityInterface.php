@@ -3,11 +3,11 @@
 namespace Shapecode\Bundle\CronBundle\Entity\Plan;
 
 /**
- * Class BaseEntityInterface
+ * Class AbstractEntityInterface
  * @package Shapecode\Bundle\CronBundle\Entity\Plan
  * @author Nikita Loges
  */
-interface BaseEntityInterface
+interface AbstractEntityInterface
 {
 
     /**

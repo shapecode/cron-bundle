@@ -12,12 +12,5 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ShapecodeCronBundle extends Bundle
 {
-    /**
-     * @{@inheritdoc}
-     */
-    public function boot()
-    {
-        // register doctrine annotation
-        AnnotationRegistry::registerFile(__DIR__ . "/Annotation/CronJob.php");
-    }
+
 }

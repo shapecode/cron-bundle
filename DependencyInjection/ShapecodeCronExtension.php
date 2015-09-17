@@ -16,7 +16,7 @@ class ShapecodeCronExtension extends Extension
 {
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function load(array $configs, ContainerBuilder $container)
     {

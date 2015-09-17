@@ -15,14 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CronPruneLogsCommand extends BaseCommand
 {
 
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     protected $commandName = 'shapecode:cron:logs:cleanup';
 
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     protected $commandDescription = 'Cleans the logs for each cron job, leaving only recent failures and the most recent success';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -32,7 +32,7 @@ class CronPruneLogsCommand extends BaseCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

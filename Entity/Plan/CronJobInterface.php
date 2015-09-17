@@ -11,7 +11,7 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
  * @author Nikita Loges
  * @date 02.02.2015
  */
-interface CronJobInterface extends BaseEntityInterface
+interface CronJobInterface extends AbstractEntityInterface
 {
 
 
@@ -97,14 +97,9 @@ interface CronJobInterface extends BaseEntityInterface
     public function removeResult(CronJobResult $result);
 
     /**
-     * @param boolean $isEnable
+     * @param boolean $enable
      */
-    public function setIsEnable($isEnable);
-
-    /**
-     * @return boolean
-     */
-    public function getIsEnable();
+    public function setEnable($enable);
 
     /**
      * @see getIsEnable()

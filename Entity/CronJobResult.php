@@ -12,7 +12,7 @@ use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobResultInterface;
  * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class CronJobResult extends BaseEntity implements CronJobResultInterface
+class CronJobResult extends AbstractEntity implements CronJobResultInterface
 {
 
 
@@ -48,7 +48,7 @@ class CronJobResult extends BaseEntity implements CronJobResultInterface
     protected $cronJob;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct()
     {
@@ -56,7 +56,7 @@ class CronJobResult extends BaseEntity implements CronJobResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRunAt(\DateTime $runAt)
     {
@@ -64,7 +64,7 @@ class CronJobResult extends BaseEntity implements CronJobResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRunAt()
     {
@@ -72,7 +72,7 @@ class CronJobResult extends BaseEntity implements CronJobResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRunTime($runTime)
     {
@@ -80,7 +80,7 @@ class CronJobResult extends BaseEntity implements CronJobResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRunTime()
     {
@@ -104,7 +104,7 @@ class CronJobResult extends BaseEntity implements CronJobResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOutput($output)
     {
@@ -112,7 +112,7 @@ class CronJobResult extends BaseEntity implements CronJobResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOutput()
     {
@@ -120,7 +120,7 @@ class CronJobResult extends BaseEntity implements CronJobResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCronJob(CronJob $job)
     {
@@ -128,7 +128,7 @@ class CronJobResult extends BaseEntity implements CronJobResultInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCronJob()
     {

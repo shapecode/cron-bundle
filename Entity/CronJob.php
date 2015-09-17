@@ -14,7 +14,7 @@ use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobInterface;
  * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobRepository")
  * @ORM\HasLifecycleCallbacks
  */
-class CronJob extends BaseEntity implements CronJobInterface
+class CronJob extends AbstractEntity implements CronJobInterface
 {
 
     /**
@@ -25,7 +25,7 @@ class CronJob extends BaseEntity implements CronJobInterface
 
     /**
      * @var string
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $description;
 
@@ -56,10 +56,10 @@ class CronJob extends BaseEntity implements CronJobInterface
     /**
      * @ORM\Column(type="boolean", options={"default"=1})
      */
-    protected $isEnable = true;
+    protected $enable = true;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct()
     {
@@ -67,7 +67,7 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getId()
     {
@@ -75,7 +75,7 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setId($id = null)
     {
@@ -83,7 +83,7 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCommand($command)
     {
@@ -91,7 +91,7 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCommand()
     {
@@ -155,7 +155,7 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setNextRun($nextRun)
     {
@@ -163,7 +163,7 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getNextRun()
     {
@@ -171,7 +171,7 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getResults()
     {
@@ -179,7 +179,7 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function hasResult(CronJobResult $result)
     {
@@ -187,7 +187,7 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addResult(CronJobResult $result)
     {
@@ -198,7 +198,7 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function removeResult(CronJobResult $result)
     {
@@ -208,19 +208,11 @@ class CronJob extends BaseEntity implements CronJobInterface
     }
 
     /**
-     * @param boolean $isEnable
+     * @param boolean $enable
      */
-    public function setIsEnable($isEnable)
+    public function setEnable($enable)
     {
-        $this->isEnable = $isEnable;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getIsEnable()
-    {
-        return $this->isEnable;
+        $this->enable = $enable;
     }
 
     /**
@@ -228,7 +220,7 @@ class CronJob extends BaseEntity implements CronJobInterface
      */
     public function isEnable()
     {
-        return $this->getIsEnable();
+        return $this->enable;
     }
 
     /**

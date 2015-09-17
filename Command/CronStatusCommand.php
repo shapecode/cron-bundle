@@ -15,14 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CronStatusCommand extends BaseCommand
 {
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     protected $commandName = 'shapecode:cron:status';
 
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     protected $commandDescription = 'Displays the current status of cron jobs';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -32,7 +32,7 @@ class CronStatusCommand extends BaseCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

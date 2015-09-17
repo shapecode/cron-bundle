@@ -1,10 +1,17 @@
 Shapecode Cron Bundle
 =======================
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/bff6efd0-1226-4fb8-8604-05342fd71db8/mini.png)](https://insight.sensiolabs.com/projects/bff6efd0-1226-4fb8-8604-05342fd71db8)
+[![Dependency Status](https://www.versioneye.com/user/projects/55faaf0e3ed894001e000e46/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55faaf0e3ed894001e000e46)
+[![Latest Stable Version](https://poser.pugx.org/shapecode/cron-bundle/v/stable)](https://packagist.org/packages/shapecode/cron-bundle)
+[![Total Downloads](https://poser.pugx.org/shapecode/cron-bundle/downloads)](https://packagist.org/packages/shapecode/cron-bundle)
+[![Latest Unstable Version](https://poser.pugx.org/shapecode/cron-bundle/v/unstable)](https://packagist.org/packages/shapecode/cron-bundle)
+[![License](https://poser.pugx.org/shapecode/cron-bundle/license)](https://packagist.org/packages/shapecode/cron-bundle)
+
 This bundle provides a simple interface for registering repeated scheduled
 tasks within your application.
 
-This bundle is tested only against Symfony 2.6.
+This bundle is tested against Symfony 2.7.
 
 Install instructions
 --------------------------------
@@ -19,7 +26,7 @@ Add the bundle to your project as a composer dependency:
     // ...
     require: {
         // ...
-        "shapecode/cron-bundle": "dev-master"
+        "shapecode/cron-bundle": "~1.0"
     }
 }
 ```
@@ -27,7 +34,7 @@ Add the bundle to your project as a composer dependency:
 Update your composer installation:
 ```
 #!bash
-$ composer update
+$ composer update --prefer-dist
 ```
 
 Add the bundle to your application kernel:

@@ -1,0 +1,4 @@
+cronjob_run:
+    path:     /run
+    defaults: { _controller: 'ShapecodeCronBundle:CronJob:run' }
+    methods:  [GET]

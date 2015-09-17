@@ -5,6 +5,7 @@ namespace Shapecode\Bundle\CronBundle\Command;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -18,14 +19,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CronRunCommand extends BaseCommand
 {
 
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     protected $commandName = 'shapecode:cron:run';
 
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     protected $commandDescription = 'Runs any currently schedule cron jobs';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -35,7 +36,7 @@ class CronRunCommand extends BaseCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -97,12 +98,14 @@ class CronRunCommand extends BaseCommand
             return;
         }
 
-        $emptyInput = new ArgvInput();
+        $emptyInput = new ArrayInput(array(
+            'command' => $job->getCommand()
+        ));
         $jobOutput = new BufferedOutput();
 
         $this->getStopWatch()->start($watch);
         try {
-            $statusCode = $commandToRun->execute($emptyInput, $jobOutput);
+            $statusCode = $commandToRun->run($emptyInput, $jobOutput);
         } catch (\Exception $ex) {
             $statusCode = CronJobResult::FAILED;
             $jobOutput->writeln('');
@@ -125,11 +128,16 @@ class CronRunCommand extends BaseCommand
                 break;
         }
 
+        $bufferedOutput = $jobOutput->fetch();
+        $output->write($bufferedOutput);
+
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
         $output->writeln($statusStr . ' in ' . $duration . ' seconds');
 
+
         // Record the result
-        $this->recordJobResult($job, $duration, $jobOutput->fetch(), $statusCode);
+        $this->recordJobResult($job, $duration, $bufferedOutput, $statusCode);
+
 
         // And update the job with it's next scheduled time
         $job->calculateNextRun();

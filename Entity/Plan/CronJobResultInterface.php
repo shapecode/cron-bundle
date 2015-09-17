@@ -10,7 +10,7 @@ use Shapecode\Bundle\CronBundle\Entity\CronJob;
  * @author Nikita Loges
  * @date 02.02.2015
  */
-interface CronJobResultInterface extends BaseEntityInterface
+interface CronJobResultInterface extends AbstractEntityInterface
 {
 
     const SUCCEEDED = 'succeeded';

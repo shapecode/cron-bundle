@@ -16,14 +16,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CronScanCommand extends BaseCommand
 {
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     protected $commandName = 'shapecode:cron:scan';
 
-    /** {@inheritdoc} */
+    /** @inheritdoc */
     protected $commandDescription = 'Scans for any new or deleted cron jobs';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -34,7 +34,7 @@ class CronScanCommand extends BaseCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -101,7 +101,7 @@ class CronScanCommand extends BaseCommand
         $newJob->setCommand($command->getName());
         $newJob->setDescription($command->getDescription());
         $newJob->setPeriod($annotation->value);
-        $newJob->setIsEnable(!$defaultDisabled);
+        $newJob->setEnable(!$defaultDisabled);
         $newJob->calculateNextRun();
 
         $output->writeln("Added the job " . $newJob->getCommand() . " with period " . $newJob->getPeriod());
