@@ -41,6 +41,8 @@
         "doctrine/doctrine-bundle": "~1.5"
     },
     "autoload": {
-        "psr-4": {"Shapecode\\Bundle\\CronBundle\\": ""}
+        "psr-4": {
+            "Shapecode\\Bundle\\CronBundle\\": ""
+        }
     }
 }
