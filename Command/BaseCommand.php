@@ -16,14 +16,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 abstract class BaseCommand extends ContainerAwareCommand
 {
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $commandName = '';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $commandDescription = '';
 
     /**

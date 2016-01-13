@@ -16,14 +16,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CronJobEditCommand extends BaseCommand
 {
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $commandName = 'shapecode:cron:edit';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $commandDescription = 'Changes the status of a cron job';
 
     /**
