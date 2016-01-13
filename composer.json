@@ -41,11 +41,8 @@
         "doctrine/doctrine-bundle": "~1.5"
     },
     "autoload": {
-        "psr-4": {"Shapecode\\Bundle\\CronBundle\\": ""}
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.2-dev"
+        "psr-4": {
+            "Shapecode\\Bundle\\CronBundle\\": ""
         }
     }
 }
