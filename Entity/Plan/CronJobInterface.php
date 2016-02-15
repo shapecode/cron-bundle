@@ -14,7 +14,6 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 interface CronJobInterface extends AbstractEntityInterface
 {
 
-
     /**
      * Set command
      *
