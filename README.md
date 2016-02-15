@@ -11,8 +11,6 @@ Shapecode Cron Bundle
 This bundle provides a simple interface for registering repeated scheduled
 tasks within your application.
 
-This bundle is tested against Symfony 2.7.
-
 Install instructions
 --------------------------------
 
@@ -26,7 +24,7 @@ Add the bundle to your project as a composer dependency:
     // ...
     require: {
         // ...
-        "shapecode/cron-bundle": "~1.0"
+        "shapecode/cron-bundle": "~1.3"
     }
 }
 ```
@@ -64,20 +62,6 @@ Update your DB schema ...
 $ php app/console doctrine:schema:update --force
 ```
 
-... or with Doctrine Migrations
-```
-#!bash
-$ php app/console doctrine:migrations:diff
-$ php app/console doctrine:migrations:migrate
-```
-
-Start using the bundle:
-```
-#!bash
-$ php app/console cron:scan
-$ php app/console cron:run
-```
-
 Running your cron jobs automatically
 --------------------------------
 
@@ -85,7 +69,7 @@ This bundle is designed around the idea that your tasks will be run with a minim
 
 To facilitate this, you can create a cron job on your system like this:
 ```
-*/5 * * * * /path/to/symfony/app/console cron:run
+*/5 * * * * php /path/to/symfony/app/console cron:run
 ```
 This will schedule your tasks to run at most every 5 minutes - for instance, tasks which are scheduled to run every 3 minutes will only run every 5 minutes.
 
@@ -127,16 +111,12 @@ class DemoCommand extends Command
 }
 ```
 
-
 The interval spec ("PT1H" in the above example) is documented on the [DateInterval](http://php.net/manual/en/dateinterval.construct.php) documentation page, and can be modified whenever you choose.
 For your CronJob to be scanned and included in future runs, you must first run `php app/console cron:scan` - it will be scheduled to run the next time you run `php app/console cron:run`
 
-
-Update instructions
----------------------------
-
-Do a [composer](https://getcomposer.org/doc/00-intro.md) update.
-
-```bash
-$ composer update
+Register your new Crons:
+```
+#!bash
+$ php app/console cron:scan
+$ php app/console cron:run
 ```
