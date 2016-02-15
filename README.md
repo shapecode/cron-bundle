@@ -62,17 +62,6 @@ Update your DB schema ...
 $ php app/console doctrine:schema:update --force
 ```
 
-Running your cron jobs automatically
---------------------------------
-
-This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `app/console cron:run`).
-
-To facilitate this, you can create a cron job on your system like this:
-```
-*/5 * * * * php /path/to/symfony/app/console cron:run
-```
-This will schedule your tasks to run at most every 5 minutes - for instance, tasks which are scheduled to run every 3 minutes will only run every 5 minutes.
-
 Creating your own tasks
 --------------------------------
 
@@ -120,3 +109,15 @@ Register your new Crons:
 $ php app/console cron:scan
 $ php app/console cron:run
 ```
+
+Running your cron jobs automatically
+--------------------------------
+
+This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `app/console cron:run`).
+
+To facilitate this, you can create a cron job on your system like this:
+```
+*/5 * * * * php /path/to/symfony/app/console cron:run
+```
+This will schedule your tasks to run at most every 5 minutes - for instance, tasks which are scheduled to run every 3 minutes will only run every 5 minutes.
+
