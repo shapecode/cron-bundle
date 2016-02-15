@@ -24,7 +24,7 @@ Add the bundle to your project as a composer dependency:
     // ...
     require: {
         // ...
-        "shapecode/cron-bundle": "~1.3"
+        "shapecode/cron-bundle": "~1.4"
     }
 }
 ```
