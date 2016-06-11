@@ -15,35 +15,52 @@
     ],
     "type": "symfony-bundle",
     "license": "MIT",
-    "homepage": "http://shapecode.de",
+    "homepage": "https://github.com/shapecode/cron-bundle",
     "support": {
-        "email": "support@nikita-loges.de",
-        "issues": "https://bitbucket.org/shapecode/symfony-cron-bundle/issues",
-        "source": "https://bitbucket.org/shapecode/symfony-cron-bundle/downloads",
-        "wiki": "https://bitbucket.org/shapecode/symfony-cron-bundle/wiki/Home"
+        "email": "support@shapeocode.de",
+        "issues": "https://github.com/shapecode/cron-bundle/issues",
+        "source": "https://github.com/shapecode/cron-bundle/releases",
+        "wiki": "https://github.com/shapecode/cron-bundle/wiki"
     },
     "authors": [
         {
             "name": "Nikita Loges",
-            "homepage": "http://nikita-loges.de",
+            "homepage": "https://nikita-loges.de",
             "email": "develop@nikita-loges.de"
         }
     ],
     "require": {
-        "php": ">=5.5.9",
+        "php": "~5.5|~7.0",
+
         "symfony/framework-bundle": "~2.8|~3.0",
         "symfony/dependency-injection": "~2.8|~3.0",
         "symfony/http-kernel": "~2.8|~3.0",
         "symfony/config": "~2.8|~3.0",
         "symfony/console": "~2.8|~3.0",
         "symfony/process": "~2.8|~3.0",
+
         "doctrine/orm": "~2.5",
         "doctrine/common": "~2.6",
         "doctrine/doctrine-bundle": "~1.6"
     },
+    "require-dev": {
+        "symfony/phpunit-bridge": "~2.8|~3.0"
+    },
     "autoload": {
         "psr-4": {
-            "Shapecode\\Bundle\\CronBundle\\": ""
+            "Shapecode\\Bundle\\CronBundle\\": "src/"
         }
-    }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Shapecode\\Bundle\\CronBundle\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-release/1.3": "1.3-dev"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
