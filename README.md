@@ -17,8 +17,7 @@ Install instructions
 Installing this bundle can be done through these simple steps:
 
 Add the bundle to your project as a composer dependency:
-```
-#!javascript
+```javascript
 // composer.json
 {
     // ...
@@ -30,8 +29,7 @@ Add the bundle to your project as a composer dependency:
 ```
 
 Update your composer installation:
-```
-#!bash
+```bash
 $ composer update --prefer-dist
 ```
 
