@@ -29,13 +29,12 @@ Add the bundle to your project as a composer dependency:
 ```
 
 Update your composer installation:
-```bash
+```sh
 $ composer update --prefer-dist
 ```
 
 Add the bundle to your application kernel:
-```
-#!php
+```php
 <?php
 
 // application/ApplicationKernel.php
@@ -55,8 +54,7 @@ public function registerBundles()
 Update your DB schema ...
 
 ... with Doctrine standard method ...
-```
-#!bash
+```sh
 $ php app/console doctrine:schema:update --force
 ```
 
@@ -65,8 +63,7 @@ Creating your own tasks
 
 Creating your own tasks with CronBundle couldn't be easier - all you have to do is create a normal Symfony2 Command (or ContainerAwareCommand) and tag it with the CronJob annotation, as demonstrated below:
 
-```
-#!php
+```php
 <?php
 
 namespace App\DemoBundle\Command;
@@ -102,8 +99,7 @@ The interval spec ("PT1H" in the above example) is documented on the [DateInterv
 For your CronJob to be scanned and included in future runs, you must first run `php app/console cron:scan` - it will be scheduled to run the next time you run `php app/console cron:run`
 
 Register your new Crons:
-```
-#!bash
+```sh
 $ php app/console cron:scan
 $ php app/console cron:run
 ```
