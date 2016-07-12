@@ -78,7 +78,7 @@ class CronStatusCommand extends BaseCommand
 
             $mostRecent = $resultRepo->findMostRecent($cronJob);
             if ($mostRecent) {
-                $output->writeln('Last run was: ' . $mostRecent->getResult());
+                $output->writeln('Last run was: ' . $mostRecent->getOutput());
             } else {
                 $output->writeln('This job has not yet been run');
             }
