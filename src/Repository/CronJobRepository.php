@@ -20,10 +20,11 @@ class CronJobRepository extends EntityRepository
      * @param $command
      * @return null|CronJob
      */
-    public function findOneByCommand($command)
+    public function findOneByCommand($command, $number = 1)
     {
         return $this->findOneBy(array(
-            'command' => $command
+            'command' => $command,
+            'number' => $number
         ));
     }
 

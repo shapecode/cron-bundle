@@ -52,7 +52,9 @@ class CronScanCommand extends BaseCommand
             // Check for an @CronJob annotation
             $reflClass = new \ReflectionClass($command);
 
+            $counter = 0;
             foreach ($reader->getClassAnnotations($reflClass) as $annotation) {
+                $counter++;
                 if ($annotation instanceof CronJobAnnotation) {
                     $job = $command->getName();
 
@@ -61,7 +63,7 @@ class CronScanCommand extends BaseCommand
                         unset($knownJobs[array_search($job, $knownJobs)]);
 
                         // Update the job if necessary
-                        $currentJob = $jobRepo->findOneByCommand($job);
+                        $currentJob = $jobRepo->findOneByCommand($job, $counter);
                         $currentJob->setDescription($command->getDescription());
 
                         if ($currentJob->getPeriod() != $annotation->value) {
@@ -70,7 +72,7 @@ class CronScanCommand extends BaseCommand
                             $output->writeln('Updated interval for ' . $job . ' to ' . $annotation->value);
                         }
                     } else {
-                        $this->newJobFound($output, $command, $annotation, $defaultDisabled);
+                        $this->newJobFound($output, $command, $annotation, $defaultDisabled, $counter);
                     }
                 }
             }
@@ -90,18 +92,20 @@ class CronScanCommand extends BaseCommand
     }
 
     /**
-     * @param OutputInterface $output
-     * @param Command $command
+     * @param OutputInterface   $output
+     * @param Command           $command
      * @param CronJobAnnotation $annotation
-     * @param bool $defaultDisabled
+     * @param bool              $defaultDisabled
+     * @param                   $counter
      */
-    protected function newJobFound(OutputInterface $output, Command $command, CronJobAnnotation $annotation, $defaultDisabled = false)
+    protected function newJobFound(OutputInterface $output, Command $command, CronJobAnnotation $annotation, $defaultDisabled = false, $counter)
     {
         $newJob = new CronJob();
         $newJob->setCommand($command->getName());
         $newJob->setDescription($command->getDescription());
         $newJob->setPeriod($annotation->value);
         $newJob->setEnable(!$defaultDisabled);
+        $newJob->setNumber($counter);
         $newJob->calculateNextRun();
 
         $output->writeln("Added the job " . $newJob->getCommand() . " with period " . $newJob->getPeriod());

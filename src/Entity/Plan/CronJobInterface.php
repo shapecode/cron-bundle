@@ -43,6 +43,16 @@ interface CronJobInterface extends AbstractEntityInterface
     public function getDescription();
 
     /**
+     * @return int
+     */
+    public function getNumber();
+
+    /**
+     * @param int $number
+     */
+    public function setNumber($number);
+
+    /**
      * Set Period
      *
      * @param string $period

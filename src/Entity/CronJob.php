@@ -32,6 +32,12 @@ class CronJob extends AbstractEntity implements CronJobInterface
     protected $description;
 
     /**
+     * @var int
+     * @ORM\Column(type="integer")
+     */
+    protected $number;
+
+    /**
      * @var string
      * @ORM\Column(type="string")
      */
@@ -114,6 +120,22 @@ class CronJob extends AbstractEntity implements CronJobInterface
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param int $number
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
     }
 
     /**
