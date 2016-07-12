@@ -47,7 +47,7 @@ class CronJobRepository extends EntityRepository
         $qb = $this->createQueryBuilder('p');
         $expr = $qb->expr();
         $qb->andWhere($expr->lte('p.nextRun', ':time'));
-        $qb->andWhere($expr->lte('p.enable', ':enabled'));
+        $qb->andWhere($expr->eq('p.enable', ':enabled'));
 
         $qb->setParameter('time', new \DateTime());
         $qb->setParameter('enabled', true);
