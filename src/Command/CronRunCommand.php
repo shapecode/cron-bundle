@@ -73,7 +73,7 @@ class CronRunCommand extends BaseCommand
 
         $duration = $this->getStopWatch()->getEvent('cronjobs')->getDuration();
 
-        $output->writeln('Cron run completed in ' . $duration . ' seconds');
+        $output->writeln('Cron run completed in ' . $duration . ' ms');
     }
 
     /**
