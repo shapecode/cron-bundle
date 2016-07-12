@@ -46,7 +46,7 @@ class CronJobResultRepository extends EntityRepository
         $expr = $qb->expr();
 
         if ($job) {
-            $qb->andWhere($expr->eq('r.cronJob', ':cronJob'));
+            $qb->andWhere($expr->eq('p.cronJob', ':cronJob'));
             $qb->setParameter('cronJob', $job->getId());
         }
 
