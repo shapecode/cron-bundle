@@ -3,6 +3,7 @@
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobInterface;
@@ -27,7 +28,7 @@ class CronJobRepository extends EntityRepository
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection|static
+     * @return ArrayCollection|Collection|CronJob[]
      */
     public function getKnownJobs()
     {

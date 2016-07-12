@@ -1,6 +1,7 @@
 <?php
 namespace Shapecode\Bundle\CronBundle\Entity;
 
+use Cron\CronExpression;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -8,8 +9,9 @@ use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobInterface;
 
 /**
  * Class CronJob
+ *
  * @package Shapecode\Bundle\CronBundle\Entity
- * @author Nikita Loges
+ * @author  Nikita Loges
  *
  * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobRepository")
  * @ORM\HasLifecycleCallbacks
@@ -228,12 +230,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
      */
     public function calculateNextRun()
     {
-        $now = new \DateTime();
-        $nextRun = new \DateTime(date('Y') . '-' . date('m') . '-01');
-        do {
-            $nextRun->add($this->getInterval());
-        } while ($nextRun <= $now);
-
-        $this->setNextRun($nextRun);
+        $cron = CronExpression::factory($this->getPeriod());
+        $this->setNextRun($cron->getNextRunDate());
     }
 }
