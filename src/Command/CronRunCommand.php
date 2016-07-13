@@ -131,16 +131,16 @@ class CronRunCommand extends BaseCommand
         $output->write($bufferedOutput);
 
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
-        $output->writeln($statusStr . ' in ' . $duration . ' seconds');
-
-
+        $output->writeln($statusStr . ' in ' . $duration . ' ms');
+        
         // Record the result
         $this->recordJobResult($job, $duration, $bufferedOutput, $statusCode);
-
-
+        
         // And update the job with it's next scheduled time
         $job->calculateNextRun();
         $job->setLastUse(new \DateTime());
+        
+        $this->getEntityManager()->persist($job);
     }
 
     protected function recordJobResult(CronJob $job, $timeTaken, $output, $statusCode)

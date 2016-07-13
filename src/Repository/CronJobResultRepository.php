@@ -24,7 +24,7 @@ class CronJobResultRepository extends EntityRepository
         $qb->delete($this->getEntityName(), 'd');
         $expr = $qb->expr();
 
-        $qb->andWhere($expr->lte('r.createdAt', ':createdAt'));
+        $qb->andWhere($expr->lte('d.createdAt', ':createdAt'));
         $qb->setParameter('createdAt', new \DateTime('7 days ago'));
 
         if ($job) {
