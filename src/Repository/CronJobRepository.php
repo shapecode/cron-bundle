@@ -29,6 +29,17 @@ class CronJobRepository extends EntityRepository
     }
 
     /**
+     * @param $command
+     * @return array|CronJob[]
+     */
+    public function findByCommand($command)
+    {
+        return $this->findBy(array(
+            'command' => $command
+        ));
+    }
+
+    /**
      * @return ArrayCollection|Collection|CronJob[]
      */
     public function getKnownJobs()

@@ -10,8 +10,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CronJobEditCommand
+ *
  * @package Shapecode\Bundle\CronBundle\Command
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronJobEditCommand extends BaseCommand
 {
@@ -40,9 +41,9 @@ class CronJobEditCommand extends BaseCommand
     {
         $jobName = $input->getArgument('job');
         $jobRepo = $this->getCronJobRepository();
-        $job = $jobRepo->findOneByCommand($jobName);
+        $jobs = $jobRepo->findByCommand($jobName);
 
-        if (!$job) {
+        if (!count($jobs)) {
             $output->writeln("Couldn't find a job by the name of " . $jobName);
 
             return CronJobResult::FAILED;
@@ -50,8 +51,11 @@ class CronJobEditCommand extends BaseCommand
 
         $enable = ($input->getOption('enable') == 'y') ? true : false;
 
-        $job->setEnable($enable);
-        $this->getEntityManager()->persist($job);
+        foreach ($jobs as $job) {
+            $job->setEnable($enable);
+            $this->getEntityManager()->persist($job);
+        }
+
         $this->getEntityManager()->flush();
 
         if ($enable) {

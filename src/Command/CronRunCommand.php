@@ -109,7 +109,7 @@ class CronRunCommand extends BaseCommand
             $statusCode = CronJobResult::FAILED;
             $jobOutput->writeln('');
             $jobOutput->writeln('Job execution failed with exception ' . get_class($ex) . ':');
-            $jobOutput->writeln($ex->__toString());
+//            $jobOutput->writeln($ex->__toString());
         }
         $this->getStopWatch()->stop($watch);
 
