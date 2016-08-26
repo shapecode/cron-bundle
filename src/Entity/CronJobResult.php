@@ -42,7 +42,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
 
     /**
      * @var CronJob
-     * @ORM\ManyToOne(targetEntity="CronJob", inversedBy="results")
+     * @ORM\ManyToOne(targetEntity="CronJob", inversedBy="results", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $cronJob;

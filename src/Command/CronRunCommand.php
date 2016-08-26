@@ -131,7 +131,7 @@ class CronRunCommand extends BaseCommand
         $output->write($bufferedOutput);
 
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
-        $output->writeln($statusStr . ' in ' . $duration . ' seconds');
+        $output->writeln($statusStr . ' in ' . $duration / 1000 . ' seconds');
 
 
         // Record the result
@@ -153,6 +153,7 @@ class CronRunCommand extends BaseCommand
         $result->setStatusCode($statusCode);
 
         $this->getEntityManager()->persist($result);
+        $this->getEntityManager()->persist($job);
     }
 
     /**
