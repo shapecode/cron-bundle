@@ -153,6 +153,7 @@ class CronRunCommand extends BaseCommand
         $result->setStatusCode($statusCode);
 
         $this->getEntityManager()->persist($result);
+        $this->getEntityManager()->persist($job);
     }
 
     /**
