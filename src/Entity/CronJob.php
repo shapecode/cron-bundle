@@ -5,7 +5,7 @@ use Cron\CronExpression;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
 
 /**
  * Class CronJob

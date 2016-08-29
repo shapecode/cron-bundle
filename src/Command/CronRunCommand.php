@@ -2,6 +2,7 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
@@ -74,12 +75,14 @@ class CronRunCommand extends BaseCommand
 
         $duration = $this->getStopWatch()->getEvent('cronjobs')->getDuration();
 
-        $output->writeln('Cron run completed in ' . number_format(($duration / 1000), 2) . ' seconds');
+        $output->writeln('Cron run completed in ' . number_format(($duration / 1000), 4) . ' seconds');
     }
 
     /**
-     * @param CronJob $job
+     * @param CronJob         $job
      * @param OutputInterface $output
+     *
+     * @return string
      */
     protected function runJob(CronJob $job, OutputInterface $output)
     {
@@ -132,7 +135,7 @@ class CronRunCommand extends BaseCommand
         $output->write($bufferedOutput);
 
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
-        $output->writeln($statusStr . ' in ' . number_format(($duration / 1000), 2) . ' seconds');
+        $output->writeln($statusStr . ' in ' . number_format(($duration / 1000), 4) . ' seconds');
 
         // Record the result
         $this->recordJobResult($job, $duration, $bufferedOutput, $statusCode);
@@ -142,6 +145,8 @@ class CronRunCommand extends BaseCommand
         $job->setLastUse(new \DateTime());
         
         $this->getEntityManager()->persist($job);
+
+        return CronJobResult::SUCCEEDED;
     }
 
     /**
@@ -152,8 +157,10 @@ class CronRunCommand extends BaseCommand
      */
     protected function recordJobResult(CronJob $job, $timeTaken, $output, $statusCode)
     {
-        // Create a new CronJobResult
-        $result = new CronJobResult();
+        $className = $this->getCronJobResultRepository()->getClassName();
+
+        /** @var CronJobResultInterface $result */
+        $result = new $className();
         $result->setCronJob($job);
         $result->setRunTime($timeTaken);
         $result->setOutput($output);
@@ -167,6 +174,6 @@ class CronRunCommand extends BaseCommand
      */
     protected function getStopWatch()
     {
-        return $this->get('debug.stopwatch');
+        return $this->getContainer()->get('debug.stopwatch');
     }
 }

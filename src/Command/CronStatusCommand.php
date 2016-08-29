@@ -85,5 +85,7 @@ class CronStatusCommand extends BaseCommand
 
             $output->writeln('');
         }
+
+        return CronJobResult::SUCCEEDED;
     }
 }

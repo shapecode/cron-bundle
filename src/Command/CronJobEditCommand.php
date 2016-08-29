@@ -63,5 +63,7 @@ class CronJobEditCommand extends BaseCommand
         } else {
             $output->writeln('cron disabled');
         }
+
+        return CronJobResult::SUCCEEDED;
     }
 }

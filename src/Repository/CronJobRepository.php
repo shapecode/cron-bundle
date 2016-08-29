@@ -3,44 +3,43 @@
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
-use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobRepositoryInterface;
 
 /**
  * Class CronJobRepository
+ *
  * @package Shapecode\Bundle\CronBundle\Repository
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
-class CronJobRepository extends EntityRepository
+class CronJobRepository extends EntityRepository implements CronJobRepositoryInterface
 {
 
     /**
-     * @param $command
-     * @return null|CronJob
+     * @inheritdoc
      */
     public function findOneByCommand($command, $number = 1)
     {
-        return $this->findOneBy(array(
+        return $this->findOneBy([
             'command' => $command,
-            'number' => $number
-        ));
+            'number'  => $number
+        ]);
     }
 
     /**
-     * @param $command
-     * @return array|CronJob[]
+     * @inheritdoc
      */
     public function findByCommand($command)
     {
-        return $this->findBy(array(
+        return $this->findBy([
             'command' => $command
-        ));
+        ]);
     }
 
     /**
-     * @return ArrayCollection|string[]
+     * @inheritdoc
      */
     public function getKnownJobs()
     {
@@ -52,7 +51,7 @@ class CronJobRepository extends EntityRepository
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function findDueTasks()
     {

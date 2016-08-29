@@ -23,7 +23,7 @@ Add the bundle to your project as a composer dependency:
     // ...
     require: {
         // ...
-        "shapecode/cron-bundle": "~1.3"
+        "shapecode/cron-bundle": "~2.0"
     }
 }
 ```
@@ -41,7 +41,7 @@ Add the bundle to your application kernel:
 public function registerBundles()
 {
 	// ...
-	$bundle = array(
+	$bundles = array(
 		// ...
         new Shapecode\Bundle\CronBundle\ShapecodeCronBundle(),
 	);
@@ -77,7 +77,7 @@ use Symfony\Component\Console\Command\Command;
  * @package App\DemoBundle\Command
  * @author Nikita Loges
  *
- * @CronJob("PT1H")
+ * @CronJob("*\/5 * * * *")
  * Will be executed every hour
  */
 class DemoCommand extends Command
@@ -95,13 +95,13 @@ class DemoCommand extends Command
 }
 ```
 
-The interval spec ("PT1H" in the above example) is documented on the [DateInterval](http://php.net/manual/en/dateinterval.construct.php) documentation page, and can be modified whenever you choose.
-For your CronJob to be scanned and included in future runs, you must first run `php app/console cron:scan` - it will be scheduled to run the next time you run `php app/console cron:run`
+The interval spec ("*\/5 * * * *" in the above example) use the standard cronjob schedule format and can be modified whenever you choose. You have to escape the / in this example because it would close the annotation.
+For your CronJob to be scanned and included in future runs, you must first run `php app/console shapecode:cron:scan` - it will be scheduled to run the next time you run `php app/console schapede:cron:run`
 
 Register your new Crons:
 ```sh
-$ php app/console cron:scan
-$ php app/console cron:run
+$ php app/console schapecode:cron:scan
+$ php app/console schapecode:cron:run
 ```
 
 Running your cron jobs automatically
@@ -110,8 +110,7 @@ Running your cron jobs automatically
 This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `app/console cron:run`).
 
 To facilitate this, you can create a cron job on your system like this:
-```
+```sh
 */5 * * * * php /path/to/symfony/app/console cron:run
 ```
 This will schedule your tasks to run at most every 5 minutes - for instance, tasks which are scheduled to run every 3 minutes will only run every 5 minutes.
-
