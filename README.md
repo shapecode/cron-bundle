@@ -70,6 +70,8 @@ namespace App\DemoBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 // use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
@@ -78,16 +80,23 @@ use Symfony\Component\Console\Command\Command;
  * @author Nikita Loges
  *
  * @CronJob("*\/5 * * * *")
- * Will be executed every hour
+ * Will be executed every 5 minutes
  */
 class DemoCommand extends Command
 {
+    
+    /**
+     * @inheritdoc
+     */
     public function configure()
     {
 		// Must have a name configured
 		// ...
     }
     
+    /**
+     * @inheritdoc
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
 		// Your code here
@@ -96,6 +105,7 @@ class DemoCommand extends Command
 ```
 
 The interval spec ("*\/5 * * * *" in the above example) use the standard cronjob schedule format and can be modified whenever you choose. You have to escape the / in this example because it would close the annotation.
+You can also register your command multiple times by using the annotation more than once with different values.
 For your CronJob to be scanned and included in future runs, you must first run `php app/console shapecode:cron:scan` - it will be scheduled to run the next time you run `php app/console schapede:cron:run`
 
 Register your new Crons:
