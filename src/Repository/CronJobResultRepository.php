@@ -3,6 +3,7 @@
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 
@@ -38,7 +39,7 @@ class CronJobResultRepository extends EntityRepository
     /**
      * @param CronJob $job
      * @return CronJobResult
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findMostRecent(CronJob $job = null)
     {

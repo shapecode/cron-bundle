@@ -15,7 +15,6 @@ use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobResultInterface;
 class CronJobResult extends AbstractEntity implements CronJobResultInterface
 {
 
-
     /**
      * @var \DateTime
      * @ORM\Column(type="datetime")
