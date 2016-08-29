@@ -40,7 +40,7 @@ class CronJobRepository extends EntityRepository
     }
 
     /**
-     * @return ArrayCollection|Collection|CronJob[]
+     * @return ArrayCollection|string[]
      */
     public function getKnownJobs()
     {
@@ -58,6 +58,7 @@ class CronJobRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('p');
         $expr = $qb->expr();
+
         $qb->andWhere($expr->lte('p.nextRun', ':time'));
         $qb->andWhere($expr->eq('p.enable', ':enabled'));
 

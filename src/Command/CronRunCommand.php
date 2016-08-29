@@ -2,6 +2,7 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use Symfony\Component\Stopwatch\Stopwatch;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -60,7 +61,7 @@ class CronRunCommand extends BaseCommand
         }
 
         $jobCount = count($jobsToRun);
-        $output->writeln("Running $jobCount jobs:");
+        $output->writeln('Running '.$jobCount.' jobs:');
 
         foreach ($jobsToRun as $job) {
             $this->runJob($job, $output);
@@ -73,7 +74,7 @@ class CronRunCommand extends BaseCommand
 
         $duration = $this->getStopWatch()->getEvent('cronjobs')->getDuration();
 
-        $output->writeln('Cron run completed in ' . $duration . ' ms');
+        $output->writeln('Cron run completed in ' . number_format(($duration / 1000), 2) . ' seconds');
     }
 
     /**
@@ -131,11 +132,11 @@ class CronRunCommand extends BaseCommand
         $output->write($bufferedOutput);
 
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
-        $output->writeln($statusStr . ' in ' . $duration . ' ms');
-        
+        $output->writeln($statusStr . ' in ' . number_format(($duration / 1000), 2) . ' seconds');
+
         // Record the result
         $this->recordJobResult($job, $duration, $bufferedOutput, $statusCode);
-        
+
         // And update the job with it's next scheduled time
         $job->calculateNextRun();
         $job->setLastUse(new \DateTime());
@@ -143,6 +144,12 @@ class CronRunCommand extends BaseCommand
         $this->getEntityManager()->persist($job);
     }
 
+    /**
+     * @param CronJob $job
+     * @param         $timeTaken
+     * @param         $output
+     * @param         $statusCode
+     */
     protected function recordJobResult(CronJob $job, $timeTaken, $output, $statusCode)
     {
         // Create a new CronJobResult
@@ -156,7 +163,7 @@ class CronRunCommand extends BaseCommand
     }
 
     /**
-     * @return \Symfony\Component\Stopwatch\Stopwatch
+     * @return Stopwatch
      */
     protected function getStopWatch()
     {
