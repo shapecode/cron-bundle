@@ -98,6 +98,10 @@ class CronRunCommand extends BaseCommand
             return;
         }
 
+        // And update the job with it's next scheduled time
+        $job->calculateNextRun();
+        $job->setLastUse(new \DateTime());
+        
         $emptyInput = new ArrayInput(array(
             'command' => $job->getCommand()
         ));
@@ -136,10 +140,6 @@ class CronRunCommand extends BaseCommand
 
         // Record the result
         $this->recordJobResult($job, $duration, $bufferedOutput, $statusCode);
-
-        // And update the job with it's next scheduled time
-        $job->calculateNextRun();
-        $job->setLastUse(new \DateTime());
     }
 
     /**
