@@ -101,6 +101,7 @@ class CronRunCommand extends BaseCommand
         // And update the job with it's next scheduled time
         $job->calculateNextRun();
         $job->setLastUse(new \DateTime());
+        $this->getEntityManager()->flush();
         
         $emptyInput = new ArrayInput(array(
             'command' => $job->getCommand()
