@@ -61,8 +61,17 @@ class CronRunCommand extends BaseCommand
         }
 
         $jobCount = count($jobsToRun);
-        $output->writeln('Running '.$jobCount.' jobs:');
+        $output->writeln('Running ' . $jobCount . ' jobs:');
 
+        // Update the job with it's next scheduled time
+        $now = new \DateTime();
+        foreach ($jobsToRun as $job) {
+            $job->calculateNextRun();
+            $job->setLastUse($now);
+        }
+        $this->getEntityManager()->flush();
+
+        // Run the jobs
         foreach ($jobsToRun as $job) {
             $this->runJob($job, $output);
         }
@@ -98,11 +107,6 @@ class CronRunCommand extends BaseCommand
             return;
         }
 
-        // And update the job with it's next scheduled time
-        $job->calculateNextRun();
-        $job->setLastUse(new \DateTime());
-        $this->getEntityManager()->flush();
-        
         $emptyInput = new ArrayInput(array(
             'command' => $job->getCommand()
         ));
@@ -168,4 +172,5 @@ class CronRunCommand extends BaseCommand
     {
         return $this->get('debug.stopwatch');
     }
+
 }
