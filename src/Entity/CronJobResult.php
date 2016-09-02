@@ -2,19 +2,19 @@
 namespace Shapecode\Bundle\CronBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobResultInterface;
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
 
 /**
  * Class CronJobResult
+ *
  * @package Shapecode\Bundle\CronBundle\Entity
- * @author Nikita Loges
+ * @author  Nikita Loges
  *
  * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class CronJobResult extends AbstractEntity implements CronJobResultInterface
 {
-
 
     /**
      * @var \DateTime

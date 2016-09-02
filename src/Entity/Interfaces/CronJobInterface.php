@@ -1,13 +1,13 @@
 <?php
 
-namespace Shapecode\Bundle\CronBundle\Entity\Plan;
+namespace Shapecode\Bundle\CronBundle\Entity\Interfaces;
 
 use Doctrine\Common\Collections\Collection;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 
 /**
  * Class CronJobInterface
- * @package Shapecode\Bundle\CronBundle\Entity\Plan
+ * @package Shapecode\Bundle\CronBundle\Entity\Interfaces
  * @author Nikita Loges
  * @date 02.02.2015
  */
@@ -41,6 +41,16 @@ interface CronJobInterface extends AbstractEntityInterface
      * @return string
      */
     public function getDescription();
+
+    /**
+     * @return int
+     */
+    public function getNumber();
+
+    /**
+     * @param int $number
+     */
+    public function setNumber($number);
 
     /**
      * Set Period
@@ -104,4 +114,9 @@ interface CronJobInterface extends AbstractEntityInterface
      * @see getIsEnable()
      */
     public function isEnable();
+
+    /**
+     *
+     */
+    public function calculateNextRun();
 }

@@ -4,30 +4,41 @@ namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
-use Shapecode\Bundle\CronBundle\Entity\CronJob;
-use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobRepositoryInterface;
 
 /**
  * Class CronJobRepository
+ *
  * @package Shapecode\Bundle\CronBundle\Repository
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
-class CronJobRepository extends EntityRepository
+class CronJobRepository extends EntityRepository implements CronJobRepositoryInterface
 {
 
     /**
-     * @param $command
-     * @return null|CronJob
+     * @inheritdoc
      */
-    public function findOneByCommand($command)
+    public function findOneByCommand($command, $number = 1)
     {
-        return $this->findOneBy(array(
-            'command' => $command
-        ));
+        return $this->findOneBy([
+            'command' => $command,
+            'number'  => $number
+        ]);
     }
 
     /**
-     * @return \Doctrine\Common\Collections\Collection|static
+     * @inheritdoc
+     */
+    public function findByCommand($command)
+    {
+        return $this->findBy([
+            'command' => $command
+        ]);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getKnownJobs()
     {
@@ -39,14 +50,15 @@ class CronJobRepository extends EntityRepository
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function findDueTasks()
     {
         $qb = $this->createQueryBuilder('p');
         $expr = $qb->expr();
+
         $qb->andWhere($expr->lte('p.nextRun', ':time'));
-        $qb->andWhere($expr->lte('p.enable', ':enabled'));
+        $qb->andWhere($expr->eq('p.enable', ':enabled'));
 
         $qb->setParameter('time', new \DateTime());
         $qb->setParameter('enabled', true);

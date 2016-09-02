@@ -10,8 +10,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CronStatusCommand
+ *
  * @package Shapecode\Bundle\CronBundle\Command
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronStatusCommand extends BaseCommand
 {
@@ -43,7 +44,7 @@ class CronStatusCommand extends BaseCommand
 
         if ($jobName = $input->getArgument('job')) {
             try {
-                $cronJobs = array($jobRepo->findOneByCommand($jobName));
+                $cronJobs = [$jobRepo->findOneByCommand($jobName)];
             } catch (\Exception $e) {
                 $output->writeln('Couldn\'t find a job by the name of ' . $jobName);
 
@@ -78,12 +79,14 @@ class CronStatusCommand extends BaseCommand
 
             $mostRecent = $resultRepo->findMostRecent($cronJob);
             if ($mostRecent) {
-                $output->writeln('Last run was: ' . $mostRecent->getResult());
+                $output->writeln('Last run was: ' . $mostRecent->getOutput());
             } else {
                 $output->writeln('This job has not yet been run');
             }
 
             $output->writeln('');
         }
+
+        return CronJobResult::SUCCEEDED;
     }
 }

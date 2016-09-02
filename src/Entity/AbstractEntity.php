@@ -6,8 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class AbstractEntity
+ *
  * @package Shapecode\Bundle\CronBundle\Entity
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 abstract class AbstractEntity
 {

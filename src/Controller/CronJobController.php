@@ -10,9 +10,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class CronJobController
- * @author Nikita Loges
+ *
+ * @author  Nikita Loges
  * @company tenolo GbR
- * @date 17.09.2015
+ * @date    17.09.2015
  */
 class CronJobController extends Controller
 {
@@ -26,9 +27,9 @@ class CronJobController extends Controller
         $application = new Application($kernel);
         $application->setAutoExit(false);
 
-        $input = new ArrayInput(array(
+        $input = new ArrayInput([
             'shapecode:cron:run'
-        ));
+        ]);
 
         $output = new BufferedOutput();
         $application->run($input, $output);

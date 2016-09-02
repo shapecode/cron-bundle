@@ -2,6 +2,8 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -12,8 +14,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CronRunCommand
+ *
  * @package Shapecode\Bundle\CronBundle\Command
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronRunCommand extends BaseCommand
 {
@@ -43,12 +46,12 @@ class CronRunCommand extends BaseCommand
 
         $jobRepo = $this->getCronJobRepository();
 
-        $jobsToRun = array();
+        $jobsToRun = [];
         if ($jobName = $input->getArgument('job')) {
             try {
                 $jobObj = $jobRepo->findOneByCommand($jobName);
                 if ($jobObj->isEnable()) {
-                    $jobsToRun = array($jobObj);
+                    $jobsToRun = [$jobObj];
                 }
             } catch (\Exception $e) {
                 $output->writeln('Couldn\'t find a job by the name of ' . $jobName);
@@ -60,8 +63,21 @@ class CronRunCommand extends BaseCommand
         }
 
         $jobCount = count($jobsToRun);
-        $output->writeln("Running $jobCount jobs:");
+        $output->writeln('Running ' . $jobCount . ' jobs:');
 
+        // Update the job with it's next scheduled time
+        $now = new \DateTime();
+        foreach ($jobsToRun as $job) {
+            $job->calculateNextRun();
+            $job->setLastUse($now);
+
+            $this->getEntityManager()->persist($job);
+        }
+
+        // flush the calculated runs
+        $this->getEntityManager()->flush();
+
+        // Run the jobs
         foreach ($jobsToRun as $job) {
             $this->runJob($job, $output);
         }
@@ -73,12 +89,14 @@ class CronRunCommand extends BaseCommand
 
         $duration = $this->getStopWatch()->getEvent('cronjobs')->getDuration();
 
-        $output->writeln('Cron run completed in ' . $duration . ' seconds');
+        $output->writeln('Cron run completed in ' . number_format(($duration / 1000), 4) . ' seconds');
     }
 
     /**
-     * @param CronJob $job
+     * @param CronJob         $job
      * @param OutputInterface $output
+     *
+     * @return string
      */
     protected function runJob(CronJob $job, OutputInterface $output)
     {
@@ -97,9 +115,9 @@ class CronRunCommand extends BaseCommand
             return;
         }
 
-        $emptyInput = new ArrayInput(array(
+        $emptyInput = new ArrayInput([
             'command' => $job->getCommand()
-        ));
+        ]);
         $jobOutput = new BufferedOutput();
 
         $this->getStopWatch()->start($watch);
@@ -109,7 +127,7 @@ class CronRunCommand extends BaseCommand
             $statusCode = CronJobResult::FAILED;
             $jobOutput->writeln('');
             $jobOutput->writeln('Job execution failed with exception ' . get_class($ex) . ':');
-            $jobOutput->writeln($ex->__toString());
+//            $jobOutput->writeln($ex->__toString());
         }
         $this->getStopWatch()->stop($watch);
 
@@ -131,22 +149,24 @@ class CronRunCommand extends BaseCommand
         $output->write($bufferedOutput);
 
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
-        $output->writeln($statusStr . ' in ' . $duration . ' seconds');
-
+        $output->writeln($statusStr . ' in ' . number_format(($duration / 1000), 4) . ' seconds');
 
         // Record the result
         $this->recordJobResult($job, $duration, $bufferedOutput, $statusCode);
-
-
-        // And update the job with it's next scheduled time
-        $job->calculateNextRun();
-        $job->setLastUse(new \DateTime());
     }
 
+    /**
+     * @param CronJob $job
+     * @param         $timeTaken
+     * @param         $output
+     * @param         $statusCode
+     */
     protected function recordJobResult(CronJob $job, $timeTaken, $output, $statusCode)
     {
-        // Create a new CronJobResult
-        $result = new CronJobResult();
+        $className = $this->getCronJobResultRepository()->getClassName();
+
+        /** @var CronJobResultInterface $result */
+        $result = new $className();
         $result->setCronJob($job);
         $result->setRunTime($timeTaken);
         $result->setOutput($output);
@@ -156,10 +176,11 @@ class CronRunCommand extends BaseCommand
     }
 
     /**
-     * @return \Symfony\Component\Stopwatch\Stopwatch
+     * @return Stopwatch
      */
     protected function getStopWatch()
     {
-        return $this->get('debug.stopwatch');
+        return $this->getContainer()->get('debug.stopwatch');
     }
+
 }
