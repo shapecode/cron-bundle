@@ -10,8 +10,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CronJobEditCommand
+ *
  * @package Shapecode\Bundle\CronBundle\Command
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronJobEditCommand extends BaseCommand
 {

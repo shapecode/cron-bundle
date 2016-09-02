@@ -4,8 +4,9 @@ namespace Shapecode\Bundle\CronBundle\Entity\Plan;
 
 /**
  * Class AbstractEntityInterface
+ *
  * @package Shapecode\Bundle\CronBundle\Entity\Plan
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 interface AbstractEntityInterface
 {

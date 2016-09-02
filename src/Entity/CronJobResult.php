@@ -6,8 +6,9 @@ use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobResultInterface;
 
 /**
  * Class CronJobResult
+ *
  * @package Shapecode\Bundle\CronBundle\Entity
- * @author Nikita Loges
+ * @author  Nikita Loges
  *
  * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository")
  * @ORM\HasLifecycleCallbacks

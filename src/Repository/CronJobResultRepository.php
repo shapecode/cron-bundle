@@ -9,14 +9,16 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 
 /**
  * Class CronJobResultRepository
+ *
  * @package Shapecode\Bundle\CronBundle\Repository
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronJobResultRepository extends EntityRepository
 {
 
     /**
      * @param CronJob $job
+     *
      * @return mixed
      */
     public function deleteOldLogs(CronJob $job = null)
@@ -38,6 +40,7 @@ class CronJobResultRepository extends EntityRepository
 
     /**
      * @param CronJob $job
+     *
      * @return CronJobResult
      * @throws NonUniqueResultException
      */

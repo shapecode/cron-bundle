@@ -11,8 +11,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CronScanCommand
+ *
  * @package Shapecode\Bundle\CronBundle\Command
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronScanCommand extends BaseCommand
 {
@@ -90,10 +91,10 @@ class CronScanCommand extends BaseCommand
     }
 
     /**
-     * @param OutputInterface $output
-     * @param Command $command
+     * @param OutputInterface   $output
+     * @param Command           $command
      * @param CronJobAnnotation $annotation
-     * @param bool $defaultDisabled
+     * @param bool              $defaultDisabled
      */
     protected function newJobFound(OutputInterface $output, Command $command, CronJobAnnotation $annotation, $defaultDisabled = false)
     {

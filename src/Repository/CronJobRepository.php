@@ -3,28 +3,29 @@
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobInterface;
 
 /**
  * Class CronJobRepository
+ *
  * @package Shapecode\Bundle\CronBundle\Repository
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronJobRepository extends EntityRepository
 {
 
     /**
      * @param $command
+     *
      * @return null|CronJob
      */
     public function findOneByCommand($command)
     {
-        return $this->findOneBy(array(
+        return $this->findOneBy([
             'command' => $command
-        ));
+        ]);
     }
 
     /**
