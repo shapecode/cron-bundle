@@ -9,8 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CronPruneLogsCommand
+ *
  * @package Shapecode\Bundle\CronBundle\Command
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronPruneLogsCommand extends BaseCommand
 {

@@ -6,9 +6,10 @@ use Shapecode\Bundle\CronBundle\Entity\CronJob;
 
 /**
  * Class CronJobResultInterface
+ *
  * @package Shapecode\Bundle\CronBundle\Entity\Plan
- * @author Nikita Loges
- * @date 02.02.2015
+ * @author  Nikita Loges
+ * @date    02.02.2015
  */
 interface CronJobResultInterface extends AbstractEntityInterface
 {

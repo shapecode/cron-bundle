@@ -7,9 +7,10 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 
 /**
  * Class CronJobInterface
+ *
  * @package Shapecode\Bundle\CronBundle\Entity\Plan
- * @author Nikita Loges
- * @date 02.02.2015
+ * @author  Nikita Loges
+ * @date    02.02.2015
  */
 interface CronJobInterface extends AbstractEntityInterface
 {
@@ -79,6 +80,7 @@ interface CronJobInterface extends AbstractEntityInterface
 
     /**
      * @param CronJobResult $result
+     *
      * @return bool
      */
     public function hasResult(CronJobResult $result);

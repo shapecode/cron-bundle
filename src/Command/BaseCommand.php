@@ -9,9 +9,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class BaseCronjob
+ *
  * @package Shapecode\Bundle\CronBundle\Command
- * @author Nikita Loges
- * @date 02.02.2015
+ * @author  Nikita Loges
+ * @date    02.02.2015
  */
 abstract class BaseCommand extends ContainerAwareCommand
 {
@@ -41,6 +42,7 @@ abstract class BaseCommand extends ContainerAwareCommand
 
     /**
      * @param $id
+     *
      * @return object
      */
     protected function get($id)

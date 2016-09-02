@@ -2,7 +2,6 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
-use Symfony\Component\Stopwatch\Stopwatch;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -10,11 +9,13 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * Class CronRunCommand
+ *
  * @package Shapecode\Bundle\CronBundle\Command
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronRunCommand extends BaseCommand
 {
@@ -44,12 +45,12 @@ class CronRunCommand extends BaseCommand
 
         $jobRepo = $this->getCronJobRepository();
 
-        $jobsToRun = array();
+        $jobsToRun = [];
         if ($jobName = $input->getArgument('job')) {
             try {
                 $jobObj = $jobRepo->findOneByCommand($jobName);
                 if ($jobObj->isEnable()) {
-                    $jobsToRun = array($jobObj);
+                    $jobsToRun = [$jobObj];
                 }
             } catch (\Exception $e) {
                 $output->writeln('Couldn\'t find a job by the name of ' . $jobName);
@@ -69,6 +70,8 @@ class CronRunCommand extends BaseCommand
             $job->calculateNextRun();
             $job->setLastUse($now);
         }
+
+        // flush the calculated runs
         $this->getEntityManager()->flush();
 
         // Run the jobs
@@ -87,7 +90,7 @@ class CronRunCommand extends BaseCommand
     }
 
     /**
-     * @param CronJob $job
+     * @param CronJob         $job
      * @param OutputInterface $output
      */
     protected function runJob(CronJob $job, OutputInterface $output)
@@ -107,9 +110,9 @@ class CronRunCommand extends BaseCommand
             return;
         }
 
-        $emptyInput = new ArrayInput(array(
+        $emptyInput = new ArrayInput([
             'command' => $job->getCommand()
-        ));
+        ]);
         $jobOutput = new BufferedOutput();
 
         $this->getStopWatch()->start($watch);

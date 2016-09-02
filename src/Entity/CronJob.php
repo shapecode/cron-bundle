@@ -8,8 +8,9 @@ use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobInterface;
 
 /**
  * Class CronJob
+ *
  * @package Shapecode\Bundle\CronBundle\Entity
- * @author Nikita Loges
+ * @author  Nikita Loges
  *
  * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobRepository")
  * @ORM\HasLifecycleCallbacks
