@@ -3,15 +3,14 @@
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobResultRepositoryInterface;
 
 /**
  * Class CronJobResultRepository
+ *
  * @package Shapecode\Bundle\CronBundle\Repository
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronJobResultRepository extends EntityRepository implements CronJobResultRepositoryInterface
 {

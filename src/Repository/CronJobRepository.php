@@ -4,7 +4,6 @@ namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
-use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobRepositoryInterface;
 

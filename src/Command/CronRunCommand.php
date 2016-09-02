@@ -14,8 +14,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class CronRunCommand
+ *
  * @package Shapecode\Bundle\CronBundle\Command
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class CronRunCommand extends BaseCommand
 {
@@ -45,12 +46,12 @@ class CronRunCommand extends BaseCommand
 
         $jobRepo = $this->getCronJobRepository();
 
-        $jobsToRun = array();
+        $jobsToRun = [];
         if ($jobName = $input->getArgument('job')) {
             try {
                 $jobObj = $jobRepo->findOneByCommand($jobName);
                 if ($jobObj->isEnable()) {
-                    $jobsToRun = array($jobObj);
+                    $jobsToRun = [$jobObj];
                 }
             } catch (\Exception $e) {
                 $output->writeln('Couldn\'t find a job by the name of ' . $jobName);
@@ -62,8 +63,19 @@ class CronRunCommand extends BaseCommand
         }
 
         $jobCount = count($jobsToRun);
-        $output->writeln('Running '.$jobCount.' jobs:');
+        $output->writeln('Running ' . $jobCount . ' jobs:');
 
+        // Update the job with it's next scheduled time
+        $now = new \DateTime();
+        foreach ($jobsToRun as $job) {
+            $job->calculateNextRun();
+            $job->setLastUse($now);
+        }
+
+        // flush the calculated runs
+        $this->getEntityManager()->flush();
+
+        // Run the jobs
         foreach ($jobsToRun as $job) {
             $this->runJob($job, $output);
         }
@@ -101,9 +113,9 @@ class CronRunCommand extends BaseCommand
             return;
         }
 
-        $emptyInput = new ArrayInput(array(
+        $emptyInput = new ArrayInput([
             'command' => $job->getCommand()
-        ));
+        ]);
         $jobOutput = new BufferedOutput();
 
         $this->getStopWatch()->start($watch);
@@ -139,14 +151,6 @@ class CronRunCommand extends BaseCommand
 
         // Record the result
         $this->recordJobResult($job, $duration, $bufferedOutput, $statusCode);
-
-        // And update the job with it's next scheduled time
-        $job->calculateNextRun();
-        $job->setLastUse(new \DateTime());
-        
-        $this->getEntityManager()->persist($job);
-
-        return CronJobResult::SUCCEEDED;
     }
 
     /**
@@ -176,4 +180,5 @@ class CronRunCommand extends BaseCommand
     {
         return $this->getContainer()->get('debug.stopwatch');
     }
+
 }

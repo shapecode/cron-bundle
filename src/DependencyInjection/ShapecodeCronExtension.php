@@ -9,8 +9,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * Class ShapecodeCronExtension
+ *
  * @package Shapecode\Bundle\CronBundle\DependencyInjection
- * @author Nikita Loges
+ * @author  Nikita Loges
  */
 class ShapecodeCronExtension extends Extension
 {

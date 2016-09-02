@@ -6,8 +6,9 @@ use Doctrine\Common\Annotations\Annotation;
 
 /**
  * Class CronJob
+ *
  * @package Shapecode\Bundle\CronBundle\Annotation
- * @author Nikita Loges
+ * @author  Nikita Loges
  *
  * @Annotation
  */
