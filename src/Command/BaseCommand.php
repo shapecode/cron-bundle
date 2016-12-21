@@ -4,6 +4,8 @@ namespace Shapecode\Bundle\CronBundle\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Annotations\Reader;
+use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobRepositoryInterface;
+use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobResultRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -41,21 +43,11 @@ abstract class BaseCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param $id
-     *
-     * @return object
-     */
-    protected function get($id)
-    {
-        return $this->getContainer()->get($id);
-    }
-
-    /**
      * @return KernelInterface
      */
     protected function getKernel()
     {
-        return $this->get('kernel');
+        return $this->getContainer()->get('kernel');
     }
 
     /**
@@ -63,7 +55,7 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     public function getReader()
     {
-        return $this->get('annotation_reader');
+        return $this->getContainer()->get('annotation_reader');
     }
 
     /**
@@ -71,7 +63,7 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     protected function getDoctrine()
     {
-        return $this->get('doctrine');
+        return $this->getContainer()->get('doctrine');
     }
 
     /**
@@ -87,22 +79,22 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     protected function getRequest()
     {
-        return $this->get('request_stack')->getCurrentRequest();
+        return $this->getContainer()->get('request_stack')->getCurrentRequest();
     }
 
     /**
-     * @return \Shapecode\Bundle\CronBundle\Repository\CronJobRepository
+     * @return CronJobRepositoryInterface
      */
     protected function getCronJobRepository()
     {
-        return $this->getEntityManager()->getRepository('ShapecodeCronBundle:CronJob');
+        return $this->getContainer()->get('cronjob_repository');
     }
 
     /**
-     * @return \Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository
+     * @return CronJobResultRepositoryInterface
      */
     protected function getCronJobResultRepository()
     {
-        return $this->getEntityManager()->getRepository('ShapecodeCronBundle:CronJobResult');
+        return $this->getContainer()->get('cronjobresult_repository');
     }
 }

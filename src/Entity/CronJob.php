@@ -1,10 +1,11 @@
 <?php
 namespace Shapecode\Bundle\CronBundle\Entity;
 
+use Cron\CronExpression;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
 
 /**
  * Class CronJob
@@ -29,6 +30,12 @@ class CronJob extends AbstractEntity implements CronJobInterface
      * @ORM\Column(type="string", nullable=true)
      */
     protected $description;
+
+    /**
+     * @var int
+     * @ORM\Column(type="integer", options={"default":1})
+     */
+    protected $number = 1;
 
     /**
      * @var string
@@ -113,6 +120,22 @@ class CronJob extends AbstractEntity implements CronJobInterface
     public function setDescription($description)
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param int $number
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
     }
 
     /**
@@ -229,12 +252,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
      */
     public function calculateNextRun()
     {
-        $now = new \DateTime();
-        $nextRun = new \DateTime(date('Y') . '-' . date('m') . '-01');
-        do {
-            $nextRun->add($this->getInterval());
-        } while ($nextRun <= $now);
-
-        $this->setNextRun($nextRun);
+        $cron = CronExpression::factory($this->getPeriod());
+        $this->setNextRun($cron->getNextRunDate());
     }
 }

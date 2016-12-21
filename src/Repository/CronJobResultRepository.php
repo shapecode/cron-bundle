@@ -3,9 +3,8 @@
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Shapecode\Bundle\CronBundle\Entity\CronJob;
-use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobResultRepositoryInterface;
 
 /**
  * Class CronJobResultRepository
@@ -13,21 +12,19 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
  * @package Shapecode\Bundle\CronBundle\Repository
  * @author  Nikita Loges
  */
-class CronJobResultRepository extends EntityRepository
+class CronJobResultRepository extends EntityRepository implements CronJobResultRepositoryInterface
 {
 
     /**
-     * @param CronJob $job
-     *
-     * @return mixed
+     * @inheritdoc
      */
-    public function deleteOldLogs(CronJob $job = null)
+    public function deleteOldLogs(CronJobInterface $job = null)
     {
         $qb = $this->createQueryBuilder('d');
         $qb->delete($this->getEntityName(), 'd');
         $expr = $qb->expr();
 
-        $qb->andWhere($expr->lte('r.createdAt', ':createdAt'));
+        $qb->andWhere($expr->lte('d.createdAt', ':createdAt'));
         $qb->setParameter('createdAt', new \DateTime('7 days ago'));
 
         if ($job) {
@@ -39,12 +36,9 @@ class CronJobResultRepository extends EntityRepository
     }
 
     /**
-     * @param CronJob $job
-     *
-     * @return CronJobResult
-     * @throws NonUniqueResultException
+     * @inheritdoc
      */
-    public function findMostRecent(CronJob $job = null)
+    public function findMostRecent(CronJobInterface $job = null)
     {
         $qb = $this->createQueryBuilder('p');
         $expr = $qb->expr();

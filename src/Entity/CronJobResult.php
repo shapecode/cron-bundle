@@ -2,7 +2,7 @@
 namespace Shapecode\Bundle\CronBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Shapecode\Bundle\CronBundle\Entity\Plan\CronJobResultInterface;
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
 
 /**
  * Class CronJobResult

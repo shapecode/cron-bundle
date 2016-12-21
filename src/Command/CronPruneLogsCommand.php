@@ -37,20 +37,22 @@ class CronPruneLogsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $job = $input->getArgument('job');
+        $jobName = $input->getArgument('job');
 
-        if ($job) {
-            $output->writeln("Cleaning logs for cron job $job");
-            $jobObj = $this->getCronJobRepository()->findOneByCommand($job);
+        if ($jobName) {
+            $output->writeln("Cleaning logs for cron job $jobName");
+            $jobs = $this->getCronJobRepository()->findByCommand($jobName);
 
-            if (!$jobObj) {
+            if (!count($jobs)) {
 
-                $output->writeln("Couldn't find a job by the name of " . $job);
+                $output->writeln("Couldn't find a job by the name of " . $jobName);
 
                 return CronJobResult::FAILED;
             }
 
-            $this->getCronJobResultRepository()->deleteOldLogs($jobObj);
+            foreach ($jobs as $job) {
+                $this->getCronJobResultRepository()->deleteOldLogs($job);
+            }
         } else {
             $output->writeln("Cleaning logs for all cron jobs");
             $this->getCronJobResultRepository()->deleteOldLogs();

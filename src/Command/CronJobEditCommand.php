@@ -41,9 +41,9 @@ class CronJobEditCommand extends BaseCommand
     {
         $jobName = $input->getArgument('job');
         $jobRepo = $this->getCronJobRepository();
-        $job = $jobRepo->findOneByCommand($jobName);
+        $jobs = $jobRepo->findByCommand($jobName);
 
-        if (!$job) {
+        if (!count($jobs)) {
             $output->writeln("Couldn't find a job by the name of " . $jobName);
 
             return CronJobResult::FAILED;
@@ -51,8 +51,11 @@ class CronJobEditCommand extends BaseCommand
 
         $enable = ($input->getOption('enable') == 'y') ? true : false;
 
-        $job->setEnable($enable);
-        $this->getEntityManager()->persist($job);
+        foreach ($jobs as $job) {
+            $job->setEnable($enable);
+            $this->getEntityManager()->persist($job);
+        }
+
         $this->getEntityManager()->flush();
 
         if ($enable) {
@@ -60,5 +63,7 @@ class CronJobEditCommand extends BaseCommand
         } else {
             $output->writeln('cron disabled');
         }
+
+        return CronJobResult::SUCCEEDED;
     }
 }
