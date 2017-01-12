@@ -44,8 +44,6 @@
         "doctrine/common": "~2.6",
         "doctrine/doctrine-bundle": "~1.6",
 
-        "shapecode/repository-as-a-service": "~1.2",
-
         "mtdowling/cron-expression": "~1.1"
     },
     "require-dev": {

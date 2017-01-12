@@ -4,6 +4,8 @@ namespace Shapecode\Bundle\CronBundle\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Annotations\Reader;
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobRepositoryInterface;
 use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobResultRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -87,7 +89,7 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     protected function getCronJobRepository()
     {
-        return $this->getContainer()->get('cronjob_repository');
+        return $this->getEntityManager()->getRepository(CronJobInterface::class);
     }
 
     /**
@@ -95,6 +97,6 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     protected function getCronJobResultRepository()
     {
-        return $this->getContainer()->get('cronjobresult_repository');
+        return $this->getEntityManager()->getRepository(CronJobResultInterface::class);
     }
 }
