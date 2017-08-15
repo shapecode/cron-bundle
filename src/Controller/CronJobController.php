@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class CronJobController
  *
  * @author  Nikita Loges
- * @company tenolo GbR
+
  * @date    17.09.2015
  */
 class CronJobController extends Controller

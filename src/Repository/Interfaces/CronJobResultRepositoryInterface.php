@@ -12,7 +12,6 @@ use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
  *
  * @package Shapecode\Bundle\CronBundle\Repository\Interfaces
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 interface CronJobResultRepositoryInterface extends ObjectRepository
 {
