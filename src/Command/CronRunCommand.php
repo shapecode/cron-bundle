@@ -2,15 +2,14 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
-use Shapecode\Bundle\CronBundle\Entity\CronJob;
-use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * Class CronRunCommand
@@ -56,7 +55,7 @@ class CronRunCommand extends BaseCommand
             } catch (\Exception $e) {
                 $output->writeln('Couldn\'t find a job by the name of ' . $jobName);
 
-                return CronJobResult::FAILED;
+                return CronJobResultInterface::FAILED;
             }
         } else {
             $jobsToRun = $jobRepo->findDueTasks();
@@ -82,9 +81,6 @@ class CronRunCommand extends BaseCommand
             $this->runJob($job, $output);
         }
 
-        // Flush our results to the DB
-        $this->getEntityManager()->flush();
-
         $this->getStopWatch()->stop('cronjobs');
 
         $duration = $this->getStopWatch()->getEvent('cronjobs')->getDuration();
@@ -93,12 +89,12 @@ class CronRunCommand extends BaseCommand
     }
 
     /**
-     * @param CronJob         $job
-     * @param OutputInterface $output
+     * @param CronJobInterface $job
+     * @param OutputInterface  $output
      *
      * @return string
      */
-    protected function runJob(CronJob $job, OutputInterface $output)
+    protected function runJob(CronJobInterface $job, OutputInterface $output)
     {
         $command = $job->getCommand();
         $watch = 'job-' . $command;
@@ -109,7 +105,7 @@ class CronRunCommand extends BaseCommand
             $commandToRun = $this->getApplication()->get($job->getCommand());
         } catch (\InvalidArgumentException $ex) {
             $output->writeln(' skipped (command no longer exists)');
-            $this->recordJobResult($job, 0, 'Command no longer exists', CronJobResult::SKIPPED);
+            $this->recordJobResult($job, 0, 'Command no longer exists', CronJobResultInterface::SKIPPED);
 
             // No need to reschedule non-existant commands
             return;
@@ -121,13 +117,13 @@ class CronRunCommand extends BaseCommand
         $jobOutput = new BufferedOutput();
 
         $this->getStopWatch()->start($watch);
+
         try {
             $statusCode = $commandToRun->run($emptyInput, $jobOutput);
         } catch (\Exception $ex) {
-            $statusCode = CronJobResult::FAILED;
+            $statusCode = CronJobResultInterface::FAILED;
             $jobOutput->writeln('');
             $jobOutput->writeln('Job execution failed with exception ' . get_class($ex) . ':');
-//            $jobOutput->writeln($ex->__toString());
         }
         $this->getStopWatch()->stop($watch);
 
@@ -135,13 +131,13 @@ class CronRunCommand extends BaseCommand
             $statusCode = 0;
         }
 
-        $statusStr = CronJobResult::FAILED;
+        $statusStr = CronJobResultInterface::FAILED;
         switch ($statusCode) {
             case 0:
-                $statusStr = CronJobResult::SUCCEEDED;
+                $statusStr = CronJobResultInterface::SUCCEEDED;
                 break;
             case 2:
-                $statusStr = CronJobResult::SKIPPED;
+                $statusStr = CronJobResultInterface::SKIPPED;
                 break;
         }
 
@@ -156,13 +152,16 @@ class CronRunCommand extends BaseCommand
     }
 
     /**
-     * @param CronJob $job
-     * @param         $timeTaken
-     * @param         $output
-     * @param         $statusCode
+     * @param CronJobInterface $job
+     * @param                  $timeTaken
+     * @param                  $output
+     * @param                  $statusCode
      */
-    protected function recordJobResult(CronJob $job, $timeTaken, $output, $statusCode)
+    protected function recordJobResult(CronJobInterface $job, $timeTaken, $output, $statusCode)
     {
+        $manager = $this->getDoctrine()->resetManager();
+        $job = $manager->find(CronJobInterface::class, $job->getId());
+
         $className = $this->getCronJobResultRepository()->getClassName();
 
         /** @var CronJobResultInterface $result */
@@ -172,7 +171,8 @@ class CronRunCommand extends BaseCommand
         $result->setOutput($output);
         $result->setStatusCode($statusCode);
 
-        $this->getEntityManager()->persist($result);
+        $manager->persist($result);
+        $manager->flush();
     }
 
     /**

@@ -2,6 +2,7 @@
 namespace Shapecode\Bundle\CronBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
 
 /**
@@ -42,7 +43,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
 
     /**
      * @var CronJob
-     * @ORM\ManyToOne(targetEntity="CronJob", inversedBy="results")
+     * @ORM\ManyToOne(targetEntity="Shapecode\Bundle\CronBundle\Entity\CronJob", inversedBy="results", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $cronJob;
@@ -122,7 +123,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @inheritdoc
      */
-    public function setCronJob(CronJob $job)
+    public function setCronJob(CronJobInterface $job)
     {
         $this->cronJob = $job;
     }

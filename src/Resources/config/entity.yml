@@ -1,3 +1,0 @@
-parameters:
-    shapecode_cron.target_entity_resolver.cron_job.class: Shapecode\Bundle\CronBundle\Entity\CronJob
-    shapecode_cron.target_entity_resolver.cron_job_result.class: Shapecode\Bundle\CronBundle\Entity\CronJobResult
