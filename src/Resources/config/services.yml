@@ -1,3 +1,16 @@
-parameters:
-
 services:
+
+    shapecode_cron.cronjob_manager:
+        class: Shapecode\Bundle\CronBundle\Manager\CronJobManager
+        arguments:
+            - '@kernel'
+            - '@annotation_reader'
+            - '@doctrine.orm.default_entity_listener_resolver'
+
+    shapecode_cron.command.cron_scan:
+        class: Shapecode\Bundle\CronBundle\Command\CronScanCommand
+        arguments:
+            - '@doctrine'
+            - '@shapecode_cron.cronjob_manager'
+        tags:
+            - { name: console.command }

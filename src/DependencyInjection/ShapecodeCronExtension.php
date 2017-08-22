@@ -35,13 +35,13 @@ class ShapecodeCronExtension extends Extension implements PrependExtensionInterf
      */
     public function prepend(ContainerBuilder $container)
     {
-        $doctrine['orm'] = [
-            'resolve_target_entities' => [
-                CronJobInterface::class       => CronJob::class,
-                CronJobResultInterface::class => CronJobResult::class,
+        $container->prependExtensionConfig('doctrine', [
+            'orm' => [
+                'resolve_target_entities' => [
+                    CronJobInterface::class       => CronJob::class,
+                    CronJobResultInterface::class => CronJobResult::class,
+                ]
             ]
-        ];
-
-        $container->prependExtensionConfig('doctrine', $doctrine);
+        ]);
     }
 }
