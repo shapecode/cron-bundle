@@ -39,6 +39,7 @@
         "symfony/console": "~2.8|~3.0",
         "symfony/process": "~2.8|~3.0",
         "symfony/stopwatch": "~2.8|~3.0",
+        "symfony/event-dispatcher": "~2.8|~3.0",
 
         "doctrine/orm": "~2.5",
         "doctrine/common": "~2.6",

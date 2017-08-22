@@ -14,3 +14,19 @@ services:
             - '@shapecode_cron.cronjob_manager'
         tags:
             - { name: console.command }
+
+    shapecode_cron.command.generic_clean_up_daily:
+        class: Shapecode\Bundle\CronBundle\Command\GenericCleanUpDailyCommand
+        arguments:
+            - '@event_dispatcher'
+        tags:
+            - { name: console.command }
+            - { name: shapecode_cron.cron_job, expression: '@daily' }
+
+    shapecode_cron.command.generic_clean_up_hourly:
+        class: Shapecode\Bundle\CronBundle\Command\GenericCleanUpHourlyCommand
+        arguments:
+            - '@event_dispatcher'
+        tags:
+            - { name: console.command }
+            - { name: shapecode_cron.cron_job, expression: '@hourly' }
