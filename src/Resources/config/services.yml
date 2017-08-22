@@ -16,7 +16,7 @@ services:
             - { name: console.command }
 
     shapecode_cron.command.generic_clean_up_daily:
-        class: Shapecode\Bundle\CronBundle\Command\GenericCleanUpDailyCommand
+        class: Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpDailyCommand
         arguments:
             - '@event_dispatcher'
         tags:
@@ -24,7 +24,7 @@ services:
             - { name: shapecode_cron.cron_job, expression: '@daily' }
 
     shapecode_cron.command.generic_clean_up_hourly:
-        class: Shapecode\Bundle\CronBundle\Command\GenericCleanUpHourlyCommand
+        class: Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpHourlyCommand
         arguments:
             - '@event_dispatcher'
         tags:

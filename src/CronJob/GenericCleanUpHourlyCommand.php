@@ -1,6 +1,6 @@
 <?php
 
-namespace Shapecode\Bundle\CronBundle\Command;
+namespace Shapecode\Bundle\CronBundle\CronJob;
 
 use Shapecode\Bundle\CronBundle\Event\GenericCleanUpEvent;
 use Symfony\Component\Console\Command\Command;
@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * Class GenericCleanUpHourlyCommand
  *
- * @package Shapecode\Bundle\CronBundle\Command
+ * @package Shapecode\Bundle\CronBundle\CronJob
  * @author  Nikita Loges
  */
 class GenericCleanUpHourlyCommand extends Command
