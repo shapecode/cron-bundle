@@ -31,6 +31,14 @@ class GenericCleanUpHourlyCommand extends Command
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function configure()
+    {
+        $this->setName('shapecode:cron:generic-cleanup:hourly');
+    }
+
+    /**
      * @inheritdoc
      */
     public function execute(InputInterface $input, OutputInterface $output)
