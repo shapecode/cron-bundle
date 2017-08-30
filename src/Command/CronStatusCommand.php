@@ -16,18 +16,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CronStatusCommand extends BaseCommand
 {
-    /** @inheritdoc */
-    protected $commandName = 'shapecode:cron:status';
-
-    /** @inheritdoc */
-    protected $commandDescription = 'Displays the current status of cron jobs';
 
     /**
      * @inheritdoc
      */
     protected function configure()
     {
-        parent::configure();
+        $this->setName('shapecode:cron:status');
+        $this->setDescription('Displays the current status of cron jobs');
 
         $this->addArgument('job', InputArgument::OPTIONAL, 'Show information for only this job');
     }

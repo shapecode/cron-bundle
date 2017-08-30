@@ -7,14 +7,6 @@ services:
             - '@annotation_reader'
             - '@doctrine.orm.default_entity_listener_resolver'
 
-    shapecode_cron.command.cron_scan:
-        class: Shapecode\Bundle\CronBundle\Command\CronScanCommand
-        arguments:
-            - '@doctrine'
-            - '@shapecode_cron.cronjob_manager'
-        tags:
-            - { name: console.command }
-
     shapecode_cron.command.generic_clean_up_daily:
         class: Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpDailyCommand
         arguments:

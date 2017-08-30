@@ -11,9 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class CronJobController
  *
+ * @package Shapecode\Bundle\CronBundle\Controller
  * @author  Nikita Loges
-
- * @date    17.09.2015
  */
 class CronJobController extends Controller
 {

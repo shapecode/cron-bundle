@@ -4,45 +4,23 @@ namespace Shapecode\Bundle\CronBundle\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobRepositoryInterface;
 use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobResultRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
  * Class BaseCronjob
  *
  * @package Shapecode\Bundle\CronBundle\Command
  * @author  Nikita Loges
- * @date    02.02.2015
  */
 abstract class BaseCommand extends ContainerAwareCommand
 {
-
-    /** @var string */
-    protected $commandName = '';
-
-    /** @var string */
-    protected $commandDescription = '';
-
-    /**
-     * @inheritdoc
-     */
-    protected function configure()
-    {
-        $this->setName($this->commandName);
-        $this->setDescription($this->commandDescription);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getContainer()
-    {
-        return parent::getContainer();
-    }
 
     /**
      * @return KernelInterface
@@ -69,11 +47,11 @@ abstract class BaseCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectManager|object
+     * @return Stopwatch
      */
-    protected function getEntityManager()
+    protected function getStopWatch()
     {
-        return $this->getDoctrine()->getManager();
+        return $this->getContainer()->get('debug.stopwatch');
     }
 
     /**
@@ -85,18 +63,46 @@ abstract class BaseCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return CronJobRepositoryInterface
+     * @param null $className
+     *
+     * @return \Doctrine\ORM\EntityManager|null
      */
-    protected function getCronJobRepository()
+    protected function getEntityManager($className = null)
     {
-        return $this->getEntityManager()->getRepository(CronJobInterface::class);
+        if (is_object($className)) {
+            $className = get_class($className);
+        }
+
+        if (is_null($className)) {
+            return $this->getDoctrine()->getManager();
+        }
+
+        return $this->getDoctrine()->getManagerForClass($className);
     }
 
     /**
-     * @return CronJobResultRepositoryInterface
+     * @param $className
+     *
+     * @return \Doctrine\Common\Persistence\ObjectRepository|EntityRepository
+     */
+    protected function findRepository($className)
+    {
+        return $this->getDoctrine()->getRepository($className);
+    }
+
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectRepository|EntityRepository|CronJobRepositoryInterface
+     */
+    protected function getCronJobRepository()
+    {
+        return $this->findRepository(CronJobInterface::class);
+    }
+
+    /**
+     * @return \Doctrine\Common\Persistence\ObjectRepository|EntityRepository|CronJobResultRepositoryInterface
      */
     protected function getCronJobResultRepository()
     {
-        return $this->getEntityManager()->getRepository(CronJobResultInterface::class);
+        return $this->findRepository(CronJobResultInterface::class);
     }
 }

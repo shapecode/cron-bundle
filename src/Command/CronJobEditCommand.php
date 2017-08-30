@@ -17,18 +17,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CronJobEditCommand extends BaseCommand
 {
 
-    /** @var string */
-    protected $commandName = 'shapecode:cron:edit';
-
-    /** @var string */
-    protected $commandDescription = 'Changes the status of a cron job';
-
     /**
      * @inheritdoc
      */
     protected function configure()
     {
-        parent::configure();
+        $this->setName('shapecode:cron:edit');
+        $this->setDescription('Changes the status of a cron job');
 
         $this->addArgument("job", InputArgument::REQUIRED, 'Name of the job to disable');
         $this->addOption('enable', 'e', InputOption::VALUE_REQUIRED, 'Enable or disable this cron (y or n)');

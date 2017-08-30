@@ -29,7 +29,8 @@ class CronRunCommand extends BaseCommand
      */
     protected function configure()
     {
-        parent::configure();
+        $this->setName('shapecode:cron:run');
+        $this->setDescription('Runs any currently schedule cron jobs');
 
         $this->addArgument('job', InputArgument::OPTIONAL, 'Run only this job (if enabled)');
     }

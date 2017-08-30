@@ -16,18 +16,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CronPruneLogsCommand extends BaseCommand
 {
 
-    /** @inheritdoc */
-    protected $commandName = 'shapecode:cron:logs:cleanup';
-
-    /** @inheritdoc */
-    protected $commandDescription = 'Cleans the logs for each cron job, leaving only recent failures and the most recent success';
-
     /**
      * @inheritdoc
      */
     protected function configure()
     {
-        parent::configure();
+        $this->setName('shapecode:cron:logs:cleanup');
+        $this->setDescription('Cleans the logs for each cron job, leaving only recent failures and the most recent success');
 
         $this->addArgument('job', InputArgument::OPTIONAL, 'Operate only on this job');
     }

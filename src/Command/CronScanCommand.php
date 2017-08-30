@@ -2,14 +2,8 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
-use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
-use Shapecode\Bundle\CronBundle\Manager\CronJobManagerInterface;
-use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobRepositoryInterface;
-use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobResultRepositoryInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,34 +15,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package Shapecode\Bundle\CronBundle\Command
  * @author  Nikita Loges
  */
-class CronScanCommand extends Command
+class CronScanCommand extends BaseCommand
 {
-
-    /** @var RegistryInterface */
-    protected $doctrine;
-
-    /** @var CronJobManagerInterface */
-    protected $cronManager;
-
-    /**
-     * @param RegistryInterface       $doctrine
-     * @param CronJobManagerInterface $cronManager
-     */
-    public function __construct(RegistryInterface $doctrine, CronJobManagerInterface $cronManager)
-    {
-        $this->doctrine = $doctrine;
-        $this->cronManager = $cronManager;
-
-        parent::__construct();
-    }
 
     /**
      * @inheritdoc
      */
     protected function configure()
     {
-        parent::configure();
-
         $this->setName('shapecode:cron:scan');
         $this->setDescription('Scans for any new or deleted cron jobs');
 
@@ -70,7 +44,7 @@ class CronScanCommand extends Command
         $em = $this->getEntityManager($jobRepo->getClassName());
 
         $counter = [];
-        foreach ($this->cronManager->getJobs() as $jobMetadata) {
+        foreach ($this->getCronManager()->getJobs() as $jobMetadata) {
             $command = $jobMetadata->getCommand();
             $name = $command->getName();
 
@@ -144,54 +118,10 @@ class CronScanCommand extends Command
     }
 
     /**
-     * @return RegistryInterface
+     * @return object|\Shapecode\Bundle\CronBundle\Manager\CronJobManager
      */
-    protected function getDoctrine()
+    protected function getCronManager()
     {
-        return $this->doctrine;
-    }
-
-    /**
-     * @param null $className
-     *
-     * @return \Doctrine\ORM\EntityManager|null
-     */
-    protected function getEntityManager($className = null)
-    {
-        if (is_object($className)) {
-            $className = get_class($className);
-        }
-
-        if (is_null($className)) {
-            return $this->getDoctrine()->getEntityManager();
-        }
-
-        return $this->getDoctrine()->getEntityManagerForClass($className);
-    }
-
-    /**
-     * @param $className
-     *
-     * @return \Doctrine\Common\Persistence\ObjectRepository|EntityRepository
-     */
-    protected function findRepository($className)
-    {
-        return $this->getDoctrine()->getRepository($className);
-    }
-
-    /**
-     * @return EntityRepository|CronJobRepositoryInterface
-     */
-    protected function getCronJobRepository()
-    {
-        return $this->findRepository(CronJobInterface::class);
-    }
-
-    /**
-     * @return EntityRepository|CronJobResultRepositoryInterface
-     */
-    protected function getCronJobResultRepository()
-    {
-        return $this->findRepository(CronJobResultInterface::class);
+        return $this->getContainer()->get('shapecode_cron.cronjob_manager');
     }
 }
