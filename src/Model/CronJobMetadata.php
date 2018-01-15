@@ -9,7 +9,6 @@ use Symfony\Component\Console\Command\Command;
  *
  * @package Shapecode\Bundle\CronBundle\Model
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class CronJobMetadata
 {

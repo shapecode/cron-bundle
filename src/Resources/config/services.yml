@@ -1,13 +1,63 @@
 services:
 
+    # manager
     shapecode_cron.cronjob_manager:
         class: Shapecode\Bundle\CronBundle\Manager\CronJobManager
         arguments:
             - '@kernel'
             - '@annotation_reader'
-            - '@doctrine.orm.default_entity_listener_resolver'
 
-    shapecode_cron.command.generic_clean_up_daily:
+    # commands
+    shapecode_cron.abstract:
+        arguments:
+            - '@kernel'
+            - '@annotations.reader'
+            - '@doctrine'
+            - '@request_stack'
+
+    shapecode_cron.command.cron_job_edit:
+        class: Shapecode\Bundle\CronBundle\Command\CronJobEditCommand
+        parent: shapecode_cron.abstract
+        tags:
+            - { name: console.command }
+
+    shapecode_cron.command.cron_process:
+        class: Shapecode\Bundle\CronBundle\Command\CronProcessCommand
+        parent: shapecode_cron.abstract
+        tags:
+            - { name: console.command }
+
+    shapecode_cron.command.cron_prune_logs:
+        class: Shapecode\Bundle\CronBundle\Command\CronPruneLogsCommand
+        parent: shapecode_cron.abstract
+        tags:
+            - { name: console.command }
+
+    shapecode_cron.command.cron_run:
+        class: Shapecode\Bundle\CronBundle\Command\CronRunCommand
+        parent: shapecode_cron.abstract
+        tags:
+            - { name: console.command }
+
+    shapecode_cron.command.cron_scan:
+        class: Shapecode\Bundle\CronBundle\Command\CronScanCommand
+        arguments:
+            - '@shapecode_cron.cronjob_manager'
+            - '@kernel'
+            - '@annotations.reader'
+            - '@doctrine'
+            - '@request_stack'
+        tags:
+            - { name: console.command }
+
+    shapecode_cron.command.cron_status:
+        class: Shapecode\Bundle\CronBundle\Command\CronStatusCommand
+        parent: shapecode_cron.abstract
+        tags:
+            - { name: console.command }
+
+    # cronjobs
+    shapecode_cron.cronjob.generic_clean_up_daily:
         class: Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpDailyCommand
         arguments:
             - '@event_dispatcher'
@@ -15,7 +65,7 @@ services:
             - { name: console.command }
             - { name: shapecode_cron.cron_job, expression: '@daily' }
 
-    shapecode_cron.command.generic_clean_up_hourly:
+    shapecode_cron.cronjob.generic_clean_up_hourly:
         class: Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpHourlyCommand
         arguments:
             - '@event_dispatcher'

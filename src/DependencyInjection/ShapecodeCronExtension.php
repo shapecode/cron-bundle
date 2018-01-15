@@ -3,9 +3,9 @@
 namespace Shapecode\Bundle\CronBundle\DependencyInjection;
 
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
+use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;

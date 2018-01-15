@@ -1,11 +1,11 @@
 <?php
 
-namespace Shapecode\Bundle\CronBundle\Entity\Interfaces;
+namespace Shapecode\Bundle\CronBundle\Entity;
 
 /**
  * Class CronJobResultInterface
  *
- * @package Shapecode\Bundle\CronBundle\Entity\Interfaces
+ * @package Shapecode\Bundle\CronBundle\Entity
  * @author  Nikita Loges
  */
 interface CronJobResultInterface extends AbstractEntityInterface

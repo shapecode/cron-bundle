@@ -3,8 +3,7 @@
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
-use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobResultRepositoryInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 
 /**
  * Class CronJobResultRepository

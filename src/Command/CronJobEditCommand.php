@@ -38,6 +38,8 @@ class CronJobEditCommand extends BaseCommand
         $jobRepo = $this->getCronJobRepository();
         $jobs = $jobRepo->findByCommand($jobName);
 
+        $em = $this->getEntityManager($jobRepo->getClassName());
+
         if (!count($jobs)) {
             $output->writeln("Couldn't find a job by the name of " . $jobName);
 
@@ -48,10 +50,10 @@ class CronJobEditCommand extends BaseCommand
 
         foreach ($jobs as $job) {
             $job->setEnable($enable);
-            $this->getEntityManager()->persist($job);
+            $em->persist($job);
         }
 
-        $this->getEntityManager()->flush();
+        $em->flush();
 
         if ($enable) {
             $output->writeln('cron enabled');

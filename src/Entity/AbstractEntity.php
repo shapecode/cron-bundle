@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package Shapecode\Bundle\CronBundle\Entity
  * @author  Nikita Loges
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements AbstractEntityInterface
 {
 
     /**

@@ -2,12 +2,17 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Manager\CronJobManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class CronScanCommand
@@ -17,6 +22,16 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CronScanCommand extends BaseCommand
 {
+
+    /** @var CronJobManagerInterface */
+    protected $cronJobManager;
+
+    public function __construct(CronJobManagerInterface $manager, KernelInterface $kernel, Reader $annotationReader, ManagerRegistry $registry, RequestStack $requestStack)
+    {
+        $this->cronJobManager = $manager;
+
+        parent::__construct($kernel, $annotationReader, $registry, $requestStack);
+    }
 
     /**
      * @inheritdoc
@@ -118,10 +133,10 @@ class CronScanCommand extends BaseCommand
     }
 
     /**
-     * @return object|\Shapecode\Bundle\CronBundle\Manager\CronJobManager
+     * @return CronJobManagerInterface
      */
     protected function getCronManager()
     {
-        return $this->getContainer()->get('shapecode_cron.cronjob_manager');
+        return $this->cronJobManager;
     }
 }

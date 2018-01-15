@@ -2,14 +2,15 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
-use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobRepositoryInterface;
-use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobResultRepositoryInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
+use Shapecode\Bundle\CronBundle\Repository\CronJobRepositoryInterface;
+use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepositoryInterface;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -19,15 +20,48 @@ use Symfony\Component\Stopwatch\Stopwatch;
  * @package Shapecode\Bundle\CronBundle\Command
  * @author  Nikita Loges
  */
-abstract class BaseCommand extends ContainerAwareCommand
+abstract class BaseCommand extends Command
 {
+
+    /** @var KernelInterface */
+    protected $kernel;
+
+    /** @var Reader */
+    protected $annotationReader;
+
+    /** @var ManagerRegistry */
+    protected $registry;
+
+    /** @var Stopwatch */
+    protected $stopwatch;
+
+    /** @var RequestStack */
+    protected $requestStack;
+
+    /**
+     * @param KernelInterface $kernel
+     * @param Reader          $annotationReader
+     * @param ManagerRegistry $registry
+     * @param Stopwatch       $stopwatch
+     * @param RequestStack    $requestStack
+     */
+    public function __construct(KernelInterface $kernel, Reader $annotationReader, ManagerRegistry $registry, RequestStack $requestStack)
+    {
+        parent::__construct();
+
+        $this->kernel = $kernel;
+        $this->annotationReader = $annotationReader;
+        $this->registry = $registry;
+        $this->stopwatch = $stopwatch;
+        $this->requestStack = $requestStack;
+    }
 
     /**
      * @return KernelInterface
      */
     protected function getKernel()
     {
-        return $this->getContainer()->get('kernel');
+        return $this->kernel;
     }
 
     /**
@@ -35,15 +69,25 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     public function getReader()
     {
-        return $this->getContainer()->get('annotation_reader');
+        return $this->annotationReader;
     }
 
     /**
-     * @return Registry
+     * @return ManagerRegistry
+     *
+     * @deprecated
      */
     protected function getDoctrine()
     {
-        return $this->getContainer()->get('doctrine');
+        return $this->getRegistry();
+    }
+
+    /**
+     * @return ManagerRegistry
+     */
+    protected function getRegistry()
+    {
+        return $this->registry;
     }
 
     /**
@@ -51,7 +95,11 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     protected function getStopWatch()
     {
-        return $this->getContainer()->get('debug.stopwatch');
+        if (is_null($this->stopwatch)) {
+            $this->stopwatch = new Stopwatch();
+        }
+
+        return $this->stopwatch;
     }
 
     /**
@@ -59,13 +107,13 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     protected function getRequest()
     {
-        return $this->getContainer()->get('request_stack')->getCurrentRequest();
+        return $this->requestStack->getMasterRequest();
     }
 
     /**
      * @param null $className
      *
-     * @return \Doctrine\ORM\EntityManager|null
+     * @return \Doctrine\Common\Persistence\ObjectManager|null
      */
     protected function getEntityManager($className = null)
     {
@@ -74,10 +122,10 @@ abstract class BaseCommand extends ContainerAwareCommand
         }
 
         if (is_null($className)) {
-            return $this->getDoctrine()->getManager();
+            return $this->getRegistry()->getManager();
         }
 
-        return $this->getDoctrine()->getManagerForClass($className);
+        return $this->getRegistry()->getManagerForClass($className);
     }
 
     /**
@@ -87,7 +135,7 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     protected function findRepository($className)
     {
-        return $this->getDoctrine()->getRepository($className);
+        return $this->getRegistry()->getRepository($className);
     }
 
     /**
@@ -95,7 +143,9 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     protected function getCronJobRepository()
     {
-        return $this->findRepository(CronJobInterface::class);
+        $em = $this->getEntityManager(CronJobInterface::class);
+
+        return $em->getRepository(CronJobInterface::class);
     }
 
     /**
@@ -103,6 +153,8 @@ abstract class BaseCommand extends ContainerAwareCommand
      */
     protected function getCronJobResultRepository()
     {
-        return $this->findRepository(CronJobResultInterface::class);
+        $em = $this->getEntityManager(CronJobResultInterface::class);
+
+        return $em->getRepository(CronJobResultInterface::class);
     }
 }

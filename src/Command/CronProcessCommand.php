@@ -2,12 +2,8 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
-use Doctrine\ORM\EntityRepository;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
-use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobRepositoryInterface;
-use Shapecode\Bundle\CronBundle\Repository\Interfaces\CronJobResultRepositoryInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,7 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package Shapecode\Bundle\CronBundle\Command
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class CronProcessCommand extends BaseCommand
 {
@@ -105,10 +100,12 @@ class CronProcessCommand extends BaseCommand
      */
     protected function recordJobResult(CronJobInterface $job, $timeTaken, $output, $statusCode)
     {
-        $repo = $this->getCronJobResultRepository();
-        $manager = $this->getEntityManager($repo->getClassName());
+        $cronJobResultRepository = $this->getCronJobResultRepository();
+        $cronJobRepository = $this->getCronJobRepository();
 
-        $job = $manager->find(CronJobInterface::class, $job->getId());
+        $cronJobResultManager = $this->getEntityManager($cronJobResultRepository->getClassName());
+
+        $job = $cronJobRepository->find($job->getId());
 
         $className = $this->getCronJobResultRepository()->getClassName();
 
@@ -119,60 +116,8 @@ class CronProcessCommand extends BaseCommand
         $result->setOutput($output);
         $result->setStatusCode($statusCode);
 
-        $manager->persist($result);
-        $manager->flush();
-    }
-
-    /**
-     * @return RegistryInterface
-     */
-    protected function getDoctrine()
-    {
-        return $this->getContainer()->get('doctrine');
-    }
-
-    /**
-     * @param null $className
-     *
-     * @return \Doctrine\ORM\EntityManager|null
-     */
-    protected function getEntityManager($className = null)
-    {
-        if (is_object($className)) {
-            $className = get_class($className);
-        }
-
-        if (is_null($className)) {
-            return $this->getDoctrine()->getEntityManager();
-        }
-
-        return $this->getDoctrine()->getEntityManagerForClass($className);
-    }
-
-    /**
-     * @param $className
-     *
-     * @return \Doctrine\Common\Persistence\ObjectRepository|EntityRepository
-     */
-    protected function findRepository($className)
-    {
-        return $this->getDoctrine()->getRepository($className);
-    }
-
-    /**
-     * @return EntityRepository|CronJobRepositoryInterface
-     */
-    protected function getCronJobRepository()
-    {
-        return $this->findRepository(CronJobInterface::class);
-    }
-
-    /**
-     * @return EntityRepository|CronJobResultRepositoryInterface
-     */
-    protected function getCronJobResultRepository()
-    {
-        return $this->findRepository(CronJobResultInterface::class);
+        $cronJobResultManager->persist($result);
+        $cronJobResultManager->flush();
     }
 
 }

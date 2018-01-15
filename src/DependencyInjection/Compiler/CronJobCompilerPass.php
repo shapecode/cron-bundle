@@ -11,7 +11,6 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * @package Shapecode\Bundle\CronBundle\DependencyInjection\Compiler
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class CronJobCompilerPass implements CompilerPassInterface
 {

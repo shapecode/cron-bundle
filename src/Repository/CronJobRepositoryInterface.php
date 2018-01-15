@@ -1,17 +1,16 @@
 <?php
 
-namespace Shapecode\Bundle\CronBundle\Repository\Interfaces;
+namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 
 /**
  * Interface CronJobRepositoryInterface
  *
- * @package Shapecode\Bundle\CronBundle\Repository\Interfaces
+ * @package Shapecode\Bundle\CronBundle\Repository
  * @author  Nikita Loges
-
  */
 interface CronJobRepositoryInterface extends ObjectRepository
 {

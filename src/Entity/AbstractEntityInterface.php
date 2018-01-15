@@ -1,11 +1,12 @@
 <?php
 
-namespace Shapecode\Bundle\CronBundle\Entity\Interfaces;
+namespace Shapecode\Bundle\CronBundle\Entity;
 
 /**
  * Class AbstractEntityInterface
- * @package Shapecode\Bundle\CronBundle\Entity\Interfaces
- * @author Nikita Loges
+ *
+ * @package Shapecode\Bundle\CronBundle\Entity
+ * @author  Nikita Loges
  */
 interface AbstractEntityInterface
 {

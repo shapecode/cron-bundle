@@ -2,8 +2,8 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobInterface;
-use Shapecode\Bundle\CronBundle\Entity\Interfaces\CronJobResultInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

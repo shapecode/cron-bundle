@@ -14,7 +14,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *
  * @package Shapecode\Bundle\CronBundle\Manager
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class CronJobManager implements CronJobManagerInterface
 {
@@ -60,7 +59,7 @@ class CronJobManager implements CronJobManagerInterface
     /**
      * @return array
      */
-    public function initApplicationJobs()
+    protected function initApplicationJobs()
     {
         $applicationJobs = [];
 
@@ -103,7 +102,7 @@ class CronJobManager implements CronJobManagerInterface
     /**
      * @return Application
      */
-    public function getApplication()
+    protected function getApplication()
     {
         return $this->application;
     }
@@ -111,7 +110,7 @@ class CronJobManager implements CronJobManagerInterface
     /**
      * @return Reader
      */
-    public function getReader()
+    protected function getReader()
     {
         return $this->reader;
     }
