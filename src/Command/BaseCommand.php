@@ -42,7 +42,6 @@ abstract class BaseCommand extends Command
      * @param KernelInterface $kernel
      * @param Reader          $annotationReader
      * @param ManagerRegistry $registry
-     * @param Stopwatch       $stopwatch
      * @param RequestStack    $requestStack
      */
     public function __construct(KernelInterface $kernel, Reader $annotationReader, ManagerRegistry $registry, RequestStack $requestStack)
@@ -52,7 +51,6 @@ abstract class BaseCommand extends Command
         $this->kernel = $kernel;
         $this->annotationReader = $annotationReader;
         $this->registry = $registry;
-        $this->stopwatch = $stopwatch;
         $this->requestStack = $requestStack;
     }
 
