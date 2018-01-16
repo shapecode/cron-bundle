@@ -28,6 +28,8 @@ class GenericCleanUpDailyCommand extends Command
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct();
+
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
