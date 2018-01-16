@@ -89,16 +89,26 @@ class CronRunCommand extends BaseCommand
     {
         $output->writeln("Running " . $job->getCommand());
 
-        try {
-            $process = new Process('php app/console shapecode:cron:process ' . $job->getId());
-            $process->start();
-        } catch (\Exception $e) {
+        $rootDir = $this->kernel->getRootDir();
+        $projectDir = $rootDir . '/..';
+
+        $binaryDir = $projectDir . '/bin';
+        $legacyBinaryDir = $projectDir . '/app';
+
+        if (file_exists($legacyBinaryDir . '/console')) {
+            try {
+                $process = new Process('php app/console shapecode:cron:process ' . $job->getId());
+                $process->start();
+            } catch (\Exception $e) {
+            }
         }
 
-        try {
-            $process = new Process('php bin/console shapecode:cron:process ' . $job->getId());
-            $process->start();
-        } catch (\Exception $e) {
+        if (file_exists($binaryDir . '/console')) {
+            try {
+                $process = new Process('php bin/console shapecode:cron:process ' . $job->getId());
+                $process->start();
+            } catch (\Exception $e) {
+            }
         }
     }
 

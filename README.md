@@ -55,7 +55,7 @@ Update your DB schema ...
 
 ... with Doctrine standard method ...
 ```sh
-$ php app/console doctrine:schema:update --force
+$ php bin/console doctrine:schema:update --force
 ```
 
 Creating your own tasks
@@ -106,21 +106,21 @@ class DemoCommand extends Command
 
 The interval spec ("*\/5 * * * *" in the above example) use the standard cronjob schedule format and can be modified whenever you choose. You have to escape the / in this example because it would close the annotation.
 You can also register your command multiple times by using the annotation more than once with different values.
-For your CronJob to be scanned and included in future runs, you must first run `php app/console shapecode:cron:scan` - it will be scheduled to run the next time you run `php app/console schapede:cron:run`
+For your CronJob to be scanned and included in future runs, you must first run `php bin/console shapecode:cron:scan` - it will be scheduled to run the next time you run `php app/console schapede:cron:run`
 
 Register your new Crons:
 ```sh
-$ php app/console schapecode:cron:scan
-$ php app/console schapecode:cron:run
+$ php bin/console schapecode:cron:scan
+$ php bin/console schapecode:cron:run
 ```
 
 Running your cron jobs automatically
 --------------------------------
 
-This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `app/console cron:run`).
+This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `bin/console cron:run`).
 
 To facilitate this, you can create a cron job on your system like this:
 ```sh
-*/5 * * * * php /path/to/symfony/app/console cron:run
+*/5 * * * * php /path/to/symfony/bin/console cron:run
 ```
 This will schedule your tasks to run at most every 5 minutes - for instance, tasks which are scheduled to run every 3 minutes will only run every 5 minutes.
