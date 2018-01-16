@@ -23,7 +23,7 @@ Add the bundle to your project as a composer dependency:
     // ...
     require: {
         // ...
-        "shapecode/cron-bundle": "~2.0"
+        "shapecode/cron-bundle": "~3.0"
     }
 }
 ```
@@ -42,8 +42,8 @@ public function registerBundles()
 {
 	// ...
 	$bundles = array(
-		// ...
-        new Shapecode\Bundle\CronBundle\ShapecodeCronBundle(),
+	    // ...
+            new Shapecode\Bundle\CronBundle\ShapecodeCronBundle(),
 	);
     // ...
 
