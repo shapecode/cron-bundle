@@ -50,9 +50,4 @@ interface AbstractEntityInterface
      * @return \DateTime
      */
     public function getUpdatedAt();
-
-    /**
-     * Sets created and updated by default
-     */
-    public function setCreatedAtAndUpdatedAtValue();
 }

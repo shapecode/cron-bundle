@@ -9,6 +9,7 @@ services:
 
     # commands
     shapecode_cron.abstract:
+        abstract: true
         arguments:
             - '@kernel'
             - '@annotations.reader'
@@ -72,3 +73,9 @@ services:
         tags:
             - { name: console.command }
             - { name: shapecode_cron.cron_job, expression: '@hourly' }
+
+    # eventlistener
+    shapecode_cron.event_listener.entity_subscriber:
+        class: Shapecode\Bundle\CronBundle\EventListener\EntitySubscriber
+        tags:
+            - { name: doctrine.event_subscriber }

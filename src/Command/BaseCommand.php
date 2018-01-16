@@ -109,31 +109,11 @@ abstract class BaseCommand extends Command
     }
 
     /**
-     * @param null $className
-     *
      * @return \Doctrine\Common\Persistence\ObjectManager|null
      */
-    protected function getEntityManager($className = null)
+    protected function getManager()
     {
-        if (is_object($className)) {
-            $className = get_class($className);
-        }
-
-        if (is_null($className)) {
-            return $this->getRegistry()->getManager();
-        }
-
-        return $this->getRegistry()->getManagerForClass($className);
-    }
-
-    /**
-     * @param $className
-     *
-     * @return \Doctrine\Common\Persistence\ObjectRepository|EntityRepository
-     */
-    protected function findRepository($className)
-    {
-        return $this->getRegistry()->getRepository($className);
+        return $this->getRegistry()->getManager();
     }
 
     /**
@@ -141,9 +121,7 @@ abstract class BaseCommand extends Command
      */
     protected function getCronJobRepository()
     {
-        $em = $this->getEntityManager(CronJobInterface::class);
-
-        return $em->getRepository(CronJobInterface::class);
+        return $this->getRegistry()->getRepository(CronJobInterface::class);
     }
 
     /**
@@ -151,8 +129,6 @@ abstract class BaseCommand extends Command
      */
     protected function getCronJobResultRepository()
     {
-        $em = $this->getEntityManager(CronJobResultInterface::class);
-
-        return $em->getRepository(CronJobResultInterface::class);
+        return $this->getRegistry()->getRepository(CronJobResultInterface::class);
     }
 }

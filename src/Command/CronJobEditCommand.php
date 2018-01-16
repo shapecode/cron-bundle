@@ -38,7 +38,7 @@ class CronJobEditCommand extends BaseCommand
         $jobRepo = $this->getCronJobRepository();
         $jobs = $jobRepo->findByCommand($jobName);
 
-        $em = $this->getEntityManager($jobRepo->getClassName());
+        $em = $this->getManager();
 
         if (!count($jobs)) {
             $output->writeln("Couldn't find a job by the name of " . $jobName);

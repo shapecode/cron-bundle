@@ -56,7 +56,7 @@ class CronScanCommand extends BaseCommand
         // Enumerate the known jobs
         $jobRepo = $this->getCronJobRepository();
         $knownJobs = $jobRepo->getKnownJobs()->toArray();
-        $em = $this->getEntityManager($jobRepo->getClassName());
+        $em = $this->getManager();
 
         $counter = [];
         foreach ($this->getCronManager()->getJobs() as $jobMetadata) {
@@ -129,7 +129,7 @@ class CronScanCommand extends BaseCommand
 
         $output->writeln("Added the job " . $newJob->getCommand() . " with period " . $newJob->getPeriod());
 
-        $this->getEntityManager($className)->persist($newJob);
+        $this->getManager()->persist($newJob);
     }
 
     /**

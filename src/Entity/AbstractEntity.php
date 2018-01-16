@@ -85,19 +85,4 @@ abstract class AbstractEntity implements AbstractEntityInterface
 
         return $this->updatedAt;
     }
-
-    /**
-     * @inheritdoc
-     * @ORM\PrePersist
-     * @ORM\PreUpdate
-     */
-    public function setCreatedAtAndUpdatedAtValue()
-    {
-        if (empty($this->updatedAt)) {
-            $this->setUpdatedAt(new \DateTime());
-        }
-        if (empty($this->createdAt)) {
-            $this->setCreatedAt(new \DateTime());
-        }
-    }
 }

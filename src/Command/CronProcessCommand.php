@@ -100,10 +100,8 @@ class CronProcessCommand extends BaseCommand
      */
     protected function recordJobResult(CronJobInterface $job, $timeTaken, $output, $statusCode)
     {
-        $cronJobResultRepository = $this->getCronJobResultRepository();
         $cronJobRepository = $this->getCronJobRepository();
-
-        $cronJobResultManager = $this->getEntityManager($cronJobResultRepository->getClassName());
+        $cronJobResultManager = $this->getManager();
 
         $job = $cronJobRepository->find($job->getId());
 

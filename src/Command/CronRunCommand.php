@@ -67,11 +67,11 @@ class CronRunCommand extends BaseCommand
             $job->calculateNextRun();
             $job->setLastUse($now);
 
-            $this->getEntityManager()->persist($job);
+            $this->getManager()->persist($job);
         }
 
         // flush the calculated runs
-        $this->getEntityManager()->flush();
+        $this->getManager()->flush();
 
         // Run the jobs
         foreach ($jobsToRun as $job) {
