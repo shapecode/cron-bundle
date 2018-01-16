@@ -73,9 +73,28 @@ class CronRunCommand extends BaseCommand
         // flush the calculated runs
         $this->getManager()->flush();
 
+        /** @var Process[] $processes */
+        $processes = [];
+
         // Run the jobs
         foreach ($jobsToRun as $job) {
-            $this->runJob($job, $output);
+            $process = $this->runJob($job, $output);
+
+            if ($process) {
+                $processes[] = $process;
+            }
+        }
+
+        // wait for all processes
+        $wait = true;
+        while ($wait) {
+            $wait = false;
+
+            foreach ($processes as $process) {
+                if ($process->isRunning()) {
+                    $wait = true;
+                }
+            }
         }
     }
 
@@ -83,7 +102,7 @@ class CronRunCommand extends BaseCommand
      * @param CronJobInterface $job
      * @param OutputInterface  $output
      *
-     * @return string
+     * @return Process|null
      */
     protected function runJob(CronJobInterface $job, OutputInterface $output)
     {
@@ -95,21 +114,29 @@ class CronRunCommand extends BaseCommand
         $binaryDir = $projectDir . '/bin';
         $legacyBinaryDir = $projectDir . '/app';
 
+        $command = null;
+
         if (file_exists($legacyBinaryDir . '/console')) {
-            try {
-                $process = new Process('php app/console shapecode:cron:process ' . $job->getId());
-                $process->start();
-            } catch (\Exception $e) {
-            }
+            $command = 'php app/console shapecode:cron:process ' . $job->getId();
         }
 
         if (file_exists($binaryDir . '/console')) {
+            $command = 'php bin/console shapecode:cron:process ' . $job->getId();
+        }
+
+        if ($command) {
             try {
-                $process = new Process('php bin/console shapecode:cron:process ' . $job->getId());
+                $process = new Process($command);
+                $process->disableOutput();
                 $process->start();
+
+                return $process;
             } catch (\Exception $e) {
+
             }
         }
+
+        return null;
     }
 
 }
