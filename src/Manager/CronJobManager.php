@@ -5,7 +5,7 @@ namespace Shapecode\Bundle\CronBundle\Manager;
 use Doctrine\Common\Annotations\Reader;
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
-use Symfony\Component\Console\Application;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\KernelInterface;
 
