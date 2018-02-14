@@ -117,10 +117,10 @@ $ php bin/console shapecode:cron:run
 Running your cron jobs automatically
 --------------------------------
 
-This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `bin/console cron:run`).
+This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `bin/console shapecode:cron:run`).
 
 To facilitate this, you can create a cron job on your system like this:
 ```sh
-*/5 * * * * php /path/to/symfony/bin/console cron:run
+*/5 * * * * php /path/to/symfony/bin/console shapecode:cron:run
 ```
 This will schedule your tasks to run at most every 5 minutes - for instance, tasks which are scheduled to run every 3 minutes will only run every 5 minutes.
