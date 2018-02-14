@@ -106,12 +106,12 @@ class DemoCommand extends Command
 
 The interval spec ("*\/5 * * * *" in the above example) use the standard cronjob schedule format and can be modified whenever you choose. You have to escape the / in this example because it would close the annotation.
 You can also register your command multiple times by using the annotation more than once with different values.
-For your CronJob to be scanned and included in future runs, you must first run `php bin/console shapecode:cron:scan` - it will be scheduled to run the next time you run `php app/console schapede:cron:run`
+For your CronJob to be scanned and included in future runs, you must first run `php bin/console shapecode:cron:scan` - it will be scheduled to run the next time you run `php app/console shapecode:cron:run`
 
 Register your new Crons:
 ```sh
-$ php bin/console schapecode:cron:scan
-$ php bin/console schapecode:cron:run
+$ php bin/console shapecode:cron:scan
+$ php bin/console shapecode:cron:run
 ```
 
 Running your cron jobs automatically

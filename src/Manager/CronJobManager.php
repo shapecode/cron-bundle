@@ -5,7 +5,7 @@ namespace Shapecode\Bundle\CronBundle\Manager;
 use Doctrine\Common\Annotations\Reader;
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
-use Symfony\Component\Console\Application;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -18,10 +18,10 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class CronJobManager implements CronJobManagerInterface
 {
 
-    /** @var array */
-    protected $applicationJobs = [];
+    /** @var \Shapecode\Bundle\CronBundle\Model\CronJobMetadata[]|null */
+    protected $applicationJobs;
 
-    /** @var array */
+    /** @var \Shapecode\Bundle\CronBundle\Model\CronJobMetadata[] */
     protected $jobs = [];
 
     /** @var KernelInterface */
@@ -35,7 +35,7 @@ class CronJobManager implements CronJobManagerInterface
 
     /**
      * @param KernelInterface $kernel
-     * @param Reader          $reader
+     * @param Reader $reader
      */
     public function __construct(KernelInterface $kernel, Reader $reader)
     {
@@ -45,7 +45,8 @@ class CronJobManager implements CronJobManagerInterface
     }
 
     /**
-     * @return mixed
+     * @return array|\Shapecode\Bundle\CronBundle\Model\CronJobMetadata[]
+     * @throws \ReflectionException
      */
     public function getApplicationJobs()
     {
@@ -57,7 +58,8 @@ class CronJobManager implements CronJobManagerInterface
     }
 
     /**
-     * @return array
+     * @return array|\Shapecode\Bundle\CronBundle\Model\CronJobMetadata[]
+     * @throws \ReflectionException
      */
     protected function initApplicationJobs()
     {
@@ -102,7 +104,7 @@ class CronJobManager implements CronJobManagerInterface
     /**
      * @return Application
      */
-    protected function getApplication()
+    public function getApplication()
     {
         return $this->application;
     }
@@ -110,7 +112,7 @@ class CronJobManager implements CronJobManagerInterface
     /**
      * @return Reader
      */
-    protected function getReader()
+    public function getReader()
     {
         return $this->reader;
     }
