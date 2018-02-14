@@ -10,7 +10,6 @@
     <php>
         <ini name="error_reporting" value="-1"/>
         <server name="KERNEL_CLASS" value="AppKernel"/>
-        <server name="ENV_TEST_CHANNEL_READABLE" value="test"/>
     </php>
 
     <testsuites>
