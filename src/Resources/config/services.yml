@@ -1,8 +1,8 @@
 services:
-
     # manager
     shapecode_cron.cronjob_manager:
         class: Shapecode\Bundle\CronBundle\Manager\CronJobManager
+        public: true
         arguments:
             - '@kernel'
             - '@annotation_reader'
@@ -19,29 +19,34 @@ services:
     shapecode_cron.command.cron_job_edit:
         class: Shapecode\Bundle\CronBundle\Command\CronJobEditCommand
         parent: shapecode_cron.abstract
+        public: true
         tags:
             - { name: console.command }
 
     shapecode_cron.command.cron_process:
         class: Shapecode\Bundle\CronBundle\Command\CronProcessCommand
         parent: shapecode_cron.abstract
+        public: true
         tags:
             - { name: console.command }
 
     shapecode_cron.command.cron_prune_logs:
         class: Shapecode\Bundle\CronBundle\Command\CronPruneLogsCommand
         parent: shapecode_cron.abstract
+        public: true
         tags:
             - { name: console.command }
 
     shapecode_cron.command.cron_run:
         class: Shapecode\Bundle\CronBundle\Command\CronRunCommand
         parent: shapecode_cron.abstract
+        public: true
         tags:
             - { name: console.command }
 
     shapecode_cron.command.cron_scan:
         class: Shapecode\Bundle\CronBundle\Command\CronScanCommand
+        public: true
         arguments:
             - '@shapecode_cron.cronjob_manager'
             - '@kernel'
@@ -53,6 +58,7 @@ services:
 
     shapecode_cron.command.cron_status:
         class: Shapecode\Bundle\CronBundle\Command\CronStatusCommand
+        public: true
         parent: shapecode_cron.abstract
         tags:
             - { name: console.command }
@@ -60,6 +66,7 @@ services:
     # cronjobs
     shapecode_cron.cronjob.generic_clean_up_daily:
         class: Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpDailyCommand
+        public: true
         arguments:
             - '@event_dispatcher'
         tags:
@@ -68,6 +75,7 @@ services:
 
     shapecode_cron.cronjob.generic_clean_up_hourly:
         class: Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpHourlyCommand
+        public: true
         arguments:
             - '@event_dispatcher'
         tags:
