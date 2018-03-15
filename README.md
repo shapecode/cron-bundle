@@ -2,7 +2,6 @@ Shapecode Cron Bundle
 =======================
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/cd190858-da13-4be6-ad02-c933d4272d87/mini.png)](https://insight.sensiolabs.com/projects/cd190858-da13-4be6-ad02-c933d4272d87)
-[![Dependency Status](https://www.versioneye.com/user/projects/57703c8c671894004e1a9103/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/57703c8c671894004e1a9103)
 [![Latest Stable Version](https://poser.pugx.org/shapecode/cron-bundle/v/stable)](https://packagist.org/packages/shapecode/cron-bundle)
 [![Total Downloads](https://poser.pugx.org/shapecode/cron-bundle/downloads)](https://packagist.org/packages/shapecode/cron-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/shapecode/cron-bundle/v/unstable)](https://packagist.org/packages/shapecode/cron-bundle)
@@ -117,10 +116,10 @@ $ php bin/console shapecode:cron:run
 Running your cron jobs automatically
 --------------------------------
 
-This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `bin/console cron:run`).
+This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `bin/console shapecode:cron:run`).
 
 To facilitate this, you can create a cron job on your system like this:
 ```sh
-*/5 * * * * php /path/to/symfony/bin/console cron:run
+*/5 * * * * php /path/to/symfony/bin/console shapecode:cron:run
 ```
 This will schedule your tasks to run at most every 5 minutes - for instance, tasks which are scheduled to run every 3 minutes will only run every 5 minutes.

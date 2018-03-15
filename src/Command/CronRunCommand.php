@@ -59,7 +59,8 @@ class CronRunCommand extends BaseCommand
         }
 
         $jobCount = count($jobsToRun);
-        $output->writeln('Running ' . $jobCount . ' jobs:');
+        $output->writeln('Cronjobs started at ' . (new \DateTime())->format('r'));
+        $output->writeln('Running ' . $jobCount . ' jobs');
 
         // Update the job with it's next scheduled time
         $now = new \DateTime();
