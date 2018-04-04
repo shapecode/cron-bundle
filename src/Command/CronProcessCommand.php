@@ -72,7 +72,6 @@ class CronProcessCommand extends BaseCommand
             $statusCode = 0;
         }
 
-        $statusStr = CronJobResultInterface::FAILED;
         switch ($statusCode) {
             case 0:
                 $statusStr = CronJobResultInterface::SUCCEEDED;
@@ -80,6 +79,8 @@ class CronProcessCommand extends BaseCommand
             case 2:
                 $statusStr = CronJobResultInterface::SKIPPED;
                 break;
+            default:
+                $statusStr = CronJobResultInterface::FAILED;
         }
 
         $bufferedOutput = $jobOutput->fetch();
