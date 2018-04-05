@@ -52,7 +52,7 @@ class CronRunCommand extends BaseCommand
                     $jobsToRun = [$jobObj];
                 }
             } catch (\Exception $e) {
-                $output->writeln('Couldn\'t find a job by the name of '.$jobName);
+                $output->writeln('Couldn\'t find a job by the name of ' . $jobName);
 
                 return CronJobResultInterface::FAILED;
             }
@@ -61,8 +61,8 @@ class CronRunCommand extends BaseCommand
         }
 
         $jobCount = count($jobsToRun);
-        $output->writeln('Cronjobs started at '.(new \DateTime())->format('r'));
-        $output->writeln('Running '.$jobCount.' jobs');
+        $output->writeln('Cronjobs started at ' . (new \DateTime())->format('r'));
+        $output->writeln('Running ' . $jobCount . ' jobs');
 
         // Update the job with it's next scheduled time
         $now = new \DateTime();
@@ -112,19 +112,19 @@ class CronRunCommand extends BaseCommand
 
     /**
      * @param CronJobInterface $job
-     * @param OutputInterface $output
+     * @param OutputInterface  $output
      *
      * @return Process|null
      */
     protected function runJob(CronJobInterface $job, OutputInterface $output)
     {
-        $output->writeln("Running ".$job->getCommand());
+        $output->writeln("Running " . $job->getCommand());
 
         $rootDir = $this->getKernel()->getRootDir();
-        $projectDir = realpath($rootDir.'/..');
+        $projectDir = realpath($rootDir . '/..');
 
-        $consolePath = $projectDir.'/bin/console';
-        $legacyConsolePath = $projectDir.'/app/console';
+        $consolePath = $projectDir . '/bin/console';
+        $legacyConsolePath = $projectDir . '/app/console';
 
         if (file_exists($consolePath)) {
             $consoleBin = $consolePath;
@@ -149,6 +149,5 @@ class CronRunCommand extends BaseCommand
 
         return $process;
     }
-
 
 }

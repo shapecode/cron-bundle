@@ -104,6 +104,7 @@ class CronProcessCommand extends BaseCommand
         $cronJobRepository = $this->getCronJobRepository();
         $cronJobResultManager = $this->getManager();
 
+        /** @var CronJobInterface $job */
         $job = $cronJobRepository->find($job->getId());
 
         $className = $this->getCronJobResultRepository()->getClassName();
