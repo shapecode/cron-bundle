@@ -7,6 +7,8 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Exception\RuntimeException;
+use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 
 /**
@@ -87,6 +89,14 @@ class CronRunCommand extends BaseCommand
         }
 
         // wait for all processes
+        $this->waitProcesses($processes);
+    }
+
+    /**
+     * @param Process[] $processes
+     */
+    public function waitProcesses($processes)
+    {
         $wait = true;
         while ($wait) {
             $wait = false;
@@ -94,6 +104,7 @@ class CronRunCommand extends BaseCommand
             foreach ($processes as $process) {
                 if ($process->isRunning()) {
                     $wait = true;
+                    break;
                 }
             }
         }
@@ -109,35 +120,34 @@ class CronRunCommand extends BaseCommand
     {
         $output->writeln("Running " . $job->getCommand());
 
-        $rootDir = $this->kernel->getRootDir();
-        $projectDir = $rootDir . '/..';
+        $rootDir = $this->getKernel()->getRootDir();
+        $projectDir = realpath($rootDir . '/..');
 
-        $binaryDir = $projectDir . '/bin';
-        $legacyBinaryDir = $projectDir . '/app';
+        $consolePath = $projectDir . '/bin/console';
+        $legacyConsolePath = $projectDir . '/app/console';
 
-        $command = null;
-
-        if (file_exists($legacyBinaryDir . '/console')) {
-            $command = 'php app/console shapecode:cron:process ' . $job->getId();
+        if (file_exists($consolePath)) {
+            $consoleBin = $consolePath;
+        } elseif (file_exists($legacyConsolePath)) {
+            $consoleBin = $legacyConsolePath;
+        } else {
+            throw new RuntimeException("Missing console binary");
         }
 
-        if (file_exists($binaryDir . '/console')) {
-            $command = 'php bin/console shapecode:cron:process ' . $job->getId();
+        $executableFinder = new PhpExecutableFinder();
+        $php = $executableFinder->find();
+
+        if (false === $php) {
+            throw new RuntimeException('Unable to find the PHP executable.');
         }
 
-        if ($command) {
-            try {
-                $process = new Process($command);
-                $process->disableOutput();
-                $process->start();
+        $command = sprintf('%s %s shapecode:cron:process %d', $php, $consoleBin, $job->getId());
 
-                return $process;
-            } catch (\Exception $e) {
+        $process = new Process($command);
+        $process->disableOutput();
+        $process->start();
 
-            }
-        }
-
-        return null;
+        return $process;
     }
 
 }
