@@ -95,7 +95,7 @@ class CronRunCommand extends BaseCommand
     /**
      * @param Process[] $processes
      */
-    public function waitProcesses($processes): void
+    public function waitProcesses($processes)
     {
         $wait = true;
         while ($wait) {
