@@ -27,6 +27,10 @@
             "name": "Nikita Loges",
             "homepage": "https://nikita-loges.de",
             "email": "develop@nikita-loges.de"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/shapecode/cron-bundle/graphs/contributors"
         }
     ],
     "require": {
