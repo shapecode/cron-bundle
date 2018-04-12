@@ -26,6 +26,15 @@ class CronRunCommand extends BaseCommand
     /** @inheritdoc */
     protected $commandDescription = 'Runs any currently schedule cron jobs';
 
+    /** @var string|null */
+    protected $projectDir;
+
+    /** @var string|null */
+    protected $phpExecutable;
+
+    /** @var string|null */
+    protected $consoleBin;
+
     /**
      * @inheritdoc
      */
@@ -120,8 +129,52 @@ class CronRunCommand extends BaseCommand
     {
         $output->writeln("Running " . $job->getCommand());
 
-        $rootDir = $this->getKernel()->getRootDir();
-        $projectDir = realpath($rootDir . '/..');
+        $consoleBin = $this->getConsoleBin();
+        $php = $this->getPhpExecutable();
+
+        $command = sprintf('%s %s shapecode:cron:process %d', $php, $consoleBin, $job->getId());
+
+        $process = new Process($command);
+        $process->disableOutput();
+        $process->start();
+
+        return $process;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getProjectDir()
+    {
+        if (!is_null($this->projectDir)) {
+            return $this->projectDir;
+        }
+
+        $kernel = $this->getKernel();
+
+        // use symfony >3.3 simple way
+        if (method_exists($kernel, 'getProjectDir')) {
+            $projectDir = $kernel->getProjectDir();
+        } else {
+            $rootDir = $this->getKernel()->getRootDir();
+            $projectDir = realpath($rootDir . '/..');
+        }
+
+        $this->projectDir = $projectDir;
+
+        return $projectDir;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getConsoleBin()
+    {
+        if (!is_null($this->consoleBin)) {
+            return $this->consoleBin;
+        }
+
+        $projectDir = $this->getProjectDir();
 
         $consolePath = $projectDir . '/bin/console';
         $legacyConsolePath = $projectDir . '/app/console';
@@ -134,6 +187,20 @@ class CronRunCommand extends BaseCommand
             throw new RuntimeException("Missing console binary");
         }
 
+        $this->consoleBin = $consoleBin;
+
+        return $consoleBin;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getPhpExecutable()
+    {
+        if (!is_null($this->phpExecutable)) {
+            return $this->phpExecutable;
+        }
+
         $executableFinder = new PhpExecutableFinder();
         $php = $executableFinder->find();
 
@@ -141,13 +208,9 @@ class CronRunCommand extends BaseCommand
             throw new RuntimeException('Unable to find the PHP executable.');
         }
 
-        $command = sprintf('%s %s shapecode:cron:process %d', $php, $consoleBin, $job->getId());
+        $this->phpExecutable = $php;
 
-        $process = new Process($command);
-        $process->disableOutput();
-        $process->start();
-
-        return $process;
+        return $php;
     }
 
 }
