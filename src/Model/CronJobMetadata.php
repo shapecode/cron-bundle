@@ -16,21 +16,63 @@ class CronJobMetadata
     /** @var string */
     protected $expression;
 
-    /** @var Command */
+    /** @var string */
     protected $command;
 
+    /** @var string */
+    protected $description;
+
+    /** @var string */
+    protected $arguments;
+
     /**
-     * @param Command $command
-     * @param string  $expression
+     * @param      $expression
+     * @param      $command
+     * @param null $arguments
      */
-    public function __construct(Command $command, $expression)
+    public function __construct($expression, $command, $arguments = null)
     {
         $this->expression = $expression;
         $this->command = $command;
+        $this->arguments = $arguments;
     }
 
     /**
-     * @return Command
+     * @param         $expression
+     * @param Command $command
+     * @param         $arguments
+     *
+     * @return static
+     */
+    public static function createByCommand($expression, Command $command, $arguments = null)
+    {
+        $meta = new static($expression, $command->getName(), $arguments);
+        $meta->setDescription($command->getDescription());
+
+        return $meta;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExpression()
+    {
+        return $this->expression;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClearedExpression()
+    {
+        $expression = $this->getExpression();
+        $expression = str_replace('\\', '', $expression);
+
+        return $expression;
+    }
+
+    /**
+     * @return string
      */
     public function getCommand()
     {
@@ -40,8 +82,24 @@ class CronJobMetadata
     /**
      * @return string
      */
-    public function getExpression()
+    public function getArguments()
     {
-        return $this->expression;
+        return $this->arguments;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 }

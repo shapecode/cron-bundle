@@ -2,12 +2,9 @@
 
 namespace Shapecode\Bundle\CronBundle\Manager;
 
-use Doctrine\Common\Annotations\Reader;
-use Shapecode\Bundle\CronBundle\Annotation\CronJob;
+use Shapecode\Bundle\CronBundle\Event\LoadJobsEvent;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class CronJobManager
@@ -18,102 +15,40 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class CronJobManager implements CronJobManagerInterface
 {
 
-    /** @var \Shapecode\Bundle\CronBundle\Model\CronJobMetadata[]|null */
-    protected $applicationJobs;
+    /** @var CronJobMetadata[] */
+    protected $jobs;
 
-    /** @var \Shapecode\Bundle\CronBundle\Model\CronJobMetadata[] */
-    protected $jobs = [];
-
-    /** @var KernelInterface */
-    protected $kernel;
-
-    /** @var Application */
-    protected $application;
-
-    /** @var Reader */
-    protected $reader;
+    /** @var EventDispatcherInterface */
+    protected $eventDispatcher;
 
     /**
-     * @param KernelInterface $kernel
-     * @param Reader $reader
+     * @param EventDispatcherInterface $eventDispatcher
      */
-    public function __construct(KernelInterface $kernel, Reader $reader)
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
-        $this->kernel = $kernel;
-        $this->application = new Application($kernel);
-        $this->reader = $reader;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
-     * @return array|\Shapecode\Bundle\CronBundle\Model\CronJobMetadata[]
-     * @throws \ReflectionException
+     * @return CronJobMetadata[]
      */
-    public function getApplicationJobs()
+    public function initJobs()
     {
-        if (is_null($this->applicationJobs)) {
-            $this->applicationJobs = $this->initApplicationJobs();
-        }
+        $event = new LoadJobsEvent();
+        $this->eventDispatcher->dispatch(LoadJobsEvent::NAME, $event);
 
-        return $this->applicationJobs;
+        return $event->getJobs();
     }
 
     /**
-     * @return array|\Shapecode\Bundle\CronBundle\Model\CronJobMetadata[]
-     * @throws \ReflectionException
-     */
-    protected function initApplicationJobs()
-    {
-        $applicationJobs = [];
-
-        foreach ($this->getApplication()->all() as $command) {
-            // Check for an @CronJob annotation
-            $reflClass = new \ReflectionClass($command);
-
-            foreach ($this->getReader()->getClassAnnotations($reflClass) as $annotation) {
-                if ($annotation instanceof CronJob) {
-                    $schedule = $annotation->value;
-
-                    $meta = new CronJobMetadata($command, $schedule);
-                    $applicationJobs[] = $meta;
-                }
-            }
-        }
-
-        return $applicationJobs;
-    }
-
-    /**
-     * @param Command $command
-     * @param         $expression
-     */
-    public function addJob(Command $command, $expression)
-    {
-        $this->jobs[] = new CronJobMetadata($command, $expression);
-    }
-
-    /**
-     * @return array
+     * @inheritdoc
      */
     public function getJobs()
     {
-        $jobs = array_merge($this->jobs, $this->getApplicationJobs());
+        if (is_null($this->jobs)) {
+            $this->jobs = $this->initJobs();
+        }
 
-        return $jobs;
-    }
-
-    /**
-     * @return Application
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     * @return Reader
-     */
-    public function getReader()
-    {
-        return $this->reader;
+        return $this->jobs;
     }
 }

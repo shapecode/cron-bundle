@@ -24,6 +24,16 @@ interface CronJobInterface extends AbstractEntityInterface
     public function getCommand();
 
     /**
+     * @return string
+     */
+    public function getArguments();
+
+    /**
+     * @param string $arguments
+     */
+    public function setArguments($arguments);
+
+    /**
      * @param string $description
      */
     public function setDescription($description);

@@ -7,7 +7,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Shapecode\Bundle\CronBundle\Manager\CronJobManagerInterface;
-use Symfony\Component\Console\Command\Command;
+use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,7 +26,19 @@ class CronScanCommand extends BaseCommand
     /** @var CronJobManagerInterface */
     protected $cronJobManager;
 
-    public function __construct(CronJobManagerInterface $manager, KernelInterface $kernel, Reader $annotationReader, ManagerRegistry $registry, RequestStack $requestStack)
+    /**
+     * @param CronJobManagerInterface $manager
+     * @param KernelInterface         $kernel
+     * @param Reader                  $annotationReader
+     * @param ManagerRegistry         $registry
+     * @param RequestStack            $requestStack
+     */
+    public function __construct(
+        CronJobManagerInterface $manager,
+        KernelInterface $kernel,
+        Reader $annotationReader,
+        ManagerRegistry $registry,
+        RequestStack $requestStack)
     {
         $this->cronJobManager = $manager;
 
@@ -61,32 +73,30 @@ class CronScanCommand extends BaseCommand
         $counter = [];
         foreach ($this->getCronManager()->getJobs() as $jobMetadata) {
             $command = $jobMetadata->getCommand();
-            $name = $command->getName();
 
-            $schedule = $jobMetadata->getExpression();
-            $schedule = str_replace('\\', '', $schedule);
-
-            if (!isset($counter[$name])) {
-                $counter[$name] = 0;
+            if (!isset($counter[$command])) {
+                $counter[$command] = 0;
             }
 
-            $counter[$name]++;
+            $counter[$command]++;
 
-            if (in_array($name, $knownJobs)) {
+            if (in_array($command, $knownJobs)) {
                 // Clear it from the known jobs so that we don't try to delete it
-                unset($knownJobs[array_search($name, $knownJobs)]);
+                unset($knownJobs[array_search($command, $knownJobs)]);
 
                 // Update the job if necessary
-                $currentJob = $jobRepo->findOneByCommand($name, $counter[$name]);
-                $currentJob->setDescription($command->getDescription());
+                $currentJob = $jobRepo->findOneByCommand($command, $counter[$command]);
+                $currentJob->setDescription($jobMetadata->getDescription());
 
-                if ($currentJob->getPeriod() != $schedule) {
-                    $currentJob->setPeriod($schedule);
+                if ($currentJob->getPeriod() != $jobMetadata->getClearedExpression()) {
+                    $currentJob->setPeriod($jobMetadata->getClearedExpression());
                     $currentJob->calculateNextRun();
-                    $output->writeln('Updated interval for ' . $name . ' to ' . $schedule);
+                    $output->writeln('Updated interval for ' . $command . ' to ' . $jobMetadata->getClearedExpression());
+                } else {
+                    $output->writeln('Updated for ' . $command . ' not needed');
                 }
             } else {
-                $this->newJobFound($output, $command, $schedule, $defaultDisabled, $counter[$name]);
+                $this->newJobFound($output, $jobMetadata, $defaultDisabled, $counter[$command]);
             }
         }
 
@@ -108,21 +118,20 @@ class CronScanCommand extends BaseCommand
     }
 
     /**
-     * @param OutputInterface   $output
-     * @param Command           $command
-     * @param string            $schedule
-     * @param bool              $defaultDisabled
-     * @param                   $counter
+     * @param OutputInterface $output
+     * @param CronJobMetadata $metadata
+     * @param bool            $defaultDisabled
+     * @param                 $counter
      */
-    protected function newJobFound(OutputInterface $output, Command $command, $schedule, $defaultDisabled = false, $counter)
+    protected function newJobFound(OutputInterface $output, CronJobMetadata $metadata, $defaultDisabled = false, $counter)
     {
         $className = $this->getCronJobRepository()->getClassName();
 
         /** @var CronJobInterface $newJob */
         $newJob = new $className();
-        $newJob->setCommand($command->getName());
-        $newJob->setDescription($command->getDescription());
-        $newJob->setPeriod($schedule);
+        $newJob->setCommand($metadata->getCommand());
+        $newJob->setDescription($metadata->getDescription());
+        $newJob->setPeriod($metadata->getClearedExpression());
         $newJob->setEnable(!$defaultDisabled);
         $newJob->setNumber($counter);
         $newJob->calculateNextRun();

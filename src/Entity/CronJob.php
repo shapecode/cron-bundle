@@ -29,6 +29,12 @@ class CronJob extends AbstractEntity implements CronJobInterface
      * @var string
      * @ORM\Column(type="string", nullable=true)
      */
+    protected $arguments;
+
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     */
     protected $description;
 
     /**
@@ -107,7 +113,23 @@ class CronJob extends AbstractEntity implements CronJobInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
+     */
+    public function getArguments()
+    {
+        return $this->arguments;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setArguments($arguments)
+    {
+        $this->arguments = $arguments;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getDescription()
     {
@@ -115,7 +137,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     }
 
     /**
-     * @param string $description
+     * @inheritdoc
      */
     public function setDescription($description)
     {
@@ -123,7 +145,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getNumber()
     {
@@ -131,7 +153,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     }
 
     /**
-     * @param int $number
+     * @inheritdoc
      */
     public function setNumber($number)
     {
@@ -139,7 +161,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getPeriod()
     {
@@ -147,7 +169,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     }
 
     /**
-     * @return \DateInterval
+     * @inheritdoc
      */
     public function getInterval()
     {
@@ -155,7 +177,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     }
 
     /**
-     * @param string $period
+     * @inheritdoc
      */
     public function setPeriod($period)
     {
@@ -163,7 +185,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     }
 
     /**
-     * @return \DateTime
+     * @inheritdoc
      */
     public function getLastUse()
     {
@@ -171,7 +193,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     }
 
     /**
-     * @param \DateTime $lastUse
+     * @inheritdoc
      */
     public function setLastUse($lastUse)
     {
