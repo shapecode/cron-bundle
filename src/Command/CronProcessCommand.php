@@ -2,8 +2,10 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
@@ -34,27 +36,35 @@ class CronProcessCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $style = new CronStyle($input, $output);
+
         /** @var CronJobInterface $job */
         $job = $this->getCronJobRepository()->find($input->getArgument('cron'));
+
+        if (!$job) {
+            $style->error('No job found');
+
+            return 1;
+        }
 
         $command = $job->getCommand();
         $watch = 'job-' . $command;
 
-        $output->write("Running " . $job->getCommand() . ": ");
+        $style->title("Running " . $job->getCommand());
 
-        $application = $this->getApplication();
+        $application = new Application($this->getKernel());
+        $application->setAutoExit(false);
 
-        $jonInput = new StringInput($job->getFullCommand());
+        $jobInput = new StringInput($job->getFullCommand().' -n');
         $jobOutput = new BufferedOutput();
 
         $this->getStopWatch()->start($watch);
 
         try {
-            $statusCode = $application->run($jonInput, $jobOutput);
+            $statusCode = $application->doRun($jobInput, $jobOutput);
         } catch (\Exception $ex) {
             $statusCode = 1;
-            $jobOutput->writeln('');
-            $jobOutput->writeln('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
+            $style->error('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
         }
         $this->getStopWatch()->stop($watch);
 
@@ -62,25 +72,36 @@ class CronProcessCommand extends BaseCommand
             $statusCode = 0;
         }
 
+        $bufferedOutput = $jobOutput->fetch();
+
+        $style->text('command output');
+        $style->text('>>>>>>>>>>>>>');
+        $style->writeln('');
+        $style->write($bufferedOutput);
+        $style->writeln('');
+        $style->text('<<<<<<<<<<<<<');
+
         switch ($statusCode) {
             case 0:
                 $statusStr = CronJobResultInterface::SUCCEEDED;
+                $block = 'success';
                 break;
             case 2:
                 $statusStr = CronJobResultInterface::SKIPPED;
+                $block = 'info';
                 break;
             default:
                 $statusStr = CronJobResultInterface::FAILED;
+                $block = 'error';
         }
 
-        $bufferedOutput = $jobOutput->fetch();
-        $output->write($bufferedOutput);
-
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
-        $output->writeln($statusStr . ' in ' . number_format(($duration / 1000), 4) . ' seconds');
+        $style->$block($statusStr . ' in ' . number_format(($duration / 1000), 4) . ' seconds');
 
         // Record the result
         $this->recordJobResult($job, $duration, $bufferedOutput, $statusCode);
+
+        return $statusStr;
     }
 
     /**

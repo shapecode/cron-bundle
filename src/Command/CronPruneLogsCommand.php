@@ -3,7 +3,6 @@
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -23,8 +22,6 @@ class CronPruneLogsCommand extends BaseCommand
     {
         $this->setName('shapecode:cron:logs:cleanup');
         $this->setDescription('Cleans the logs for each cron job, leaving only recent failures and the most recent success');
-
-        $this->addArgument('job', InputArgument::OPTIONAL, 'Operate only on this job');
     }
 
     /**
@@ -32,26 +29,9 @@ class CronPruneLogsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $jobName = $input->getArgument('job');
+        $output->writeln("Cleaning logs for all cron jobs");
 
-        if ($jobName) {
-            $output->writeln("Cleaning logs for cron job $jobName");
-            $jobs = $this->getCronJobRepository()->findByCommand($jobName);
-
-            if (!count($jobs)) {
-
-                $output->writeln("Couldn't find a job by the name of " . $jobName);
-
-                return CronJobResult::FAILED;
-            }
-
-            foreach ($jobs as $job) {
-                $this->getCronJobResultRepository()->deleteOldLogs($job);
-            }
-        } else {
-            $output->writeln("Cleaning logs for all cron jobs");
-            $this->getCronJobResultRepository()->deleteOldLogs();
-        }
+        $this->getCronJobResultRepository()->deleteOldLogs();
 
         $output->writeln("Logs cleaned successfully");
 
