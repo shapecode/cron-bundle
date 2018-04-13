@@ -62,7 +62,8 @@ class CronProcessCommand extends BaseCommand
         try {
             $statusCode = $commandToRun->run($emptyInput, $jobOutput);
         } catch (\Exception $ex) {
-            $statusCode = CronJobResultInterface::FAILED;
+            // Fail the status code
+            $statusCode = 1;
             $jobOutput->writeln('');
             $jobOutput->writeln('Job execution failed with exception ' . get_class($ex) . ':');
         }
