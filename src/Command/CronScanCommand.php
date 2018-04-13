@@ -79,6 +79,8 @@ class CronScanCommand extends BaseCommand
         foreach ($this->getCronManager()->getJobs() as $jobMetadata) {
             $command = $jobMetadata->getCommand();
 
+            $style->section($command);
+
             if (!isset($counter[$command])) {
                 $counter[$command] = 0;
             }
@@ -92,13 +94,18 @@ class CronScanCommand extends BaseCommand
                 // Update the job if necessary
                 $currentJob = $jobRepo->findOneByCommand($command, $counter[$command]);
                 $currentJob->setDescription($jobMetadata->getDescription());
+                $currentJob->setArguments($jobMetadata->getArguments());
+
+                $style->text('command: ' . $jobMetadata->getCommand());
+                $style->text('arguments: ' . $jobMetadata->getArguments());
+                $style->text('expression: ' . $jobMetadata->getClearedExpression());
 
                 if ($currentJob->getPeriod() != $jobMetadata->getClearedExpression()) {
+                    $oldExpression = $currentJob->getPeriod();
+
                     $currentJob->setPeriod($jobMetadata->getClearedExpression());
                     $currentJob->calculateNextRun();
-                    $style->notice('Updated interval for ' . $command . ' to ' . $jobMetadata->getClearedExpression());
-                } else {
-                    $style->info('Update for ' . $command . ' not needed');
+                    $style->notice('interval updated form ' . $oldExpression . ' to ' . $currentJob->getPeriod());
                 }
             } else {
                 $this->newJobFound($style, $jobMetadata, $defaultDisabled, $counter[$command]);

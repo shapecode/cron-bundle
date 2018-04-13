@@ -64,8 +64,9 @@ class AnnotationJobLoaderListener implements EventSubscriberInterface
             foreach ($this->reader->getClassAnnotations($reflClass) as $annotation) {
                 if ($annotation instanceof CronJob) {
                     $schedule = $annotation->value;
+                    $arguments = $annotation->getArguments();
 
-                    $meta = CronJobMetadata::createByCommand($schedule, $command);
+                    $meta = CronJobMetadata::createByCommand($schedule, $command, $arguments);
                     $event->addJob($meta);
                 }
             }
