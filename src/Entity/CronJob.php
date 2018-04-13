@@ -115,6 +115,20 @@ class CronJob extends AbstractEntity implements CronJobInterface
     /**
      * @inheritdoc
      */
+    public function getFullCommand()
+    {
+        $arguments = '';
+
+        if ($this->getArguments()) {
+            $arguments = ' ' . $this->getArguments();
+        }
+
+        return $this->getCommand() . $arguments;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getArguments()
     {
         return $this->arguments;
@@ -195,7 +209,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     /**
      * @inheritdoc
      */
-    public function setLastUse($lastUse)
+    public function setLastUse(\DateTime $lastUse)
     {
         $this->lastUse = $lastUse;
     }

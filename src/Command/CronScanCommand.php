@@ -4,6 +4,7 @@ namespace Shapecode\Bundle\CronBundle\Command;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Shapecode\Bundle\CronBundle\Manager\CronJobManagerInterface;
@@ -62,6 +63,10 @@ class CronScanCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $style = new CronStyle($input, $output);
+        $style->comment('Scan for cronjobs started at ' . (new \DateTime())->format('r'));
+        $style->title('scanning ...');
+
         $keepDeleted = $input->getOption("keep-deleted");
         $defaultDisabled = $input->getOption("default-disabled");
 
@@ -91,39 +96,46 @@ class CronScanCommand extends BaseCommand
                 if ($currentJob->getPeriod() != $jobMetadata->getClearedExpression()) {
                     $currentJob->setPeriod($jobMetadata->getClearedExpression());
                     $currentJob->calculateNextRun();
-                    $output->writeln('Updated interval for ' . $command . ' to ' . $jobMetadata->getClearedExpression());
+                    $style->notice('Updated interval for ' . $command . ' to ' . $jobMetadata->getClearedExpression());
                 } else {
-                    $output->writeln('Updated for ' . $command . ' not needed');
+                    $style->info('Update for ' . $command . ' not needed');
                 }
             } else {
-                $this->newJobFound($output, $jobMetadata, $defaultDisabled, $counter[$command]);
+                $this->newJobFound($style, $jobMetadata, $defaultDisabled, $counter[$command]);
             }
         }
 
+        $style->success("Finished scanning for cronjobs");
+
         // Clear any jobs that weren't found
         if (!$keepDeleted) {
-            foreach ($knownJobs as $deletedJob) {
-                $output->writeln('Deleting job: ' . $deletedJob);
-                $jobsToDelete = $jobRepo->findByCommand($deletedJob);
-                foreach ($jobsToDelete as $jobToDelete) {
-                    $em->remove($jobToDelete);
+            $style->title('remove cronjobs');
+
+            if (count($knownJobs)) {
+                foreach ($knownJobs as $deletedJob) {
+                    $style->notice('Deleting job: ' . $deletedJob);
+                    $jobsToDelete = $jobRepo->findByCommand($deletedJob);
+                    foreach ($jobsToDelete as $jobToDelete) {
+                        $em->remove($jobToDelete);
+                    }
                 }
+            } else {
+                $style->info('No cronjob has to be removed.');
             }
         }
 
         $em->flush();
-        $output->writeln("Finished scanning for cron jobs");
 
         return CronJobResult::SUCCEEDED;
     }
 
     /**
-     * @param OutputInterface $output
+     * @param CronStyle       $output
      * @param CronJobMetadata $metadata
      * @param bool            $defaultDisabled
      * @param                 $counter
      */
-    protected function newJobFound(OutputInterface $output, CronJobMetadata $metadata, $defaultDisabled = false, $counter)
+    protected function newJobFound(CronStyle $output, CronJobMetadata $metadata, $defaultDisabled = false, $counter)
     {
         $className = $this->getCronJobRepository()->getClassName();
 
@@ -136,7 +148,7 @@ class CronScanCommand extends BaseCommand
         $newJob->setNumber($counter);
         $newJob->calculateNextRun();
 
-        $output->writeln("Added the job " . $newJob->getCommand() . " with period " . $newJob->getPeriod());
+        $output->success("Found new job: " . $newJob->getCommand() . " with period " . $newJob->getPeriod());
 
         $this->getManager()->persist($newJob);
     }

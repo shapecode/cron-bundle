@@ -2,6 +2,7 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -52,53 +53,89 @@ class CronRunCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $jobRepo = $this->getCronJobRepository();
+        $style = new CronStyle($input, $output);
 
-        $jobsToRun = [];
         if ($jobName = $input->getArgument('job')) {
-            try {
-                $jobObj = $jobRepo->findOneByCommand($jobName);
-                if ($jobObj->isEnable()) {
-                    $jobsToRun = [$jobObj];
-                }
-            } catch (\Exception $e) {
-                $output->writeln('Couldn\'t find a job by the name of ' . $jobName);
+            $jobObj = $jobRepo->findOneByCommand($jobName);
 
-                return CronJobResultInterface::FAILED;
+            if (!$jobObj) {
+                $style->error('Couldn\'t find a job by the name of ' . $jobName);
+
+                return CronJobResultInterface::EXIT_CODE_FAILED;
             }
+
+            if (!$jobObj->isEnable()) {
+                $style->error('job ' . $jobName . ' is disabled');
+
+                return CronJobResultInterface::EXIT_CODE_FAILED;
+            }
+
+            /** @var CronJobInterface[] $jobsToRun */
+            $jobsToRun = [$jobObj];
         } else {
-            $jobsToRun = $jobRepo->findDueTasks();
+            /** @var CronJobInterface[] $jobsToRun */
+            $jobsToRun = $jobRepo->findAll();
         }
 
         $jobCount = count($jobsToRun);
-        $output->writeln('Cronjobs started at ' . (new \DateTime())->format('r'));
-        $output->writeln('Running ' . $jobCount . ' jobs');
+        $style->comment('Cronjobs started at ' . (new \DateTime())->format('r'));
+
+        $style->title('Execute cronjobs');
+        $style->info('Found ' . $jobCount . ' jobs');
 
         // Update the job with it's next scheduled time
         $now = new \DateTime();
-        foreach ($jobsToRun as $job) {
-            $job->calculateNextRun();
-            $job->setLastUse($now);
-
-            $this->getManager()->persist($job);
-        }
-
-        // flush the calculated runs
-        $this->getManager()->flush();
 
         /** @var Process[] $processes */
         $processes = [];
 
-        // Run the jobs
         foreach ($jobsToRun as $job) {
-            $process = $this->runJob($job, $output);
+            sleep(1);
+
+            $style->section('Running "' . $job->getFullCommand() . '"');
+
+            if (!$job->isEnable()) {
+                $style->notice('cronjob is disabled');
+                continue;
+            }
+
+            if ($job->getNextRun() > $now) {
+                $style->notice('cronjob will not be executed. Next run is: ' . $job->getNextRun()->format('r'));
+
+                continue;
+            }
+
+            $process = $this->runJob($job);
 
             if ($process) {
+                $job->calculateNextRun();
+                $job->setLastUse($now);
+
+                $this->getManager()->persist($job);
+                $this->getManager()->flush();
+
                 $processes[] = $process;
             }
+
+            $style->success('cronjob started successfully and is running in background');
         }
 
-        // wait for all processes
-        $this->waitProcesses($processes);
+        sleep(1);
+
+        $style->section('Summary');
+
+        if (count($processes)) {
+            $style->text('waiting for all running jobs ...');
+
+            // wait for all processes
+            $this->waitProcesses($processes);
+
+            $style->success('All jobs are finished.');
+        } else {
+
+            $style->info('No jobs were executed. See reasons below.');
+        }
+
     }
 
     /**
@@ -121,14 +158,11 @@ class CronRunCommand extends BaseCommand
 
     /**
      * @param CronJobInterface $job
-     * @param OutputInterface  $output
      *
      * @return Process|null
      */
-    protected function runJob(CronJobInterface $job, OutputInterface $output)
+    protected function runJob(CronJobInterface $job)
     {
-        $output->writeln("Running " . $job->getCommand());
-
         $consoleBin = $this->getConsoleBin();
         $php = $this->getPhpExecutable();
 

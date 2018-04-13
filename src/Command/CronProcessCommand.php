@@ -4,9 +4,9 @@ namespace Shapecode\Bundle\CronBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -42,30 +42,19 @@ class CronProcessCommand extends BaseCommand
 
         $output->write("Running " . $job->getCommand() . ": ");
 
-        try {
-            $commandToRun = $this->getApplication()->get($job->getCommand());
-        } catch (\InvalidArgumentException $ex) {
-            $output->writeln(' skipped (command no longer exists)');
-            $this->recordJobResult($job, 0, 'Command no longer exists', CronJobResultInterface::SKIPPED);
+        $application = $this->getApplication();
 
-            // No need to reschedule non-existant commands
-            return;
-        }
-
-        $emptyInput = new ArrayInput([
-            'command' => $job->getCommand()
-        ]);
+        $jonInput = new StringInput($job->getFullCommand());
         $jobOutput = new BufferedOutput();
 
         $this->getStopWatch()->start($watch);
 
         try {
-            $statusCode = $commandToRun->run($emptyInput, $jobOutput);
+            $statusCode = $application->run($jonInput, $jobOutput);
         } catch (\Exception $ex) {
-            // Fail the status code
             $statusCode = 1;
             $jobOutput->writeln('');
-            $jobOutput->writeln('Job execution failed with exception ' . get_class($ex) . ':');
+            $jobOutput->writeln('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
         }
         $this->getStopWatch()->stop($watch);
 
