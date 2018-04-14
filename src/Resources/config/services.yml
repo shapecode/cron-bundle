@@ -31,8 +31,9 @@ services:
 
     shapecode_cron.command.cron_prune_logs:
         class: Shapecode\Bundle\CronBundle\Command\CronPruneLogsCommand
-        parent: shapecode_cron.abstract
         public: true
+        arguments:
+            - '@shapecode_cron.service.cronjob_result'
         tags:
             - { name: console.command }
 
@@ -96,8 +97,25 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
+    shapecode_cron.event_listener.result_auto_prune:
+        class: Shapecode\Bundle\CronBundle\EventListener\ResultAutoPruneListener
+        public: true
+        arguments:
+            - '@shapecode_cron.service.cronjob_result'
+            - '%shapecode_cron.results.auto_prune%'
+        tags:
+            - { name: kernel.event_subscriber }
+
     shapecode_cron.event_listener.service_job_loader:
         class: Shapecode\Bundle\CronBundle\EventListener\ServiceJobLoaderListener
         public: true
         tags:
             - { name: kernel.event_subscriber }
+
+    # service
+    shapecode_cron.service.cronjob_result:
+        class: Shapecode\Bundle\CronBundle\Service\CronJobResultService
+        public: true
+        arguments:
+            - '@doctrine'
+            - '%shapecode_cron.results.interval%'
