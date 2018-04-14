@@ -17,7 +17,7 @@ interface CronJobResultInterface extends AbstractEntityInterface
 
     const EXIT_CODE_SUCCEEDED = 0;
     const EXIT_CODE_FAILED = 1;
-    const EXIT_CODE_SKIPPED = 1;
+    const EXIT_CODE_SKIPPED = 2;
 
     /**
      * @return integer

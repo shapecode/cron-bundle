@@ -21,7 +21,7 @@ class CronPruneLogsCommand extends BaseCommand
     protected function configure()
     {
         $this->setName('shapecode:cron:logs:cleanup');
-        $this->setDescription('Cleans the logs for each cron job, leaving only recent failures and the most recent success');
+        $this->setDescription('Cleans the logs for each cron job.');
     }
 
     /**
@@ -35,6 +35,6 @@ class CronPruneLogsCommand extends BaseCommand
 
         $output->writeln("Logs cleaned successfully");
 
-        return CronJobResult::SUCCEEDED;
+        return CronJobResult::EXIT_CODE_SUCCEEDED;
     }
 }

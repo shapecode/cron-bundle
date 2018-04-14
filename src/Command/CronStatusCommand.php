@@ -2,9 +2,9 @@
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
-use Shapecode\Bundle\CronBundle\Entity\CronJob;
+use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
+use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -24,8 +24,6 @@ class CronStatusCommand extends BaseCommand
     {
         $this->setName('shapecode:cron:status');
         $this->setDescription('Displays the current status of cron jobs');
-
-        $this->addArgument('job', InputArgument::OPTIONAL, 'Show information for only this job');
     }
 
     /**
@@ -33,56 +31,41 @@ class CronStatusCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $style = new CronStyle($input, $output);
         $jobRepo = $this->getCronJobRepository();
-        $resultRepo = $this->getCronJobResultRepository();
 
-        $output->writeln('Cron job statuses:');
+        $style->title('Cron job status');
 
-        if ($jobName = $input->getArgument('job')) {
-            try {
-                $cronJobs = [$jobRepo->findOneByCommand($jobName)];
-            } catch (\Exception $e) {
-                $output->writeln('Couldn\'t find a job by the name of ' . $jobName);
+        /** @var CronJobInterface[] $cronJobs */
+        $cronJobs = $jobRepo->findAll();
 
-                return CronJobResult::FAILED;
-            }
-        } else {
-            /** @var CronJob[] $cronJobs */
-            $cronJobs = $jobRepo->findAll();
-        }
-
+        $tableContent = [];
         foreach ($cronJobs as $cronJob) {
-            $output->write(" - " . $cronJob->getCommand());
+            $row = [
+                $cronJob->getId(),
+                $cronJob->getFullCommand(),
+            ];
 
             if (!$cronJob->isEnable()) {
-                $output->write(' (disabled)');
-            }
-
-            $output->writeln('');
-            $output->writeln('   Description: ' . $cronJob->getDescription());
-
-            if (!$cronJob->isEnable()) {
-                $output->writeln('Not scheduled');
+                $row[] = 'Not scheduled';
             } else {
-                $output->write('Scheduled for: ');
-                $now = new \DateTime();
-                if ($cronJob->getNextRun() <= $now) {
-                    $output->writeln('Next run');
-                } else {
-                    $output->writeln($cronJob->getNextRun()->format('r'));
-                }
+                $row[] = $cronJob->getNextRun()->format('r');
             }
 
-            $mostRecent = $resultRepo->findMostRecent($cronJob);
-            if ($mostRecent) {
-                $output->writeln('Last run was: ' . $mostRecent->getOutput());
+            if ($cronJob->getLastUse()) {
+                $row[] = $cronJob->getLastUse()->format('r');
             } else {
-                $output->writeln('This job has not yet been run');
+                $row[] = 'This job has not yet been run';
             }
 
-            $output->writeln('');
+            $row[] = ($cronJob->isEnable()) ? 'Enabled' : 'Disabled';
+
+            $tableContent[] = $row;
         }
 
-        return CronJobResult::SUCCEEDED;
+        $header = ['ID', 'Command', 'Next Schedule', 'Last run', 'Enabled'];
+        $style->table($header, $tableContent);
+
+        return CronJobResult::EXIT_CODE_SUCCEEDED;
     }
 }

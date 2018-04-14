@@ -5,7 +5,6 @@ namespace Shapecode\Bundle\CronBundle\Command;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\RuntimeException;
@@ -43,8 +42,6 @@ class CronRunCommand extends BaseCommand
     {
         $this->setName('shapecode:cron:run');
         $this->setDescription('Runs any currently schedule cron jobs');
-
-        $this->addArgument('job', InputArgument::OPTIONAL, 'Run only this job (if enabled)');
     }
 
     /**
@@ -55,27 +52,8 @@ class CronRunCommand extends BaseCommand
         $jobRepo = $this->getCronJobRepository();
         $style = new CronStyle($input, $output);
 
-        if ($jobName = $input->getArgument('job')) {
-            $jobObj = $jobRepo->findOneByCommand($jobName);
-
-            if (!$jobObj) {
-                $style->error('Couldn\'t find a job by the name of ' . $jobName);
-
-                return CronJobResultInterface::EXIT_CODE_FAILED;
-            }
-
-            if (!$jobObj->isEnable()) {
-                $style->error('job ' . $jobName . ' is disabled');
-
-                return CronJobResultInterface::EXIT_CODE_FAILED;
-            }
-
-            /** @var CronJobInterface[] $jobsToRun */
-            $jobsToRun = [$jobObj];
-        } else {
-            /** @var CronJobInterface[] $jobsToRun */
-            $jobsToRun = $jobRepo->findAll();
-        }
+        /** @var CronJobInterface[] $jobsToRun */
+        $jobsToRun = $jobRepo->findAll();
 
         $jobCount = count($jobsToRun);
         $style->comment('Cronjobs started at ' . (new \DateTime())->format('r'));
@@ -96,6 +74,7 @@ class CronRunCommand extends BaseCommand
 
             if (!$job->isEnable()) {
                 $style->notice('cronjob is disabled');
+
                 continue;
             }
 
@@ -136,6 +115,7 @@ class CronRunCommand extends BaseCommand
             $style->info('No jobs were executed. See reasons below.');
         }
 
+        return CronJobResultInterface::EXIT_CODE_SUCCEEDED;
     }
 
     /**

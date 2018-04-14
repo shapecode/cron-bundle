@@ -55,7 +55,7 @@ class CronProcessCommand extends BaseCommand
         $application = new Application($this->getKernel());
         $application->setAutoExit(false);
 
-        $jobInput = new StringInput($job->getFullCommand().' -n');
+        $jobInput = new StringInput($job->getFullCommand() . ' -n');
         $jobOutput = new BufferedOutput();
 
         $this->getStopWatch()->start($watch);
@@ -73,13 +73,6 @@ class CronProcessCommand extends BaseCommand
         }
 
         $bufferedOutput = $jobOutput->fetch();
-
-        $style->text('command output');
-        $style->text('>>>>>>>>>>>>>');
-        $style->writeln('');
-        $style->write($bufferedOutput);
-        $style->writeln('');
-        $style->text('<<<<<<<<<<<<<');
 
         switch ($statusCode) {
             case 0:
@@ -101,7 +94,7 @@ class CronProcessCommand extends BaseCommand
         // Record the result
         $this->recordJobResult($job, $duration, $bufferedOutput, $statusCode);
 
-        return $statusStr;
+        return $statusCode;
     }
 
     /**
