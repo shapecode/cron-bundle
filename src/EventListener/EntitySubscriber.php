@@ -59,7 +59,7 @@ class EntitySubscriber implements EventSubscriber
 
         $entity->setUpdatedAt(new \DateTime());
 
-        if (empty($this->createdAt)) {
+        if (empty($entity->getCreatedAt())) {
             $entity->setCreatedAt(new \DateTime());
         }
     }
