@@ -20,15 +20,23 @@ class CronJobCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $definition = $container->getDefinition('shapecode_cron.cronjob_manager');
+        $definition = $container->getDefinition('shapecode_cron.event_listener.service_job_loader');
 
         $tagged = $container->findTaggedServiceIds('shapecode_cron.cron_job');
 
-        foreach ($tagged as $id => $values) {
-            foreach ($values as $value) {
-                $definition->addMethodCall('addJob', [
+        foreach ($tagged as $id => $configs) {
+            foreach ($configs as $config) {
+                if (!$config['expression']) {
+                    throw new \RuntimeException('missing expression config');
+                }
+
+                $expression = $config['expression'];
+                $arguments = (isset($config['arguments'])) ? $config['arguments'] : null;
+
+                $definition->addMethodCall('addCommand', [
+                    $expression,
                     new Reference($id),
-                    $value['expression']
+                    $arguments
                 ]);
             }
         }

@@ -24,6 +24,21 @@ interface CronJobInterface extends AbstractEntityInterface
     public function getCommand();
 
     /**
+     * @return string
+     */
+    public function getFullCommand();
+
+    /**
+     * @return string
+     */
+    public function getArguments();
+
+    /**
+     * @param string $arguments
+     */
+    public function setArguments($arguments);
+
+    /**
      * @param string $description
      */
     public function setDescription($description);
@@ -67,6 +82,16 @@ interface CronJobInterface extends AbstractEntityInterface
      * @return Collection|CronJobResult[]
      */
     public function getResults();
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastUse();
+
+    /**
+     * @param $lastUse
+     */
+    public function setLastUse(\DateTime $lastUse);
 
     /**
      * @param CronJobResultInterface $result

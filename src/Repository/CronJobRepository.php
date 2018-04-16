@@ -47,21 +47,4 @@ class CronJobRepository extends EntityRepository implements CronJobRepositoryInt
             return $o->getCommand();
         });
     }
-
-    /**
-     * @inheritdoc
-     */
-    public function findDueTasks()
-    {
-        $qb = $this->createQueryBuilder('p');
-        $expr = $qb->expr();
-
-        $qb->andWhere($expr->lte('p.nextRun', ':time'));
-        $qb->andWhere($expr->eq('p.enable', ':enabled'));
-
-        $qb->setParameter('time', new \DateTime());
-        $qb->setParameter('enabled', true);
-
-        return $qb->getQuery()->getResult();
-    }
 }

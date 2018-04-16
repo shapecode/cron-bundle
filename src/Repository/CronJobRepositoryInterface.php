@@ -34,9 +34,4 @@ interface CronJobRepositoryInterface extends ObjectRepository
      * @return ArrayCollection|string[]
      */
     public function getKnownJobs();
-
-    /**
-     * @return array
-     */
-    public function findDueTasks();
 }
