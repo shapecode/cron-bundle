@@ -73,14 +73,11 @@ class CronProcessCommand extends BaseCommand
                 $statusStr = CronJobResultInterface::FAILED;
         }
 
-        $bufferedOutput = $jobOutput->fetch();
-        $output->write($bufferedOutput);
-
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
         $output->writeln($statusStr . ' in ' . number_format(($duration / 1000), 4) . ' seconds');
 
         // Record the result
-        $this->recordJobResult($job, $duration, $bufferedOutput, $statusCode);
+        $this->recordJobResult($job, $duration, $jobOutput, $statusCode);
     }
 
     /**
@@ -89,7 +86,7 @@ class CronProcessCommand extends BaseCommand
      * @param                  $output
      * @param                  $statusCode
      */
-    protected function recordJobResult(CronJobInterface $job, $timeTaken, $output, $statusCode)
+    protected function recordJobResult(CronJobInterface $job, $timeTaken, BufferedOutput $output, $statusCode)
     {
         $cronJobRepository = $this->getCronJobRepository();
         $cronJobResultManager = $this->getManager();
@@ -99,11 +96,13 @@ class CronProcessCommand extends BaseCommand
 
         $className = $this->getCronJobResultRepository()->getClassName();
 
+        $buffer = (!$output->isQuiet()) ? $output->fetch() : '';
+
         /** @var CronJobResultInterface $result */
         $result = new $className();
         $result->setCronJob($job);
         $result->setRunTime($timeTaken);
-        $result->setOutput($output);
+        $result->setOutput($buffer);
         $result->setStatusCode($statusCode);
 
         $cronJobResultManager->persist($result);
