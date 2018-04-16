@@ -16,7 +16,7 @@ Install instructions
 Installing this bundle can be done through these simple steps:
 
 Add the bundle to your project as a composer dependency:
-```javascript
+```json
 // composer.json
 {
     // ...
@@ -28,7 +28,7 @@ Add the bundle to your project as a composer dependency:
 ```
 
 Update your composer installation:
-```sh
+```bash
 $ composer update --prefer-dist
 ```
 
@@ -108,7 +108,7 @@ You can also register your command multiple times by using the annotation more t
 For your CronJob to be scanned and included in future runs, you must first run `php bin/console shapecode:cron:scan` - it will be scheduled to run the next time you run `php app/console shapecode:cron:run`
 
 Register your new Crons:
-```sh
+```bash
 $ php bin/console shapecode:cron:scan
 $ php bin/console shapecode:cron:run
 ```
@@ -119,7 +119,7 @@ Running your cron jobs automatically
 This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `bin/console shapecode:cron:run`).
 
 To facilitate this, you can create a cron job on your system like this:
-```sh
+```bash
 */5 * * * * php /path/to/symfony/bin/console shapecode:cron:run
 ```
 This will schedule your tasks to run at most every 5 minutes - for instance, tasks which are scheduled to run every 3 minutes will only run every 5 minutes.

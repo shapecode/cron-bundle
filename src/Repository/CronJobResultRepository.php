@@ -17,19 +17,14 @@ class CronJobResultRepository extends EntityRepository implements CronJobResultR
     /**
      * @inheritdoc
      */
-    public function deleteOldLogs(CronJobInterface $job = null)
+    public function deleteOldLogs(\DateTime $time)
     {
         $qb = $this->createQueryBuilder('d');
         $qb->delete($this->getEntityName(), 'd');
         $expr = $qb->expr();
 
         $qb->andWhere($expr->lte('d.createdAt', ':createdAt'));
-        $qb->setParameter('createdAt', new \DateTime('7 days ago'));
-
-        if ($job) {
-            $qb->andWhere($expr->eq('r.cronJob', ':cronJob'));
-            $qb->setParameter('cronJob', $job->getId());
-        }
+        $qb->setParameter('createdAt', $time);
 
         return $qb->getQuery()->execute();
     }

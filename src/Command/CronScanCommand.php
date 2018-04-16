@@ -133,7 +133,7 @@ class CronScanCommand extends BaseCommand
 
         $em->flush();
 
-        return CronJobResult::SUCCEEDED;
+        return CronJobResult::EXIT_CODE_SUCCEEDED;
     }
 
     /**
