@@ -5,7 +5,6 @@ namespace Shapecode\Bundle\CronBundle\Command;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
@@ -47,21 +46,22 @@ class CronProcessCommand extends BaseCommand
             return 1;
         }
 
-        $command = $job->getCommand();
-        $watch = 'job-' . $command;
+        $command = $job->getFullCommand() . ' -n';
+        $watch = 'job-' . str_replace(' ', '-', $command);
 
-        $style->title("Running " . $job->getCommand());
+        $style->title("Running " . $command);
 
-        $application = new Application($this->getKernel());
-        $application->setAutoExit(false);
-
-        $jobInput = new StringInput($job->getFullCommand() . ' -n');
+        $jobInput = new StringInput($command);
         $jobOutput = new BufferedOutput();
+
+        if (true === $jobInput->hasParameterOption(['--quiet', '-q'], true)) {
+            $jobOutput->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+        }
 
         $this->getStopWatch()->start($watch);
 
         try {
-            $statusCode = $application->doRun($jobInput, $jobOutput);
+            $statusCode = $this->getApplication()->doRun($jobInput, $jobOutput);
         } catch (\Exception $ex) {
             $statusCode = 1;
             $style->error('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
