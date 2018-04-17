@@ -26,7 +26,7 @@ class ResultAutoPruneListener implements EventSubscriberInterface
      * @param CronJobResultServiceInterface $cronjobService
      * @param bool                          $autoPrune
      */
-    public function __construct(CronJobResultServiceInterface $cronjobService, bool $autoPrune)
+    public function __construct(CronJobResultServiceInterface $cronjobService, $autoPrune)
     {
         $this->cronjobService = $cronjobService;
         $this->autoPrune = $autoPrune;
