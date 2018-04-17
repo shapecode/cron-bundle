@@ -26,7 +26,7 @@ class CronJobResultService implements CronJobResultServiceInterface
      * @param ManagerRegistry $registry
      * @param string          $pruneInterval
      */
-    public function __construct(ManagerRegistry $registry, string $pruneInterval)
+    public function __construct(ManagerRegistry $registry, $pruneInterval)
     {
         $this->registry = $registry;
         $this->pruneInterval = $pruneInterval;
