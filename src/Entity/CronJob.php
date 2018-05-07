@@ -291,4 +291,12 @@ class CronJob extends AbstractEntity implements CronJobInterface
         $cron = CronExpression::factory($this->getPeriod());
         $this->setNextRun($cron->getNextRunDate());
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function __toString()
+    {
+        return $this->getCommand();
+    }
 }
