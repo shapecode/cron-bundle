@@ -12,7 +12,6 @@ use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
  *
  * @package Shapecode\Bundle\CronBundle\EventListener
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class EntitySubscriber implements EventSubscriber
 {

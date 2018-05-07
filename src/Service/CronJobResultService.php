@@ -11,7 +11,6 @@ use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepositoryInterface;
  *
  * @package Shapecode\Bundle\CronBundle\Service
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class CronJobResultService implements CronJobResultServiceInterface
 {

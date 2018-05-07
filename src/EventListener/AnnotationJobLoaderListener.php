@@ -15,7 +15,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
  *
  * @package Shapecode\Bundle\CronBundle\EventListener
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class AnnotationJobLoaderListener implements EventSubscriberInterface
 {

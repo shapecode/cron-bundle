@@ -13,7 +13,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
  *
  * @package Shapecode\Bundle\CronBundle\Admin
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class CronjobResultAdmin extends AbstractAdmin
 {

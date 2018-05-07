@@ -7,7 +7,6 @@ namespace Shapecode\Bundle\CronBundle\Service;
  *
  * @package Shapecode\Bundle\CronBundle\Service
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 interface CronJobResultServiceInterface
 {

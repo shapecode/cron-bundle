@@ -9,7 +9,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  *
  * @package Shapecode\Bundle\CronBundle\Console\Style
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class CronStyle extends SymfonyStyle
 {

@@ -12,7 +12,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  *
  * @package Shapecode\Bundle\CronBundle\EventListener
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class ServiceJobLoaderListener implements EventSubscriberInterface
 {

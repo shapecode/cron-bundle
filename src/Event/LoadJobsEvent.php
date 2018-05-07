@@ -10,7 +10,6 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @package Shapecode\Bundle\CronBundle\Event
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class LoadJobsEvent extends Event
 {

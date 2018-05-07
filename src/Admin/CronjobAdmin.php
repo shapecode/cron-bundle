@@ -13,7 +13,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
  *
  * @package Shapecode\Bundle\CronBundle\Admin
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class CronjobAdmin extends AbstractAdmin
 {
@@ -61,6 +60,9 @@ class CronjobAdmin extends AbstractAdmin
         ]);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
