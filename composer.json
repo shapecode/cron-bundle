@@ -56,6 +56,9 @@
         "phpunit/phpunit": "^6.1",
         "mockery/mockery": "^1.0"
     },
+    "suggest": {
+        "sonata-project/admin-bundle": "to manage cronjobs in the sonata admin panel"
+    },
     "autoload": {
         "psr-4": {
             "Shapecode\\Bundle\\CronBundle\\": "src/"
