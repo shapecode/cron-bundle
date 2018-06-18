@@ -36,11 +36,6 @@ class CronRunCommand extends BaseCommand
     protected $consoleBin;
 
     /**
-     * @var string|null
-     */
-    protected $environment;
-
-    /**
      * @inheritdoc
      */
     protected function configure()
@@ -71,6 +66,7 @@ class CronRunCommand extends BaseCommand
 
         /** @var Process[] $processes */
         $processes = [];
+        $em = $this->getManager();
 
         foreach ($jobsToRun as $job) {
             sleep(1);
@@ -95,8 +91,8 @@ class CronRunCommand extends BaseCommand
                 $job->calculateNextRun();
                 $job->setLastUse($now);
 
-                $this->getManager()->persist($job);
-                $this->getManager()->flush();
+                $em->persist($job);
+                $em->flush();
 
                 $processes[] = $process;
             }
@@ -166,7 +162,7 @@ class CronRunCommand extends BaseCommand
      */
     protected function getProjectDir()
     {
-        if (!is_null($this->projectDir)) {
+        if (null !== $this->projectDir) {
             return $this->projectDir;
         }
 
@@ -177,7 +173,7 @@ class CronRunCommand extends BaseCommand
             $projectDir = $kernel->getProjectDir();
         } else {
             $rootDir = $this->getKernel()->getRootDir();
-            $projectDir = realpath($rootDir . '/..');
+            $projectDir = dirname($rootDir);
         }
 
         $this->projectDir = $projectDir;
@@ -190,7 +186,7 @@ class CronRunCommand extends BaseCommand
      */
     protected function getConsoleBin()
     {
-        if (!is_null($this->consoleBin)) {
+        if (null !== $this->consoleBin) {
             return $this->consoleBin;
         }
 
@@ -217,7 +213,7 @@ class CronRunCommand extends BaseCommand
      */
     protected function getPhpExecutable()
     {
-        if (!is_null($this->phpExecutable)) {
+        if (null !== $this->phpExecutable) {
             return $this->phpExecutable;
         }
 
@@ -231,15 +227,6 @@ class CronRunCommand extends BaseCommand
         $this->phpExecutable = $php;
 
         return $php;
-    }
-
-    protected function getEnvironment()
-    {
-        if (!isset($this->environment)) {
-            $this->environment = $this->kernel->getEnvironment();
-        }
-
-        return $this->environment;
     }
 
 }

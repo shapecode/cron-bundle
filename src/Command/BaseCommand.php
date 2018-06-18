@@ -38,6 +38,9 @@ abstract class BaseCommand extends Command
     /** @var RequestStack */
     protected $requestStack;
 
+    /** @var string|null */
+    protected $environment;
+
     /**
      * @param KernelInterface $kernel
      * @param Reader          $annotationReader
@@ -93,7 +96,7 @@ abstract class BaseCommand extends Command
      */
     protected function getStopWatch()
     {
-        if (is_null($this->stopwatch)) {
+        if ($this->stopwatch === null) {
             $this->stopwatch = new Stopwatch();
         }
 
@@ -130,5 +133,17 @@ abstract class BaseCommand extends Command
     protected function getCronJobResultRepository()
     {
         return $this->getRegistry()->getRepository(CronJobResultInterface::class);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getEnvironment()
+    {
+        if ($this->environment === null) {
+            $this->environment = $this->kernel->getEnvironment();
+        }
+
+        return $this->environment;
     }
 }
