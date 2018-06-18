@@ -61,10 +61,10 @@ class CronRunCommand extends BaseCommand
         $jobsToRun = $jobRepo->findAll();
 
         $jobCount = count($jobsToRun);
-        $style->comment('Cronjobs started at '.(new \DateTime())->format('r'));
+        $style->comment('Cronjobs started at ' . (new \DateTime())->format('r'));
 
         $style->title('Execute cronjobs');
-        $style->info('Found '.$jobCount.' jobs');
+        $style->info('Found ' . $jobCount . ' jobs');
 
         // Update the job with it's next scheduled time
         $now = new \DateTime();
@@ -75,7 +75,7 @@ class CronRunCommand extends BaseCommand
         foreach ($jobsToRun as $job) {
             sleep(1);
 
-            $style->section('Running "'.$job->getFullCommand().'"');
+            $style->section('Running "' . $job->getFullCommand() . '"');
 
             if (!$job->isEnable()) {
                 $style->notice('cronjob is disabled');
@@ -84,7 +84,7 @@ class CronRunCommand extends BaseCommand
             }
 
             if ($job->getNextRun() > $now) {
-                $style->notice('cronjob will not be executed. Next run is: '.$job->getNextRun()->format('r'));
+                $style->notice('cronjob will not be executed. Next run is: ' . $job->getNextRun()->format('r'));
 
                 continue;
             }
@@ -177,7 +177,7 @@ class CronRunCommand extends BaseCommand
             $projectDir = $kernel->getProjectDir();
         } else {
             $rootDir = $this->getKernel()->getRootDir();
-            $projectDir = realpath($rootDir.'/..');
+            $projectDir = realpath($rootDir . '/..');
         }
 
         $this->projectDir = $projectDir;
@@ -196,8 +196,8 @@ class CronRunCommand extends BaseCommand
 
         $projectDir = $this->getProjectDir();
 
-        $consolePath = $projectDir.'/bin/console';
-        $legacyConsolePath = $projectDir.'/app/console';
+        $consolePath = $projectDir . '/bin/console';
+        $legacyConsolePath = $projectDir . '/app/console';
 
         if (file_exists($consolePath)) {
             $consoleBin = $consolePath;
