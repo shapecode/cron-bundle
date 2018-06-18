@@ -238,6 +238,8 @@ class CronRunCommand extends BaseCommand
         if (!isset($this->environment)) {
             $this->environment = $this->kernel->getEnvironment();
         }
+
+        return $this->environment;
     }
 
 }
