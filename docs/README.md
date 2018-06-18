@@ -1,4 +1,4 @@
-Shapecode Cron Bundle
+Shapecode - Cron Bundle
 =======================
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/cd190858-da13-4be6-ad02-c933d4272d87/mini.png)](https://insight.sensiolabs.com/projects/cd190858-da13-4be6-ad02-c933d4272d87)
@@ -15,21 +15,9 @@ Install instructions
 
 Installing this bundle can be done through these simple steps:
 
-Add the bundle to your project as a composer dependency:
-```json
-// composer.json
-{
-    // ...
-    require: {
-        // ...
-        "shapecode/cron-bundle": "~3.0"
-    }
-}
-```
-
-Update your composer installation:
+Add the bundle to your project through composer:
 ```bash
-$ composer update --prefer-dist
+composer require shapecode/cron-bundle
 ```
 
 Add the bundle to your application kernel:
@@ -53,8 +41,8 @@ public function registerBundles()
 Update your DB schema ...
 
 ... with Doctrine standard method ...
-```sh
-$ php bin/console doctrine:schema:update --force
+```bash
+php bin/console doctrine:schema:update --force
 ```
 
 Creating your own tasks
