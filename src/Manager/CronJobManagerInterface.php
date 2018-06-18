@@ -3,7 +3,6 @@
 namespace Shapecode\Bundle\CronBundle\Manager;
 
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
-use Symfony\Component\Console\Command\Command;
 
 /**
  * Interface CronJobManagerInterface
@@ -15,19 +14,8 @@ interface CronJobManagerInterface
 {
 
     /**
-     * @return mixed
-     */
-    public function getApplicationJobs();
-
-    /**
-     * @return array|CronJobMetadata[]
+     * @return CronJobMetadata[]
      */
     public function getJobs();
-
-    /**
-     * @param Command $command
-     * @param         $expression
-     */
-    public function addJob(Command $command, $expression);
 
 }

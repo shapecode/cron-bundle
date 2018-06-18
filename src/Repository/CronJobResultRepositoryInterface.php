@@ -17,11 +17,11 @@ interface CronJobResultRepositoryInterface extends ObjectRepository
 {
 
     /**
-     * @param CronJobInterface $job
+     * @param \DateTime $time
      *
      * @return mixed
      */
-    public function deleteOldLogs(CronJobInterface $job = null);
+    public function deleteOldLogs(\DateTime $time);
 
     /**
      * @param CronJobInterface $job

@@ -12,7 +12,6 @@ use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
  *
  * @package Shapecode\Bundle\CronBundle\EventListener
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class EntitySubscriber implements EventSubscriber
 {
@@ -59,7 +58,7 @@ class EntitySubscriber implements EventSubscriber
 
         $entity->setUpdatedAt(new \DateTime());
 
-        if (empty($this->createdAt)) {
+        if (empty($entity->getCreatedAt())) {
             $entity->setCreatedAt(new \DateTime());
         }
     }
