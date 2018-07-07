@@ -12,42 +12,32 @@ interface AbstractEntityInterface
 {
 
     /**
-     * Get id
-     *
-     * @return integer
+     * @return int|null
      */
-    public function getId();
+    public function getId(): ?int;
 
     /**
      * @param integer|null $id
      */
-    public function setId($id = null);
+    public function setId(?int $id = null): void;
 
     /**
-     * Set created
-     *
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt(\DateTime $createdAt);
+    public function setCreatedAt(\DateTime $createdAt): void;
 
     /**
-     * Get created
-     *
      * @return \DateTime
      */
-    public function getCreatedAt();
+    public function getCreatedAt(): \DateTime;
 
     /**
-     * Set updated
-     *
      * @param \DateTime $updatedAt
      */
-    public function setUpdatedAt(\DateTime $updatedAt);
+    public function setUpdatedAt(\DateTime $updatedAt): void;
 
     /**
-     * Get updated
-     *
      * @return \DateTime
      */
-    public function getUpdatedAt();
+    public function getUpdatedAt(): \DateTime;
 }

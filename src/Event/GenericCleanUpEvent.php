@@ -15,13 +15,13 @@ use Symfony\Component\EventDispatcher\Event;
 class GenericCleanUpEvent extends Event
 {
 
-    const HOURLY_START = 'shapecode_cron.generic_cleanup.hourly.start';
-    const HOURLY_PROCESS = 'shapecode_cron.generic_cleanup.hourly.process';
-    const HOURLY_END = 'shapecode_cron.generic_cleanup.hourly.end';
+    public const HOURLY_START = 'shapecode_cron.generic_cleanup.hourly.start';
+    public const HOURLY_PROCESS = 'shapecode_cron.generic_cleanup.hourly.process';
+    public const HOURLY_END = 'shapecode_cron.generic_cleanup.hourly.end';
 
-    const DAILY_START = 'shapecode_cron.generic_cleanup.daily.start';
-    const DAILY_PROCESS = 'shapecode_cron.generic_cleanup.daily.process';
-    const DAILY_END = 'shapecode_cron.generic_cleanup.daily.end';
+    public const DAILY_START = 'shapecode_cron.generic_cleanup.daily.start';
+    public const DAILY_PROCESS = 'shapecode_cron.generic_cleanup.daily.process';
+    public const DAILY_END = 'shapecode_cron.generic_cleanup.daily.end';
 
     /** @var InputInterface */
     protected $input;
@@ -42,7 +42,7 @@ class GenericCleanUpEvent extends Event
     /**
      * @return InputInterface
      */
-    public function getInput()
+    public function getInput(): InputInterface
     {
         return $this->input;
     }
@@ -50,7 +50,7 @@ class GenericCleanUpEvent extends Event
     /**
      * @return OutputInterface
      */
-    public function getOutput()
+    public function getOutput(): OutputInterface
     {
         return $this->output;
     }

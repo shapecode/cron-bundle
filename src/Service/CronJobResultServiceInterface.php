@@ -14,5 +14,5 @@ interface CronJobResultServiceInterface
     /**
      *
      */
-    public function prune();
+    public function prune(): void;
 }

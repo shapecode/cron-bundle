@@ -55,7 +55,7 @@ class CronRunCommand extends BaseCommand
         /** @var CronJobInterface[] $jobsToRun */
         $jobsToRun = $jobRepo->findAll();
 
-        $jobCount = count($jobsToRun);
+        $jobCount = \count($jobsToRun);
         $style->comment('Cronjobs started at ' . (new \DateTime())->format('r'));
 
         $style->title('Execute cronjobs');
@@ -104,7 +104,7 @@ class CronRunCommand extends BaseCommand
 
         $style->section('Summary');
 
-        if (count($processes)) {
+        if (\count($processes)) {
             $style->text('waiting for all running jobs ...');
 
             // wait for all processes
@@ -122,7 +122,7 @@ class CronRunCommand extends BaseCommand
     /**
      * @param Process[] $processes
      */
-    public function waitProcesses($processes)
+    public function waitProcesses(array $processes): void
     {
         $wait = true;
         while ($wait) {
@@ -140,9 +140,9 @@ class CronRunCommand extends BaseCommand
     /**
      * @param CronJobInterface $job
      *
-     * @return Process|null
+     * @return Process
      */
-    protected function runJob(CronJobInterface $job)
+    protected function runJob(CronJobInterface $job): Process
     {
         $consoleBin = $this->getConsoleBin();
         $php = $this->getPhpExecutable();
@@ -160,21 +160,14 @@ class CronRunCommand extends BaseCommand
     /**
      * @return string
      */
-    protected function getProjectDir()
+    protected function getProjectDir(): string
     {
         if (null !== $this->projectDir) {
             return $this->projectDir;
         }
 
         $kernel = $this->getKernel();
-
-        // use symfony >3.3 simple way
-        if (method_exists($kernel, 'getProjectDir')) {
-            $projectDir = $kernel->getProjectDir();
-        } else {
-            $rootDir = $this->getKernel()->getRootDir();
-            $projectDir = dirname($rootDir);
-        }
+        $projectDir = $kernel->getProjectDir();
 
         $this->projectDir = $projectDir;
 
@@ -184,7 +177,7 @@ class CronRunCommand extends BaseCommand
     /**
      * @return string
      */
-    protected function getConsoleBin()
+    protected function getConsoleBin(): string
     {
         if (null !== $this->consoleBin) {
             return $this->consoleBin;
@@ -193,14 +186,11 @@ class CronRunCommand extends BaseCommand
         $projectDir = $this->getProjectDir();
 
         $consolePath = $projectDir . '/bin/console';
-        $legacyConsolePath = $projectDir . '/app/console';
 
         if (file_exists($consolePath)) {
             $consoleBin = $consolePath;
-        } elseif (file_exists($legacyConsolePath)) {
-            $consoleBin = $legacyConsolePath;
         } else {
-            throw new RuntimeException("Missing console binary");
+            throw new RuntimeException('Missing console binary');
         }
 
         $this->consoleBin = $consoleBin;
@@ -211,7 +201,7 @@ class CronRunCommand extends BaseCommand
     /**
      * @return string
      */
-    protected function getPhpExecutable()
+    protected function getPhpExecutable(): string
     {
         if (null !== $this->phpExecutable) {
             return $this->phpExecutable;

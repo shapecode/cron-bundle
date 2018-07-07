@@ -33,7 +33,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -41,7 +41,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function setId($id = null)
+    public function setId(?int $id = null): void
     {
         $this->id = $id;
     }
@@ -49,7 +49,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function setCreatedAt(\DateTime $createdAt)
+    public function setCreatedAt(\DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
@@ -57,7 +57,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         if (empty($this->createdAt)) {
             $this->setCreatedAt(new \DateTime());
@@ -69,7 +69,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function setUpdatedAt(\DateTime $updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -77,7 +77,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): \DateTime
     {
         if (empty($this->updatedAt)) {
             $this->setUpdatedAt(new \DateTime());

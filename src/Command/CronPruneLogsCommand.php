@@ -38,7 +38,7 @@ class CronPruneLogsCommand extends Command
         $this->setName('shapecode:cron:result:prune');
 
         $this->setAliases([
-            'shapecode:cron:losg:clean-up'
+            'shapecode:cron:logs:clean-up'
         ]);
 
         $this->setDescription('Cleans the logs for each cron job.');
@@ -49,11 +49,11 @@ class CronPruneLogsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln("Cleaning logs for all cron jobs");
+        $output->writeln('Cleaning logs for all cron jobs');
 
         $this->resultService->prune();
 
-        $output->writeln("Logs cleaned successfully");
+        $output->writeln('Logs cleaned successfully');
 
         return CronJobResult::EXIT_CODE_SUCCEEDED;
     }
