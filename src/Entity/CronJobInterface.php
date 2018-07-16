@@ -16,112 +16,112 @@ interface CronJobInterface extends AbstractEntityInterface
     /**
      * @param string $command
      */
-    public function setCommand($command);
+    public function setCommand(string $command): void;
 
     /**
      * @return string
      */
-    public function getCommand();
+    public function getCommand(): string;
 
     /**
      * @return string
      */
-    public function getFullCommand();
+    public function getFullCommand(): string;
 
     /**
      * @return string
      */
-    public function getArguments();
+    public function getArguments(): ?string;
 
     /**
      * @param string $arguments
      */
-    public function setArguments($arguments);
+    public function setArguments(?string $arguments): void;
 
     /**
      * @param string $description
      */
-    public function setDescription($description);
+    public function setDescription(?string $description): void;
 
     /**
      * @return string
      */
-    public function getDescription();
+    public function getDescription(): ?string;
 
     /**
      * @return int
      */
-    public function getNumber();
+    public function getNumber(): ?int;
 
     /**
      * @param int $number
      */
-    public function setNumber($number);
+    public function setNumber(int $number);
 
     /**
      * @param string $period
      */
-    public function setPeriod($period);
+    public function setPeriod(string $period): void;
 
     /**
      * @return string
      */
-    public function getPeriod();
+    public function getPeriod(): string;
 
     /**
      * @param \DateTime $nextRun
      */
-    public function setNextRun(\DateTime $nextRun);
+    public function setNextRun(\DateTime $nextRun): void;
 
     /**
      * @return \DateTime
      */
-    public function getNextRun();
+    public function getNextRun(): \DateTime;
 
     /**
      * @return Collection|CronJobResult[]
      */
-    public function getResults();
+    public function getResults(): Collection;
 
     /**
      * @return \DateTime
      */
-    public function getLastUse();
+    public function getLastUse(): ?\DateTime;
 
     /**
      * @param $lastUse
      */
-    public function setLastUse(\DateTime $lastUse);
+    public function setLastUse(\DateTime $lastUse): void;
 
     /**
      * @param CronJobResultInterface $result
      *
      * @return bool
      */
-    public function hasResult(CronJobResultInterface $result);
+    public function hasResult(CronJobResultInterface $result): bool ;
 
     /**
      * @param CronJobResultInterface $result
      */
-    public function addResult(CronJobResultInterface $result);
+    public function addResult(CronJobResultInterface $result): void;
 
     /**
      * @param CronJobResultInterface $result
      */
-    public function removeResult(CronJobResultInterface $result);
+    public function removeResult(CronJobResultInterface $result): void;
 
     /**
      * @param boolean $enable
      */
-    public function setEnable($enable);
+    public function setEnable(bool $enable): void;
 
     /**
      * @see getIsEnable()
      */
-    public function isEnable();
+    public function isEnable(): bool;
 
     /**
      *
      */
-    public function calculateNextRun();
+    public function calculateNextRun(): void;
 }

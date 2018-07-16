@@ -36,7 +36,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
 
     /**
      * @var string
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $output;
 
@@ -58,7 +58,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @inheritdoc
      */
-    public function setRunAt(\DateTime $runAt)
+    public function setRunAt(\DateTime $runAt): void
     {
         $this->runAt = $runAt;
     }
@@ -66,7 +66,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @inheritdoc
      */
-    public function getRunAt()
+    public function getRunAt(): \DateTime
     {
         return $this->runAt;
     }
@@ -74,7 +74,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @inheritdoc
      */
-    public function setRunTime($runTime)
+    public function setRunTime(float $runTime): void
     {
         $this->runTime = $runTime;
     }
@@ -82,7 +82,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @inheritdoc
      */
-    public function getRunTime()
+    public function getRunTime(): float
     {
         return $this->runTime;
     }
@@ -90,7 +90,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @return int
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
@@ -98,7 +98,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @param int $statusCode
      */
-    public function setStatusCode($statusCode)
+    public function setStatusCode(int $statusCode): void
     {
         $this->statusCode = $statusCode;
     }
@@ -106,7 +106,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @inheritdoc
      */
-    public function setOutput($output)
+    public function setOutput(?string $output): void
     {
         $this->output = $output;
     }
@@ -114,7 +114,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @inheritdoc
      */
-    public function getOutput()
+    public function getOutput(): ?string
     {
         return $this->output;
     }
@@ -122,7 +122,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @inheritdoc
      */
-    public function setCronJob(CronJobInterface $job)
+    public function setCronJob(CronJobInterface $job): void
     {
         $this->cronJob = $job;
     }
@@ -130,7 +130,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     /**
      * @inheritdoc
      */
-    public function getCronJob()
+    public function getCronJob(): CronJobInterface
     {
         return $this->cronJob;
     }

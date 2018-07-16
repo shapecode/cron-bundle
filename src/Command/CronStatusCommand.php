@@ -58,7 +58,7 @@ class CronStatusCommand extends BaseCommand
                 $row[] = 'This job has not yet been run';
             }
 
-            $row[] = ($cronJob->isEnable()) ? 'Enabled' : 'Disabled';
+            $row[] = $cronJob->isEnable() ? 'Enabled' : 'Disabled';
 
             $tableContent[] = $row;
         }

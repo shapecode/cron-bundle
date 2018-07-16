@@ -26,12 +26,12 @@ class CronJobCompilerPass implements CompilerPassInterface
 
         foreach ($tagged as $id => $configs) {
             foreach ($configs as $config) {
-                if (!$config['expression']) {
+                if (!isset($config['expression'])) {
                     throw new \RuntimeException('missing expression config');
                 }
 
                 $expression = $config['expression'];
-                $arguments = (isset($config['arguments'])) ? $config['arguments'] : null;
+                $arguments = $config['arguments'] ?? null;
 
                 $definition->addMethodCall('addCommand', [
                     $expression,

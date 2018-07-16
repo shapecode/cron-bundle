@@ -49,7 +49,7 @@ class CronProcessCommand extends BaseCommand
         $command = $job->getFullCommand() . ' -n';
         $watch = 'job-' . str_replace(' ', '-', $command);
 
-        $style->title("Running " . $command);
+        $style->title('Running ' . $command);
 
         $jobInput = new StringInput($command);
         $jobOutput = new BufferedOutput();
@@ -62,13 +62,13 @@ class CronProcessCommand extends BaseCommand
 
         try {
             $statusCode = $this->getApplication()->doRun($jobInput, $jobOutput);
-        } catch (\Exception $ex) {
+        } catch (\Throwable $ex) {
             $statusCode = 1;
-            $style->error('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
+            $style->error('Job execution failed with exception ' . \get_class($ex) . ': ' . $ex->getMessage());
         }
         $this->getStopWatch()->stop($watch);
 
-        if (is_null($statusCode)) {
+        if ($statusCode === null) {
             $statusCode = 0;
         }
 
@@ -97,11 +97,11 @@ class CronProcessCommand extends BaseCommand
 
     /**
      * @param CronJobInterface $job
-     * @param                  $timeTaken
-     * @param                  $output
-     * @param                  $statusCode
+     * @param float            $timeTaken
+     * @param BufferedOutput   $output
+     * @param int              $statusCode
      */
-    protected function recordJobResult(CronJobInterface $job, $timeTaken, BufferedOutput $output, $statusCode)
+    protected function recordJobResult(CronJobInterface $job, float $timeTaken, BufferedOutput $output, int $statusCode): void
     {
         $cronJobRepository = $this->getCronJobRepository();
         $cronJobResultManager = $this->getManager();
