@@ -1,6 +1,9 @@
 Shapecode - Cron Bundle
 =======================
 
+[![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/nicklog/donate)
+
+
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/cd190858-da13-4be6-ad02-c933d4272d87/mini.png)](https://insight.sensiolabs.com/projects/cd190858-da13-4be6-ad02-c933d4272d87)
 [![Latest Stable Version](https://poser.pugx.org/shapecode/cron-bundle/v/stable)](https://packagist.org/packages/shapecode/cron-bundle)
 [![Total Downloads](https://poser.pugx.org/shapecode/cron-bundle/downloads)](https://packagist.org/packages/shapecode/cron-bundle)
