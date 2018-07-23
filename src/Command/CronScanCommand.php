@@ -157,10 +157,8 @@ class CronScanCommand extends BaseCommand
         $newJob->setNumber($counter);
         $newJob->calculateNextRun();
 
-        $output->success(
-            sprintf('Found new job: "%s" with period %s',
-                trim($newJob->getCommand().' '.$newJob->getArguments()),
-                $newJob->getPeriod()));
+        $message = sprintf('Found new job: "%s" with period %s', $newJob->getFullCommand(), $newJob->getPeriod());
+        $output->success($message);
 
         $this->getManager()->persist($newJob);
     }
