@@ -16,6 +16,6 @@ interface CronJobManagerInterface
     /**
      * @return CronJobMetadata[]
      */
-    public function getJobs();
+    public function getJobs(): array;
 
 }

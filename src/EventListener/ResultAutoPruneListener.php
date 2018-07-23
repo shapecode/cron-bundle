@@ -25,7 +25,7 @@ class ResultAutoPruneListener implements EventSubscriberInterface
      * @param CronJobResultServiceInterface $cronjobService
      * @param bool                          $autoPrune
      */
-    public function __construct(CronJobResultServiceInterface $cronjobService, $autoPrune)
+    public function __construct(CronJobResultServiceInterface $cronjobService, bool $autoPrune)
     {
         $this->cronjobService = $cronjobService;
         $this->autoPrune = $autoPrune;
@@ -44,7 +44,7 @@ class ResultAutoPruneListener implements EventSubscriberInterface
     /**
      * @param GenericCleanUpEvent $genericCleanUpEvent
      */
-    public function onHourlyProcess(GenericCleanUpEvent $genericCleanUpEvent)
+    public function onHourlyProcess(GenericCleanUpEvent $genericCleanUpEvent): void
     {
         if ($this->autoPrune) {
             $this->cronjobService->prune();

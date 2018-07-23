@@ -4,14 +4,15 @@ namespace Shapecode\Bundle\CronBundle\Command;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Persistence\ObjectManager;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepositoryInterface;
 use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
@@ -23,7 +24,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 abstract class BaseCommand extends Command
 {
 
-    /** @var KernelInterface */
+    /** @var Kernel */
     protected $kernel;
 
     /** @var Reader */
@@ -38,13 +39,16 @@ abstract class BaseCommand extends Command
     /** @var RequestStack */
     protected $requestStack;
 
+    /** @var string|null */
+    protected $environment;
+
     /**
-     * @param KernelInterface $kernel
+     * @param Kernel          $kernel
      * @param Reader          $annotationReader
      * @param ManagerRegistry $registry
      * @param RequestStack    $requestStack
      */
-    public function __construct(KernelInterface $kernel, Reader $annotationReader, ManagerRegistry $registry, RequestStack $requestStack)
+    public function __construct(Kernel $kernel, Reader $annotationReader, ManagerRegistry $registry, RequestStack $requestStack)
     {
         parent::__construct();
 
@@ -55,9 +59,9 @@ abstract class BaseCommand extends Command
     }
 
     /**
-     * @return KernelInterface
+     * @return Kernel
      */
-    protected function getKernel()
+    protected function getKernel(): Kernel
     {
         return $this->kernel;
     }
@@ -65,25 +69,15 @@ abstract class BaseCommand extends Command
     /**
      * @return Reader
      */
-    public function getReader()
+    public function getReader(): Reader
     {
         return $this->annotationReader;
     }
 
     /**
      * @return ManagerRegistry
-     *
-     * @deprecated
      */
-    protected function getDoctrine()
-    {
-        return $this->getRegistry();
-    }
-
-    /**
-     * @return ManagerRegistry
-     */
-    protected function getRegistry()
+    protected function getRegistry(): ManagerRegistry
     {
         return $this->registry;
     }
@@ -91,9 +85,9 @@ abstract class BaseCommand extends Command
     /**
      * @return Stopwatch
      */
-    protected function getStopWatch()
+    protected function getStopWatch(): Stopwatch
     {
-        if (is_null($this->stopwatch)) {
+        if ($this->stopwatch === null) {
             $this->stopwatch = new Stopwatch();
         }
 
@@ -101,34 +95,46 @@ abstract class BaseCommand extends Command
     }
 
     /**
-     * @return null|\Symfony\Component\HttpFoundation\Request
+     * @return Request
      */
-    protected function getRequest()
+    protected function getRequest(): Request
     {
         return $this->requestStack->getMasterRequest();
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectManager|null
+     * @return ObjectManager
      */
-    protected function getManager()
+    protected function getManager(): ObjectManager
     {
         return $this->getRegistry()->getManager();
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectRepository|EntityRepository|CronJobRepositoryInterface
+     * @return CronJobRepositoryInterface
      */
-    protected function getCronJobRepository()
+    protected function getCronJobRepository(): CronJobRepositoryInterface
     {
         return $this->getRegistry()->getRepository(CronJobInterface::class);
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\ObjectRepository|EntityRepository|CronJobResultRepositoryInterface
+     * @return CronJobResultRepositoryInterface
      */
-    protected function getCronJobResultRepository()
+    protected function getCronJobResultRepository(): CronJobResultRepositoryInterface
     {
         return $this->getRegistry()->getRepository(CronJobResultInterface::class);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getEnvironment(): string
+    {
+        if ($this->environment === null) {
+            $this->environment = $this->kernel->getEnvironment();
+        }
+
+        return $this->environment;
     }
 }

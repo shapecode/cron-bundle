@@ -2,7 +2,7 @@ services:
     # manager
     shapecode_cron.cronjob_manager:
         class: Shapecode\Bundle\CronBundle\Manager\CronJobManager
-        public: true
+        public: false
         arguments:
             - '@event_dispatcher'
 
@@ -82,9 +82,10 @@ services:
             - { name: console.command }
             - { name: shapecode_cron.cron_job, expression: '@hourly' }
 
-    # eventlistener
+    # event listener
     shapecode_cron.event_listener.entity_subscriber:
         class: Shapecode\Bundle\CronBundle\EventListener\EntitySubscriber
+        public: true
         tags:
             - { name: doctrine.event_subscriber }
 
@@ -115,7 +116,7 @@ services:
     # service
     shapecode_cron.service.cronjob_result:
         class: Shapecode\Bundle\CronBundle\Service\CronJobResultService
-        public: true
+        public: false
         arguments:
             - '@doctrine'
             - '%shapecode_cron.results.interval%'

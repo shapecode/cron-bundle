@@ -54,7 +54,7 @@ class AnnotationJobLoaderListener implements EventSubscriberInterface
      *
      * @throws \ReflectionException
      */
-    public function onLoadJobs(LoadJobsEvent $event)
+    public function onLoadJobs(LoadJobsEvent $event): void
     {
         foreach ($this->application->all() as $command) {
             // Check for an @CronJob annotation
