@@ -13,15 +13,15 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class LoadJobsEvent extends Event
 {
-    const NAME = 'shapecode_cron.load_jobs';
+    public const NAME = 'shapecode_cron.load_jobs';
 
-    /** @var CronJobMetadata[] */
-    protected $jobs;
+    /** @var CronJobMetadata[]|array */
+    protected $jobs = [];
 
     /**
      * @param CronJobMetadata $cronJobMetadata
      */
-    public function addJob(CronJobMetadata $cronJobMetadata)
+    public function addJob(CronJobMetadata $cronJobMetadata): void
     {
         $this->jobs[] = $cronJobMetadata;
     }
@@ -29,7 +29,7 @@ class LoadJobsEvent extends Event
     /**
      * @return CronJobMetadata[]
      */
-    public function getJobs()
+    public function getJobs(): array
     {
         return $this->jobs;
     }

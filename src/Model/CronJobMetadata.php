@@ -19,18 +19,18 @@ class CronJobMetadata
     /** @var string */
     protected $command;
 
-    /** @var string */
+    /** @var string|null */
     protected $description;
 
     /** @var string */
     protected $arguments;
 
     /**
-     * @param      $expression
-     * @param      $command
-     * @param null $arguments
+     * @param string      $expression
+     * @param string      $command
+     * @param null|string $arguments
      */
-    public function __construct($expression, $command, $arguments = null)
+    public function __construct(string $expression, string $command, ?string $arguments = null)
     {
         $this->expression = $expression;
         $this->command = $command;
@@ -38,13 +38,13 @@ class CronJobMetadata
     }
 
     /**
-     * @param         $expression
-     * @param Command $command
-     * @param         $arguments
+     * @param string      $expression
+     * @param Command     $command
+     * @param null|string $arguments
      *
-     * @return static
+     * @return CronJobMetadata
      */
-    public static function createByCommand($expression, Command $command, $arguments = null)
+    public static function createByCommand(string $expression, Command $command, ?string $arguments = null)
     {
         $meta = new static($expression, $command->getName(), $arguments);
         $meta->setDescription($command->getDescription());
@@ -55,7 +55,7 @@ class CronJobMetadata
     /**
      * @return string
      */
-    public function getExpression()
+    public function getExpression(): string
     {
         return $this->expression;
     }
@@ -63,7 +63,7 @@ class CronJobMetadata
     /**
      * @return string
      */
-    public function getClearedExpression()
+    public function getClearedExpression(): string
     {
         $expression = $this->getExpression();
         $expression = str_replace('\\', '', $expression);
@@ -74,15 +74,15 @@ class CronJobMetadata
     /**
      * @return string
      */
-    public function getCommand()
+    public function getCommand(): string
     {
         return $this->command;
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getArguments()
+    public function getArguments(): ?string
     {
         return $this->arguments;
     }
@@ -90,7 +90,7 @@ class CronJobMetadata
     /**
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -98,7 +98,7 @@ class CronJobMetadata
     /**
      * @param string $description
      */
-    public function setDescription($description)
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }

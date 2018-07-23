@@ -48,7 +48,7 @@ class CronJobManagerTest extends TestCase
         $this->cronJobManagerMock->shouldReceive('getReader')
                                  ->andReturn($readerMock);
 
-        $jobs = $this->cronJobManagerMock->getApplicationJobs();
+        $jobs = $this->cronJobManagerMock->getJobs();
 
         $this->assertCount(1, $jobs);
 
@@ -57,7 +57,7 @@ class CronJobManagerTest extends TestCase
         $this->assertEquals($expression, $jobs[0]->getExpression());
 
         // Run second time to assert the same result.
-        $jobs = $this->cronJobManagerMock->getApplicationJobs();
+        $jobs = $this->cronJobManagerMock->getJobs();
         $this->assertCount(1, $jobs);
         $this->assertInstanceOf(CronJobMetadata::class, $jobs[0]);
         $this->assertEquals($commandMock, $jobs[0]->getCommand());

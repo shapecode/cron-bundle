@@ -43,13 +43,13 @@ class CronJobEditCommand extends BaseCommand
 
         $em = $this->getManager();
 
-        if (!count($jobs)) {
+        if (!\count($jobs)) {
             $style->error("Couldn't find a job by the name of " . $jobName);
 
             return CronJobResult::EXIT_CODE_FAILED;
         }
 
-        $enable = ($input->getOption('enable') == 'y') ? true : false;
+        $enable = $input->getOption('enable') === 'y';
 
         foreach ($jobs as $job) {
             $job->setEnable($enable);

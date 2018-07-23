@@ -29,24 +29,30 @@ class EntitySubscriber implements EventSubscriber
 
     /**
      * @param LifecycleEventArgs $args
+     *
+     * @throws \ReflectionException
      */
-    public function prePersist(LifecycleEventArgs $args)
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $this->setDates($args);
     }
 
     /**
      * @param LifecycleEventArgs $args
+     *
+     * @throws \ReflectionException
      */
-    public function preUpdate(LifecycleEventArgs $args)
+    public function preUpdate(LifecycleEventArgs $args): void
     {
         $this->setDates($args);
     }
 
     /**
      * @param LifecycleEventArgs $args
+     *
+     * @throws \ReflectionException
      */
-    protected function setDates(LifecycleEventArgs $args)
+    protected function setDates(LifecycleEventArgs $args): void
     {
         /** @var AbstractEntity|object $entity */
         $entity = $args->getObject();
@@ -58,7 +64,7 @@ class EntitySubscriber implements EventSubscriber
 
         $entity->setUpdatedAt(new \DateTime());
 
-        if (empty($entity->getCreatedAt())) {
+        if ($entity->getCreatedAt() === null) {
             $entity->setCreatedAt(new \DateTime());
         }
     }

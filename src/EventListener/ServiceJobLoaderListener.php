@@ -20,11 +20,11 @@ class ServiceJobLoaderListener implements EventSubscriberInterface
     protected $jobs = [];
 
     /**
-     * @param         $expression
-     * @param Command $command
-     * @param null    $arguments
+     * @param string      $expression
+     * @param Command     $command
+     * @param null|string $arguments
      */
-    public function addCommand($expression, Command $command, $arguments = null)
+    public function addCommand(string $expression, Command $command, ?string $arguments = null): void
     {
         $this->jobs[] = CronJobMetadata::createByCommand($expression, $command, $arguments);
     }
@@ -42,7 +42,7 @@ class ServiceJobLoaderListener implements EventSubscriberInterface
     /**
      * @param LoadJobsEvent $event
      */
-    public function onLoadJobs(LoadJobsEvent $event)
+    public function onLoadJobs(LoadJobsEvent $event): void
     {
         foreach ($this->jobs as $job) {
             $event->addJob($job);

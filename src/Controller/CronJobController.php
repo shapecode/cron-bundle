@@ -21,7 +21,7 @@ class CronJobController extends Controller
      * @return Response
      * @throws \Exception
      */
-    public function runAction()
+    public function runAction(): Response
     {
         $kernel = $this->get('kernel');
         $application = new Application($kernel);

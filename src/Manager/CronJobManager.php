@@ -32,7 +32,7 @@ class CronJobManager implements CronJobManagerInterface
     /**
      * @return CronJobMetadata[]
      */
-    public function initJobs()
+    protected function initJobs(): array
     {
         $event = new LoadJobsEvent();
         $this->eventDispatcher->dispatch(LoadJobsEvent::NAME, $event);
@@ -43,9 +43,9 @@ class CronJobManager implements CronJobManagerInterface
     /**
      * @inheritdoc
      */
-    public function getJobs()
+    public function getJobs(): array
     {
-        if (is_null($this->jobs)) {
+        if ($this->jobs === null) {
             $this->jobs = $this->initJobs();
         }
 

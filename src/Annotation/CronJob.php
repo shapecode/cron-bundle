@@ -15,21 +15,21 @@ use Doctrine\Common\Annotations\Annotation;
 class CronJob extends Annotation
 {
 
-    /** @var string */
+    /** @var string|null */
     protected $arguments;
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return $this->value;
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getArguments()
+    public function getArguments(): ?string
     {
         return $this->arguments;
     }

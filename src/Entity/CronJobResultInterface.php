@@ -11,91 +11,61 @@ namespace Shapecode\Bundle\CronBundle\Entity;
 interface CronJobResultInterface extends AbstractEntityInterface
 {
 
-    const SUCCEEDED = 'succeeded';
-    const FAILED = 'failed';
-    const SKIPPED = 'skipped';
+    public const SUCCEEDED = 'succeeded';
+    public const FAILED = 'failed';
+    public const SKIPPED = 'skipped';
 
-    const EXIT_CODE_SUCCEEDED = 0;
-    const EXIT_CODE_FAILED = 1;
-    const EXIT_CODE_SKIPPED = 2;
-
-    /**
-     * @return integer
-     */
-    public function getId();
-
-    /**
-     * @param integer|null $id
-     */
-    public function setId($id = null);
+    public const EXIT_CODE_SUCCEEDED = 0;
+    public const EXIT_CODE_FAILED = 1;
+    public const EXIT_CODE_SKIPPED = 2;
 
     /**
      * @param \DateTime $runAt
      */
-    public function setRunAt(\DateTime $runAt);
+    public function setRunAt(\DateTime $runAt): void;
 
     /**
      * @return \DateTime
      */
-    public function getRunAt();
+    public function getRunAt(): \DateTime;
 
     /**
      * @param float $runTime
      */
-    public function setRunTime($runTime);
+    public function setRunTime(float $runTime): void;
 
     /**
      * @return float
      */
-    public function getRunTime();
+    public function getRunTime(): float;
 
     /**
      * @param integer $result
      */
-    public function setStatusCode($result);
+    public function setStatusCode(int $result): void;
 
     /**
      * @return integer
      */
-    public function getStatusCode();
+    public function getStatusCode(): int;
 
     /**
      * @param string $output
      */
-    public function setOutput($output);
+    public function setOutput(?string $output): void;
 
     /**
      * @return string
      */
-    public function getOutput();
+    public function getOutput(): ?string;
 
     /**
      * @param CronJobInterface $job
      */
-    public function setCronJob(CronJobInterface $job);
+    public function setCronJob(CronJobInterface $job): void;
 
     /**
      * @return CronJobInterface
      */
-    public function getCronJob();
-
-    /**
-     * @param \DateTime $createdAt
-     */
-    public function setCreatedAt(\DateTime $createdAt);
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt();
-
-    /**
-     * @param \DateTime $updatedAt
-     */
-    public function setUpdatedAt(\DateTime $updatedAt);
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt();
+    public function getCronJob(): CronJobInterface;
 }
