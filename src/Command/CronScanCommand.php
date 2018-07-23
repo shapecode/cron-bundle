@@ -39,7 +39,8 @@ class CronScanCommand extends BaseCommand
         KernelInterface $kernel,
         Reader $annotationReader,
         ManagerRegistry $registry,
-        RequestStack $requestStack)
+        RequestStack $requestStack
+    )
     {
         $this->cronJobManager = $manager;
 
@@ -149,13 +150,17 @@ class CronScanCommand extends BaseCommand
         /** @var CronJobInterface $newJob */
         $newJob = new $className();
         $newJob->setCommand($metadata->getCommand());
+        $newJob->setArguments($metadata->getArguments());
         $newJob->setDescription($metadata->getDescription());
         $newJob->setPeriod($metadata->getClearedExpression());
         $newJob->setEnable(!$defaultDisabled);
         $newJob->setNumber($counter);
         $newJob->calculateNextRun();
 
-        $output->success("Found new job: " . $newJob->getCommand() . " with period " . $newJob->getPeriod());
+        $output->success(
+            sprintf('Found new job: "%s" with period %s',
+                trim($newJob->getCommand().' '.$newJob->getArguments()),
+                $newJob->getPeriod()));
 
         $this->getManager()->persist($newJob);
     }
