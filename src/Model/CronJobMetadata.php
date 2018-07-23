@@ -74,9 +74,23 @@ class CronJobMetadata
     /**
      * @return string
      */
+    public function getFullCommand()
+    {
+        $arguments = '';
+
+        if (!empty($this->getArguments())) {
+            $arguments = ' ' . $this->getArguments();
+        }
+
+        return trim($this->getCommand() . $arguments);
+    }
+
+    /**
+     * @return string
+     */
     public function getCommand(): string
     {
-        return $this->command;
+        return trim($this->command);
     }
 
     /**
@@ -84,7 +98,7 @@ class CronJobMetadata
      */
     public function getArguments(): ?string
     {
-        return $this->arguments;
+        return trim($this->arguments);
     }
 
     /**
