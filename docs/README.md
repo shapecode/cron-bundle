@@ -7,6 +7,8 @@ Shapecode - Cron Bundle
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/cd190858-da13-4be6-ad02-c933d4272d87/mini.png)](https://insight.sensiolabs.com/projects/cd190858-da13-4be6-ad02-c933d4272d87)
 [![Latest Stable Version](https://poser.pugx.org/shapecode/cron-bundle/v/stable)](https://packagist.org/packages/shapecode/cron-bundle)
 [![Total Downloads](https://poser.pugx.org/shapecode/cron-bundle/downloads)](https://packagist.org/packages/shapecode/cron-bundle)
+[![Monthly Downloads](https://poser.pugx.org/shapecode/cron-bundle/d/monthly)](https://packagist.org/packages/shapecode/cron-bundle)
+[![Daily Downloads](https://poser.pugx.org/shapecode/cron-bundle/d/daily)](https://packagist.org/packages/shapecode/cron-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/shapecode/cron-bundle/v/unstable)](https://packagist.org/packages/shapecode/cron-bundle)
 [![License](https://poser.pugx.org/shapecode/cron-bundle/license)](https://packagist.org/packages/shapecode/cron-bundle)
 
