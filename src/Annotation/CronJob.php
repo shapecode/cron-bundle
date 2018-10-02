@@ -18,6 +18,9 @@ class CronJob extends Annotation
     /** @var string */
     protected $arguments;
 
+    /** @var int */
+    protected $maxInstances = 1;
+
     /**
      * @return mixed
      */
@@ -32,6 +35,14 @@ class CronJob extends Annotation
     public function getArguments()
     {
         return $this->arguments;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxInstances()
+    {
+        return $this->maxInstances;
     }
 
 }

@@ -5,6 +5,7 @@ namespace Shapecode\Bundle\CronBundle\Command;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
+use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\RuntimeException;
@@ -64,7 +65,7 @@ class CronRunCommand extends BaseCommand
         // Update the job with it's next scheduled time
         $now = new \DateTime();
 
-        /** @var Process[] $processes */
+        /** @var CronJobRunning[] $processes */
         $processes = [];
         $em = $this->getManager();
 
@@ -85,6 +86,7 @@ class CronRunCommand extends BaseCommand
                 continue;
             }
 
+            $job->increaseRunningInstances();
             $process = $this->runJob($job);
 
             if ($process) {
@@ -94,10 +96,15 @@ class CronRunCommand extends BaseCommand
                 $em->persist($job);
                 $em->flush();
 
-                $processes[] = $process;
+                $processes[] = new CronJobRunning($job, $process);
             }
 
-            $style->success('cronjob started successfully and is running in background');
+            if ($job->getRunningInstances() > $job->getMaxInstances()) {
+                $style->notice('cronjob will not be executed. The number of maximum instances has been exceeded.');
+            } else {
+                $style->success('cronjob started successfully and is running in background');
+            }
+
         }
 
         sleep(1);
@@ -120,18 +127,30 @@ class CronRunCommand extends BaseCommand
     }
 
     /**
-     * @param Process[] $processes
+     * @param CronJobRunning[] $processes
      */
     public function waitProcesses($processes)
     {
+        $em = $this->getManager();
+
         $wait = true;
         while ($wait) {
             $wait = false;
 
-            foreach ($processes as $process) {
+            foreach ($processes as $key => $running) {
+                $process = $running->getProcess();
+
                 if ($process->isRunning()) {
                     $wait = true;
                     break;
+                } else {
+                    $job = $running->getCronJob();
+                    $job->decreaseRunningInstances();
+
+                    $em->persist($job);
+                    $em->flush();
+
+                    unset($processes[$key]);
                 }
             }
         }
@@ -148,7 +167,7 @@ class CronRunCommand extends BaseCommand
         $php = $this->getPhpExecutable();
         $env = $this->getEnvironment();
 
-        $command = sprintf('%s %s shapecode:cron:process %d --env=%s', $php, $consoleBin, $job->getId(), $env);
+        $command = sprintf('%s %s shapecode:cron:process %s --env=%s', $php, $consoleBin, $job->getId(), $env);
 
         $process = new Process($command);
         $process->disableOutput();

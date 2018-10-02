@@ -23,10 +23,11 @@ class ServiceJobLoaderListener implements EventSubscriberInterface
      * @param         $expression
      * @param Command $command
      * @param null    $arguments
+     * @param int     $maxInstances
      */
-    public function addCommand($expression, Command $command, $arguments = null)
+    public function addCommand($expression, Command $command, $arguments = null, $maxInstances = 1)
     {
-        $this->jobs[] = CronJobMetadata::createByCommand($expression, $command, $arguments);
+        $this->jobs[] = CronJobMetadata::createByCommand($expression, $command, $arguments, $maxInstances);
     }
 
     /**
