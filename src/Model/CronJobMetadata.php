@@ -50,7 +50,7 @@ class CronJobMetadata
      *
      * @return CronJobMetadata
      */
-    public static function createByCommand(string $expression, Command $command, ?string $arguments = null, int $maxInstances = 1)
+    public static function createByCommand(string $expression, Command $command, ?string $arguments = null, int $maxInstances = 1): CronJobMetadata
     {
         $meta = new static($expression, $command->getName(), $arguments, $maxInstances);
         $meta->setDescription($command->getDescription());
@@ -80,7 +80,7 @@ class CronJobMetadata
     /**
      * @return string
      */
-    public function getFullCommand()
+    public function getFullCommand(): string
     {
         $arguments = '';
 
@@ -126,7 +126,7 @@ class CronJobMetadata
     /**
      * @return int
      */
-    public function getMaxInstances()
+    public function getMaxInstances(): int
     {
         return $this->maxInstances;
     }
