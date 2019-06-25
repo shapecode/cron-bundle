@@ -12,7 +12,7 @@ use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 /**
@@ -24,7 +24,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 abstract class BaseCommand extends Command
 {
 
-    /** @var Kernel */
+    /** @var KernelInterface */
     protected $kernel;
 
     /** @var Reader */
@@ -43,13 +43,17 @@ abstract class BaseCommand extends Command
     protected $environment;
 
     /**
-     * @param Kernel          $kernel
+     * @param KernelInterface $kernel
      * @param Reader          $annotationReader
      * @param ManagerRegistry $registry
      * @param RequestStack    $requestStack
      */
-    public function __construct(Kernel $kernel, Reader $annotationReader, ManagerRegistry $registry, RequestStack $requestStack)
-    {
+    public function __construct(
+        KernelInterface $kernel,
+        Reader $annotationReader,
+        ManagerRegistry $registry,
+        RequestStack $requestStack
+    ) {
         parent::__construct();
 
         $this->kernel = $kernel;
@@ -59,9 +63,9 @@ abstract class BaseCommand extends Command
     }
 
     /**
-     * @return Kernel
+     * @return KernelInterface
      */
-    protected function getKernel(): Kernel
+    protected function getKernel(): KernelInterface
     {
         return $this->kernel;
     }

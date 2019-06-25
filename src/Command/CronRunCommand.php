@@ -21,12 +21,6 @@ use Symfony\Component\Process\Process;
 class CronRunCommand extends BaseCommand
 {
 
-    /** @inheritdoc */
-    protected $commandName = 'shapecode:cron:run';
-
-    /** @inheritdoc */
-    protected $commandDescription = 'Runs any currently schedule cron jobs';
-
     /** @var string|null */
     protected $projectDir;
 
@@ -39,7 +33,7 @@ class CronRunCommand extends BaseCommand
     /**
      * @inheritdoc
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('shapecode:cron:run');
         $this->setDescription('Runs any currently schedule cron jobs');

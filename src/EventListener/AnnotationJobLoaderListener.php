@@ -42,17 +42,15 @@ class AnnotationJobLoaderListener implements EventSubscriberInterface
     /**
      * @inheritdoc
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
-            LoadJobsEvent::NAME => 'onLoadJobs'
+            LoadJobsEvent::NAME => 'onLoadJobs',
         ];
     }
 
     /**
      * @param LoadJobsEvent $event
-     *
-     * @throws \ReflectionException
      */
     public function onLoadJobs(LoadJobsEvent $event): void
     {

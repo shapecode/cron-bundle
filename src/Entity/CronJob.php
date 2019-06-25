@@ -6,6 +6,7 @@ use Cron\CronExpression;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\PersistentCollection;
 
 /**
  * Class CronJob
@@ -25,13 +26,13 @@ class CronJob extends AbstractEntity implements CronJobInterface
     protected $command;
 
     /**
-     * @var string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $arguments;
 
     /**
-     * @var string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $description;
@@ -61,7 +62,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     protected $period;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $lastUse;
@@ -73,7 +74,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     protected $nextRun;
 
     /**
-     * @var Collection|CronJobResult[]
+     * @var ArrayCollection|PersistentCollection|Collection|CronJobResult[]
      * @ORM\OneToMany(targetEntity="Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface", mappedBy="cronJob", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $results;
@@ -156,7 +157,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     /**
      * @inheritdoc
      */
-    public function getRunningInstances()
+    public function getRunningInstances(): int
     {
         return $this->runningInstances;
     }
@@ -164,7 +165,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     /**
      * @inheritdoc
      */
-    public function setRunningInstances($runningInstances)
+    public function setRunningInstances(int $runningInstances)
     {
         $this->runningInstances = $runningInstances;
     }
@@ -172,7 +173,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     /**
      *
      */
-    public function increaseRunningInstances()
+    public function increaseRunningInstances(): void
     {
         $this->runningInstances += 1;
     }
@@ -180,7 +181,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     /**
      *
      */
-    public function decreaseRunningInstances()
+    public function decreaseRunningInstances(): void
     {
         $this->runningInstances -= 1;
     }
@@ -188,7 +189,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     /**
      * @return int
      */
-    public function getMaxInstances()
+    public function getMaxInstances(): int
     {
         return $this->maxInstances;
     }
@@ -196,7 +197,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     /**
      * @param int $maxInstances
      */
-    public function setMaxInstances($maxInstances)
+    public function setMaxInstances(int $maxInstances)
     {
         $this->maxInstances = $maxInstances;
     }
@@ -204,7 +205,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     /**
      * @inheritdoc
      */
-    public function getNumber()
+    public function getNumber(): int
     {
         return $this->number;
     }

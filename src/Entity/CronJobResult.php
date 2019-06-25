@@ -34,7 +34,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     protected $statusCode;
 
     /**
-     * @var string
+     * @var string|null
      * @ORM\Column(type="text", nullable=true)
      */
     protected $output;

@@ -19,7 +19,6 @@ class CronJobController extends Controller
 
     /**
      * @return Response
-     * @throws \Exception
      */
     public function runAction(): Response
     {

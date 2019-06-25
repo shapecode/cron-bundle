@@ -2,6 +2,7 @@
 
 namespace Shapecode\Bundle\CronBundle\DependencyInjection\Compiler;
 
+use Shapecode\Bundle\CronBundle\EventListener\ServiceJobLoaderListener;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -18,9 +19,9 @@ class CronJobCompilerPass implements CompilerPassInterface
     /**
      * @param ContainerBuilder $container
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
-        $definition = $container->getDefinition('shapecode_cron.event_listener.service_job_loader');
+        $definition = $container->findDefinition(ServiceJobLoaderListener::class);
 
         $tagged = $container->findTaggedServiceIds('shapecode_cron.cron_job');
 

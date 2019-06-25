@@ -34,7 +34,7 @@ class CronJobRunning
     /**
      * @return CronJobInterface
      */
-    public function getCronJob()
+    public function getCronJob(): CronJobInterface
     {
         return $this->cronJob;
     }
@@ -42,7 +42,7 @@ class CronJobRunning
     /**
      * @return Process
      */
-    public function getProcess()
+    public function getProcess(): Process
     {
         return $this->process;
     }

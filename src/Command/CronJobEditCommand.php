@@ -21,12 +21,12 @@ class CronJobEditCommand extends BaseCommand
     /**
      * @inheritdoc
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('shapecode:cron:edit');
         $this->setDescription('Changes the status of a cron job');
 
-        $this->addArgument("job", InputArgument::REQUIRED, 'Name of the job to disable');
+        $this->addArgument('job', InputArgument::REQUIRED, 'Name of the job to disable');
         $this->addOption('enable', null, InputOption::VALUE_REQUIRED, 'Enable or disable this cron (y or n)');
     }
 

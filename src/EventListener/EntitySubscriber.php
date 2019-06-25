@@ -19,7 +19,7 @@ class EntitySubscriber implements EventSubscriber
     /**
      * @inheritDoc
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             Events::prePersist,
@@ -29,8 +29,6 @@ class EntitySubscriber implements EventSubscriber
 
     /**
      * @param LifecycleEventArgs $args
-     *
-     * @throws \ReflectionException
      */
     public function prePersist(LifecycleEventArgs $args): void
     {
@@ -39,8 +37,6 @@ class EntitySubscriber implements EventSubscriber
 
     /**
      * @param LifecycleEventArgs $args
-     *
-     * @throws \ReflectionException
      */
     public function preUpdate(LifecycleEventArgs $args): void
     {
@@ -49,8 +45,6 @@ class EntitySubscriber implements EventSubscriber
 
     /**
      * @param LifecycleEventArgs $args
-     *
-     * @throws \ReflectionException
      */
     protected function setDates(LifecycleEventArgs $args): void
     {

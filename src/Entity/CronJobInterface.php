@@ -51,37 +51,37 @@ interface CronJobInterface extends AbstractEntityInterface
     /**
      * @return int
      */
-    public function getRunningInstances();
+    public function getRunningInstances(): int;
 
     /**
      * @param int $runningInstances
      */
-    public function setRunningInstances($runningInstances);
+    public function setRunningInstances(int $runningInstances);
 
     /**
      * @return int
      */
-    public function getMaxInstances();
+    public function getMaxInstances(): int;
 
     /**
      * @param int $maxInstances
      */
-    public function setMaxInstances($maxInstances);
+    public function setMaxInstances(int $maxInstances);
 
     /**
      *
      */
-    public function increaseRunningInstances();
+    public function increaseRunningInstances(): void;
 
     /**
      *
      */
-    public function decreaseRunningInstances();
+    public function decreaseRunningInstances(): void;
 
     /**
      * @return int
      */
-    public function getNumber();
+    public function getNumber(): int;
 
     /**
      * @param int $number
@@ -114,7 +114,7 @@ interface CronJobInterface extends AbstractEntityInterface
     public function getResults(): Collection;
 
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getLastUse(): ?\DateTime;
 

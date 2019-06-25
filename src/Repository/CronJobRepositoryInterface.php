@@ -16,22 +16,22 @@ interface CronJobRepositoryInterface extends ObjectRepository
 {
 
     /**
-     * @param     $command
-     * @param int $number
+     * @param string $command
+     * @param int    $number
      *
      * @return null|CronJobInterface
      */
-    public function findOneByCommand($command, $number = 1);
+    public function findOneByCommand(string $command, int $number = 1): ?CronJobInterface;
 
     /**
-     * @param $command
+     * @param string $command
      *
      * @return array|CronJobInterface[]
      */
-    public function findByCommand($command);
+    public function findByCommand(string $command): array;
 
     /**
      * @return ArrayCollection|string[]
      */
-    public function getKnownJobs();
+    public function getKnownJobs(): ArrayCollection;
 }

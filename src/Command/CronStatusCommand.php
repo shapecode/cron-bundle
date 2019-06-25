@@ -20,7 +20,7 @@ class CronStatusCommand extends BaseCommand
     /**
      * @inheritdoc
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('shapecode:cron:status');
         $this->setDescription('Displays the current status of cron jobs');

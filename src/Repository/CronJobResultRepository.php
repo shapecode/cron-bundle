@@ -4,6 +4,7 @@ namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 
 /**
  * Class CronJobResultRepository
@@ -32,7 +33,7 @@ class CronJobResultRepository extends EntityRepository implements CronJobResultR
     /**
      * @inheritdoc
      */
-    public function findMostRecent(CronJobInterface $job = null)
+    public function findMostRecent(?CronJobInterface $job = null): ?CronJobResultInterface
     {
         $qb = $this->createQueryBuilder('p');
         $expr = $qb->expr();

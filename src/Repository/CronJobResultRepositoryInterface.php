@@ -3,7 +3,6 @@
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 
@@ -26,8 +25,7 @@ interface CronJobResultRepositoryInterface extends ObjectRepository
     /**
      * @param CronJobInterface $job
      *
-     * @return CronJobResultInterface
-     * @throws NonUniqueResultException
+     * @return CronJobResultInterface|null
      */
-    public function findMostRecent(CronJobInterface $job = null);
+    public function findMostRecent(?CronJobInterface $job = null): ?CronJobResultInterface;
 }

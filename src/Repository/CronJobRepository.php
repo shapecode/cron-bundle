@@ -16,30 +16,33 @@ class CronJobRepository extends EntityRepository implements CronJobRepositoryInt
 {
 
     /**
-     * @inheritdoc
+     * @param     $command
+     * @param int $number
+     *
+     * @return CronJobInterface|null
      */
-    public function findOneByCommand($command, $number = 1)
+    public function findOneByCommand(string $command, int $number = 1): ?CronJobInterface
     {
         return $this->findOneBy([
             'command' => $command,
-            'number'  => $number
+            'number'  => $number,
         ]);
     }
 
     /**
      * @inheritdoc
      */
-    public function findByCommand($command)
+    public function findByCommand(string $command): array
     {
         return $this->findBy([
-            'command' => $command
+            'command' => $command,
         ]);
     }
 
     /**
      * @inheritdoc
      */
-    public function getKnownJobs()
+    public function getKnownJobs(): ArrayCollection
     {
         $data = new ArrayCollection($this->findAll());
 

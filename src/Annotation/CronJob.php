@@ -40,7 +40,7 @@ class CronJob extends Annotation
     /**
      * @return int
      */
-    public function getMaxInstances()
+    public function getMaxInstances(): int
     {
         return $this->maxInstances;
     }

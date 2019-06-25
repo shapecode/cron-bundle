@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class CronScanCommand
@@ -29,14 +29,14 @@ class CronScanCommand extends BaseCommand
 
     /**
      * @param CronJobManagerInterface $manager
-     * @param Kernel                  $kernel
+     * @param KernelInterface                  $kernel
      * @param Reader                  $annotationReader
      * @param ManagerRegistry         $registry
      * @param RequestStack            $requestStack
      */
     public function __construct(
         CronJobManagerInterface $manager,
-        Kernel $kernel,
+        KernelInterface $kernel,
         Reader $annotationReader,
         ManagerRegistry $registry,
         RequestStack $requestStack
@@ -150,7 +150,7 @@ class CronScanCommand extends BaseCommand
      * @param bool            $defaultDisabled
      * @param int             $counter
      */
-    protected function newJobFound(CronStyle $output, CronJobMetadata $metadata, bool $defaultDisabled = false, int $counter): void
+    protected function newJobFound(CronStyle $output, CronJobMetadata $metadata, bool $defaultDisabled, int $counter): void
     {
         $className = $this->getCronJobRepository()->getClassName();
 

@@ -13,20 +13,21 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
-    const ROOT_NODE = 'shapecode_cron';
+
+    /** @var string  */
+    private const ROOT_NODE = 'shapecode_cron';
 
     /**
      * @inheritDoc
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder(static::ROOT_NODE);
-        
+
         if (method_exists($treeBuilder, 'getRootNode')) {
             // Symfony 4.2 +
             $rootNode = $treeBuilder->getRootNode();
-        }
-        else {
+        } else {
             // Symfony 4.1 and below
             $rootNode = $treeBuilder->root(static::ROOT_NODE);
         }
