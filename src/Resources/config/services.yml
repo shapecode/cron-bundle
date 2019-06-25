@@ -1,122 +1,44 @@
 services:
-    # manager
-    shapecode_cron.cronjob_manager:
-        class: Shapecode\Bundle\CronBundle\Manager\CronJobManager
+    _defaults:
+        autowire: true
+        autoconfigure: true
         public: false
-        arguments:
-            - '@event_dispatcher'
+        bind:
+            $autoPrune: '%shapecode_cron.results.auto_prune%'
+            $pruneInterval: '%shapecode_cron.results.interval%'
+
+    # manager
+    Shapecode\Bundle\CronBundle\Manager\CronJobManager: ~
+    Shapecode\Bundle\CronBundle\Manager\CronJobManagerInterface: '@Shapecode\Bundle\CronBundle\Manager\CronJobManager'
 
     # commands
-    shapecode_cron.abstract:
-        abstract: true
-        arguments:
-            - '@kernel'
-            - '@annotations.reader'
-            - '@doctrine'
-            - '@request_stack'
-
-    shapecode_cron.command.cron_job_edit:
-        class: Shapecode\Bundle\CronBundle\Command\CronJobEditCommand
-        parent: shapecode_cron.abstract
-        public: true
-        tags:
-            - { name: console.command }
-
-    shapecode_cron.command.cron_process:
-        class: Shapecode\Bundle\CronBundle\Command\CronProcessCommand
-        parent: shapecode_cron.abstract
-        public: true
-        tags:
-            - { name: console.command }
-
-    shapecode_cron.command.cron_prune_logs:
-        class: Shapecode\Bundle\CronBundle\Command\CronPruneLogsCommand
-        public: true
-        arguments:
-            - '@shapecode_cron.service.cronjob_result'
-        tags:
-            - { name: console.command }
-
-    shapecode_cron.command.cron_run:
-        class: Shapecode\Bundle\CronBundle\Command\CronRunCommand
-        parent: shapecode_cron.abstract
-        public: true
-        tags:
-            - { name: console.command }
-
-    shapecode_cron.command.cron_scan:
-        class: Shapecode\Bundle\CronBundle\Command\CronScanCommand
-        public: true
-        arguments:
-            - '@shapecode_cron.cronjob_manager'
-            - '@kernel'
-            - '@annotations.reader'
-            - '@doctrine'
-            - '@request_stack'
-        tags:
-            - { name: console.command }
-
-    shapecode_cron.command.cron_status:
-        class: Shapecode\Bundle\CronBundle\Command\CronStatusCommand
-        public: true
-        parent: shapecode_cron.abstract
-        tags:
-            - { name: console.command }
+    Shapecode\Bundle\CronBundle\Command\CronJobEditCommand: ~
+    Shapecode\Bundle\CronBundle\Command\CronProcessCommand: ~
+    Shapecode\Bundle\CronBundle\Command\CronPruneLogsCommand: ~
+    Shapecode\Bundle\CronBundle\Command\CronRunCommand: ~
+    Shapecode\Bundle\CronBundle\Command\CronScanCommand: ~
+    Shapecode\Bundle\CronBundle\Command\CronStatusCommand: ~
 
     # cronjobs
-    shapecode_cron.cronjob.generic_clean_up_daily:
-        class: Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpDailyCommand
-        public: true
-        arguments:
-            - '@event_dispatcher'
+    Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpDailyCommand:
         tags:
             - { name: console.command }
             - { name: shapecode_cron.cron_job, expression: '@daily' }
 
-    shapecode_cron.cronjob.generic_clean_up_hourly:
-        class: Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpHourlyCommand
-        public: true
-        arguments:
-            - '@event_dispatcher'
+    Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpHourlyCommand:
         tags:
             - { name: console.command }
             - { name: shapecode_cron.cron_job, expression: '@hourly' }
 
     # event listener
-    shapecode_cron.event_listener.entity_subscriber:
-        class: Shapecode\Bundle\CronBundle\EventListener\EntitySubscriber
-        public: true
+    Shapecode\Bundle\CronBundle\EventListener\EntitySubscriber:
         tags:
             - { name: doctrine.event_subscriber }
 
-    shapecode_cron.event_listener.annotation_job_loader:
-        class: Shapecode\Bundle\CronBundle\EventListener\AnnotationJobLoaderListener
-        public: true
-        arguments:
-            - '@kernel'
-            - '@annotations.reader'
-        tags:
-            - { name: kernel.event_subscriber }
-
-    shapecode_cron.event_listener.result_auto_prune:
-        class: Shapecode\Bundle\CronBundle\EventListener\ResultAutoPruneListener
-        public: true
-        arguments:
-            - '@shapecode_cron.service.cronjob_result'
-            - '%shapecode_cron.results.auto_prune%'
-        tags:
-            - { name: kernel.event_subscriber }
-
-    shapecode_cron.event_listener.service_job_loader:
-        class: Shapecode\Bundle\CronBundle\EventListener\ServiceJobLoaderListener
-        public: true
-        tags:
-            - { name: kernel.event_subscriber }
+    Shapecode\Bundle\CronBundle\EventListener\AnnotationJobLoaderListener: ~
+    Shapecode\Bundle\CronBundle\EventListener\ResultAutoPruneListener: ~
+    Shapecode\Bundle\CronBundle\EventListener\ServiceJobLoaderListener: ~
 
     # service
-    shapecode_cron.service.cronjob_result:
-        class: Shapecode\Bundle\CronBundle\Service\CronJobResultService
-        public: false
-        arguments:
-            - '@doctrine'
-            - '%shapecode_cron.results.interval%'
+    Shapecode\Bundle\CronBundle\Service\CronJobResultServiceInterface: '@Shapecode\Bundle\CronBundle\Service\CronJobResultService'
+    Shapecode\Bundle\CronBundle\Service\CronJobResultService: ~
