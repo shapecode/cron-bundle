@@ -100,13 +100,20 @@ class CronScanCommand extends BaseCommand
                 $style->text('command: ' . $jobMetadata->getCommand());
                 $style->text('arguments: ' . $jobMetadata->getArguments());
                 $style->text('expression: ' . $jobMetadata->getClearedExpression());
+                $style->text('instances: ' . $jobMetadata->getMaxInstances());
 
-                if ($currentJob->getPeriod() !== $jobMetadata->getClearedExpression()) {
+                if ($currentJob->getPeriod() !== $jobMetadata->getClearedExpression() ||
+                    $currentJob->getMaxInstances() !== $jobMetadata->getMaxInstances() ||
+                    $currentJob->getArguments() !== $jobMetadata->getArguments()
+                ) {
                     $oldExpression = $currentJob->getPeriod();
 
                     $currentJob->setPeriod($jobMetadata->getClearedExpression());
+                    $currentJob->setArguments($jobMetadata->getArguments());
+                    $currentJob->setMaxInstances($jobMetadata->getMaxInstances());
+
                     $currentJob->calculateNextRun();
-                    $style->notice('interval updated form ' . $oldExpression . ' to ' . $currentJob->getPeriod());
+                    $style->notice('cronjob updated');
                 }
             } else {
                 $this->newJobFound($style, $jobMetadata, $defaultDisabled, $counter[$command]);

@@ -25,28 +25,34 @@ class CronJobMetadata
     /** @var string */
     protected $arguments;
 
+    /** @var int */
+    protected $maxInstances;
+
     /**
      * @param string      $expression
      * @param string      $command
-     * @param null|string $arguments
+     * @param string|null $arguments
+     * @param int         $maxInstances
      */
-    public function __construct(string $expression, string $command, ?string $arguments = null)
+    public function __construct(string $expression, string $command, ?string $arguments = null, int $maxInstances = 1)
     {
         $this->expression = $expression;
         $this->command = $command;
         $this->arguments = $arguments;
+        $this->maxInstances = $maxInstances;
     }
 
     /**
      * @param string      $expression
      * @param Command     $command
-     * @param null|string $arguments
+     * @param string|null $arguments
+     * @param int         $maxInstances
      *
      * @return CronJobMetadata
      */
-    public static function createByCommand(string $expression, Command $command, ?string $arguments = null)
+    public static function createByCommand(string $expression, Command $command, ?string $arguments = null, int $maxInstances = 1)
     {
-        $meta = new static($expression, $command->getName(), $arguments);
+        $meta = new static($expression, $command->getName(), $arguments, $maxInstances);
         $meta->setDescription($command->getDescription());
 
         return $meta;
@@ -115,5 +121,13 @@ class CronJobMetadata
     public function setDescription(?string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxInstances()
+    {
+        return $this->maxInstances;
     }
 }

@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @author  Nikita Loges
  *
  * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobRepository")
- * @ORM\HasLifecycleCallbacks
  */
 class CronJob extends AbstractEntity implements CronJobInterface
 {
@@ -39,7 +38,19 @@ class CronJob extends AbstractEntity implements CronJobInterface
 
     /**
      * @var int
-     * @ORM\Column(type="integer", options={"default":1})
+     * @ORM\Column(type="integer", options={"unsigned": true, "default":0})
+     */
+    protected $runningInstances = 0;
+
+    /**
+     * @var int
+     * @ORM\Column(type="integer", options={"unsigned": true, "default":1})
+     */
+    protected $maxInstances = 1;
+
+    /**
+     * @var int
+     * @ORM\Column(type="integer", options={"unsigned": true, "default":1})
      */
     protected $number = 1;
 
@@ -145,7 +156,55 @@ class CronJob extends AbstractEntity implements CronJobInterface
     /**
      * @inheritdoc
      */
-    public function getNumber(): int
+    public function getRunningInstances()
+    {
+        return $this->runningInstances;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setRunningInstances($runningInstances)
+    {
+        $this->runningInstances = $runningInstances;
+    }
+
+    /**
+     *
+     */
+    public function increaseRunningInstances()
+    {
+        $this->runningInstances += 1;
+    }
+
+    /**
+     *
+     */
+    public function decreaseRunningInstances()
+    {
+        $this->runningInstances -= 1;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMaxInstances()
+    {
+        return $this->maxInstances;
+    }
+
+    /**
+     * @param int $maxInstances
+     */
+    public function setMaxInstances($maxInstances)
+    {
+        $this->maxInstances = $maxInstances;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getNumber()
     {
         return $this->number;
     }

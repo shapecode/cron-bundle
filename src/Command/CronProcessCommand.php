@@ -60,12 +60,17 @@ class CronProcessCommand extends BaseCommand
 
         $this->getStopWatch()->start($watch);
 
-        try {
-            $statusCode = $this->getApplication()->doRun($jobInput, $jobOutput);
-        } catch (\Throwable $ex) {
-            $statusCode = 1;
-            $style->error('Job execution failed with exception ' . \get_class($ex) . ': ' . $ex->getMessage());
+        if ($job->getRunningInstances() > $job->getMaxInstances()) {
+            $statusCode = CronJobResultInterface::EXIT_CODE_SKIPPED;
+        } else {
+            try {
+                $statusCode = $this->getApplication()->doRun($jobInput, $jobOutput);
+            } catch (\Exception $ex) {
+                $statusCode = CronJobResultInterface::EXIT_CODE_FAILED;
+                $style->error('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
+            }
         }
+
         $this->getStopWatch()->stop($watch);
 
         if ($statusCode === null) {

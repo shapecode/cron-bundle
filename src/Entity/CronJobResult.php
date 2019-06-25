@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @author  Nikita Loges
  *
  * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository")
- * @ORM\HasLifecycleCallbacks
  */
 class CronJobResult extends AbstractEntity implements CronJobResultInterface
 {

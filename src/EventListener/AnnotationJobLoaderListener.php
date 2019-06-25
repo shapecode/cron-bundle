@@ -64,8 +64,9 @@ class AnnotationJobLoaderListener implements EventSubscriberInterface
                 if ($annotation instanceof CronJob) {
                     $schedule = $annotation->value;
                     $arguments = $annotation->getArguments();
+                    $maxInstances = $annotation->getMaxInstances();
 
-                    $meta = CronJobMetadata::createByCommand($schedule, $command, $arguments);
+                    $meta = CronJobMetadata::createByCommand($schedule, $command, $arguments, $maxInstances);
                     $event->addJob($meta);
                 }
             }

@@ -51,7 +51,37 @@ interface CronJobInterface extends AbstractEntityInterface
     /**
      * @return int
      */
-    public function getNumber(): ?int;
+    public function getRunningInstances();
+
+    /**
+     * @param int $runningInstances
+     */
+    public function setRunningInstances($runningInstances);
+
+    /**
+     * @return int
+     */
+    public function getMaxInstances();
+
+    /**
+     * @param int $maxInstances
+     */
+    public function setMaxInstances($maxInstances);
+
+    /**
+     *
+     */
+    public function increaseRunningInstances();
+
+    /**
+     *
+     */
+    public function decreaseRunningInstances();
+
+    /**
+     * @return int
+     */
+    public function getNumber();
 
     /**
      * @param int $number
