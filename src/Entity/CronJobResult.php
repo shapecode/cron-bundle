@@ -133,4 +133,12 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
     {
         return $this->cronJob;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function __toString(): string
+    {
+        return $this->getCronJob()->getCommand().' - '.$this->getRunAt()->format('d.m.Y H:i P');
+    }
 }
