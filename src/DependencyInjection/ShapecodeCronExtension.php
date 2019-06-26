@@ -3,7 +3,6 @@
 namespace Shapecode\Bundle\CronBundle\DependencyInjection;
 
 use Shapecode\Bundle\CronBundle\Entity as BundleEntities;
-use Sonata\AdminBundle\SonataAdminBundle;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -26,10 +25,6 @@ class ShapecodeCronExtension extends ConfigurableExtension implements PrependExt
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
-
-        if (class_exists(SonataAdminBundle::class)) {
-            $loader->load('admin.yml');
-        }
 
         $container->setParameter('shapecode_cron.results.auto_prune', $config['results']['auto_prune']);
         $container->setParameter('shapecode_cron.results.interval', $config['results']['interval']);
