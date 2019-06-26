@@ -150,9 +150,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "3.0-dev"
-            "dev-release/3.3": "3.3-dev"
-            "dev-release/3.0": "3.0-dev"
+            "dev-release/3.0": "3.3-dev"
         }
     },
     "minimum-stability": "dev",
