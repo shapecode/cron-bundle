@@ -3,12 +3,14 @@ Shapecode - Cron Bundle
 
 [![paypal](https://img.shields.io/badge/Donate-Paypal-blue.svg)](http://paypal.me/nloges)
 
-[![Latest Stable Version](https://poser.pugx.org/shapecode/cron-bundle/v/stable)](https://packagist.org/packages/shapecode/cron-bundle)
-[![Total Downloads](https://poser.pugx.org/shapecode/cron-bundle/downloads)](https://packagist.org/packages/shapecode/cron-bundle)
-[![Monthly Downloads](https://poser.pugx.org/shapecode/cron-bundle/d/monthly)](https://packagist.org/packages/shapecode/cron-bundle)
-[![Daily Downloads](https://poser.pugx.org/shapecode/cron-bundle/d/daily)](https://packagist.org/packages/shapecode/cron-bundle)
-[![Latest Unstable Version](https://poser.pugx.org/shapecode/cron-bundle/v/unstable)](https://packagist.org/packages/shapecode/cron-bundle)
-[![License](https://poser.pugx.org/shapecode/cron-bundle/license)](https://packagist.org/packages/shapecode/cron-bundle)
+[![PHP Version](https://img.shields.io/packagist/php-v/shapecode/cron-bundle.svg)](https://packagist.org/packages/shapecode/cron-bundle)
+[![Latest Stable Version](https://img.shields.io/packagist/v/shapecode/cron-bundle.svg?label=stable)](https://packagist.org/packages/shapecode/cron-bundle)
+[![Latest Unstable Version](https://img.shields.io/packagist/vpre/shapecode/cron-bundle.svg?label=unstable)](https://packagist.org/packages/shapecode/cron-bundle)
+[![Total Downloads](https://img.shields.io/packagist/dt/shapecode/cron-bundle.svg)](https://packagist.org/packages/shapecode/cron-bundle)
+[![Monthly Downloads](https://img.shields.io/packagist/dm/shapecode/cron-bundle.svg)](https://packagist.org/packages/shapecode/cron-bundle)
+[![Daily Downloads](https://img.shields.io/packagist/dd/shapecode/cron-bundle.svg)](https://packagist.org/packages/shapecode/cron-bundle)
+[![License](https://img.shields.io/packagist/l/shapecode/cron-bundle.svg)](https://packagist.org/packages/shapecode/cron-bundle)
+
 
 This bundle provides a simple interface for registering repeated scheduled
 tasks within your application.
