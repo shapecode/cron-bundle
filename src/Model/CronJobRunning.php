@@ -10,7 +10,6 @@ use Symfony\Component\Process\Process;
  *
  * @package Shapecode\Bundle\CronBundle\Model
  * @author  Nikita Loges
- * @company tenolo GbR
  */
 class CronJobRunning
 {
