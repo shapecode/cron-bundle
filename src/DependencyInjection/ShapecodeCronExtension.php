@@ -16,7 +16,7 @@ class ShapecodeCronExtension extends ConfigurableExtension implements PrependExt
     /**
      * @inheritdoc
      */
-    public function loadInternal(array $config, ContainerBuilder $container)
+    public function loadInternal(array $config, ContainerBuilder $container) : void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
@@ -28,7 +28,7 @@ class ShapecodeCronExtension extends ConfigurableExtension implements PrependExt
     /**
      * {@inheritDoc}
      */
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container) : void
     {
         $container->prependExtensionConfig('doctrine', [
             'orm' => [

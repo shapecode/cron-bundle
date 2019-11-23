@@ -4,25 +4,33 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\CronJob;
 
+use RuntimeException;
 use Shapecode\Bundle\CronBundle\Event\GenericCleanUpEvent;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
+use Symfony\Component\HttpKernel\Kernel;
 
 class GenericCleanUpHourlyCommand extends Command
 {
-    /** @var EventDispatcherInterface */
+    /** @var LegacyEventDispatcherProxy|EventDispatcherInterface */
     protected $eventDispatcher;
 
-    /**
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @inheritDoc
-     */
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct();
+
+        if (Kernel::VERSION_ID > 40300) {
+            $legacy = LegacyEventDispatcherProxy::decorate($eventDispatcher);
+
+            if ($legacy === null) {
+                throw new RuntimeException('there is not event dispatcher provided');
+            }
+
+            $eventDispatcher = $legacy;
+        }
 
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -30,7 +38,7 @@ class GenericCleanUpHourlyCommand extends Command
     /**
      * @inheritDoc
      */
-    protected function configure()
+    protected function configure() : void
     {
         $this->setName('shapecode:cron:generic-cleanup:hourly');
     }
@@ -38,7 +46,7 @@ class GenericCleanUpHourlyCommand extends Command
     /**
      * @inheritdoc
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output) : int
     {
         // start cron
         $event = new GenericCleanUpEvent($input, $output);
@@ -51,5 +59,7 @@ class GenericCleanUpHourlyCommand extends Command
         // end cron
         $event = new GenericCleanUpEvent($input, $output);
         $this->eventDispatcher->dispatch(GenericCleanUpEvent::HOURLY_END, $event);
+
+        return 0;
     }
 }

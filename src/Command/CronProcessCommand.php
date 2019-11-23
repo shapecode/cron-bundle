@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use RuntimeException;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
@@ -36,10 +37,10 @@ class CronProcessCommand extends BaseCommand
     {
         $style = new CronStyle($input, $output);
 
-        /** @var CronJobInterface $job */
+        /** @var CronJobInterface|null $job */
         $job = $this->getCronJobRepository()->find($input->getArgument('cron'));
 
-        if (! $job) {
+        if ($job === null) {
             $style->error('No job found');
 
             return 1;
@@ -63,7 +64,13 @@ class CronProcessCommand extends BaseCommand
             $statusCode = CronJobResultInterface::EXIT_CODE_SKIPPED;
         } else {
             try {
-                $statusCode = $this->getApplication()->doRun($jobInput, $jobOutput);
+                $application = $this->getApplication();
+
+                if ($application === null) {
+                    throw new RuntimeException('application can not be bull');
+                }
+
+                $statusCode = $application->doRun($jobInput, $jobOutput);
             } catch (Throwable $ex) {
                 $statusCode = CronJobResultInterface::EXIT_CODE_FAILED;
                 $style->error('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
@@ -71,10 +78,6 @@ class CronProcessCommand extends BaseCommand
         }
 
         $this->getStopWatch()->stop($watch);
-
-        if ($statusCode === null) {
-            $statusCode = 0;
-        }
 
         switch ($statusCode) {
             case 0:
@@ -91,7 +94,7 @@ class CronProcessCommand extends BaseCommand
         }
 
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
-        $style->$block($statusStr . ' in ' . number_format(($duration / 1000), 4) . ' seconds');
+        $style->{$block}($statusStr . ' in ' . number_format(($duration / 1000), 4) . ' seconds');
 
         // Record the result
         $this->recordJobResult($job, $duration, $jobOutput, $statusCode);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 
@@ -12,10 +13,13 @@ class CronJobRepository extends EntityRepository implements CronJobRepositoryInt
 {
     public function findOneByCommand(string $command, int $number = 1) : ?CronJobInterface
     {
-        return $this->findOneBy([
+        /** @var CronJobInterface|null $object */
+        $object = $this->findOneBy([
             'command' => $command,
             'number'  => $number,
         ]);
+
+        return $object;
     }
 
     /**
@@ -31,7 +35,7 @@ class CronJobRepository extends EntityRepository implements CronJobRepositoryInt
     /**
      * @inheritdoc
      */
-    public function getKnownJobs() : ArrayCollection
+    public function getKnownJobs() : Collection
     {
         $data = new ArrayCollection($this->findAll());
 

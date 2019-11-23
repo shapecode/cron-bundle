@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Model;
 
+use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use function str_replace;
 use function trim;
 
-class CronJobMetadata
+final class CronJobMetadata
 {
     /** @var string */
     protected $expression;
@@ -19,7 +20,7 @@ class CronJobMetadata
     /** @var string|null */
     protected $description;
 
-    /** @var string */
+    /** @var string|null */
     protected $arguments;
 
     /** @var int */
@@ -35,7 +36,13 @@ class CronJobMetadata
 
     public static function createByCommand(string $expression, Command $command, ?string $arguments = null, int $maxInstances = 1) : CronJobMetadata
     {
-        $meta = new static($expression, $command->getName(), $arguments, $maxInstances);
+        $commandName = $command->getName();
+
+        if ($commandName === null) {
+            throw new RuntimeException('command has to have a name provided');
+        }
+
+        $meta = new static($expression, $commandName, $arguments, $maxInstances);
         $meta->setDescription($command->getDescription());
 
         return $meta;
@@ -58,7 +65,7 @@ class CronJobMetadata
     {
         $arguments = '';
 
-        if (! empty($this->getArguments())) {
+        if ($this->getArguments() !== null && $this->getArguments() !== '') {
             $arguments = ' ' . $this->getArguments();
         }
 
@@ -72,6 +79,10 @@ class CronJobMetadata
 
     public function getArguments() : ?string
     {
+        if ($this->arguments === null) {
+            return null;
+        }
+
         return trim($this->arguments);
     }
 

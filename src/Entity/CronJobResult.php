@@ -44,7 +44,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
      * @ORM\ManyToOne(targetEntity="Shapecode\Bundle\CronBundle\Entity\CronJob", inversedBy="results", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      *
-     * @var CronJob
+     * @var CronJobInterface
      */
     protected $cronJob;
 
@@ -53,6 +53,8 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->runAt = new DateTime();
     }
 

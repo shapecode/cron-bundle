@@ -47,7 +47,7 @@ class CronStatusCommand extends BaseCommand
                 $row[] = $cronJob->getNextRun()->format('r');
             }
 
-            if ($cronJob->getLastUse()) {
+            if ($cronJob->getLastUse() !== null) {
                 $row[] = $cronJob->getLastUse()->format('r');
             } else {
                 $row[] = 'This job has not yet been run';

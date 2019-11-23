@@ -83,7 +83,6 @@ class CronRunCommand extends BaseCommand
             $job->increaseRunningInstances();
             $process = $this->runJob($job);
 
-            if ($process) {
                 $job->calculateNextRun();
                 $job->setLastUse($now);
 
@@ -91,7 +90,6 @@ class CronRunCommand extends BaseCommand
                 $em->flush();
 
                 $processes[] = new CronJobRunning($job, $process);
-            }
 
             if ($job->getRunningInstances() > $job->getMaxInstances()) {
                 $style->notice('cronjob will not be executed. The number of maximum instances has been exceeded.');
@@ -104,7 +102,7 @@ class CronRunCommand extends BaseCommand
 
         $style->section('Summary');
 
-        if (count($processes)) {
+        if (count($processes) > 0) {
             $style->text('waiting for all running jobs ...');
 
             // wait for all processes
@@ -150,11 +148,13 @@ class CronRunCommand extends BaseCommand
 
     protected function runJob(CronJobInterface $job) : Process
     {
-        $consoleBin = $this->getConsoleBin();
-        $php        = $this->getPhpExecutable();
-        $env        = $this->getEnvironment();
-
-        $command = sprintf('%s %s shapecode:cron:process %s --env=%s', $php, $consoleBin, $job->getId(), $env);
+        $command = [
+            $this->getPhpExecutable(),
+            $this->getConsoleBin(),
+            'shapecode:cron:process',
+            $job->getId(),
+            sprintf('--env=%s', $this->getEnvironment()),
+        ];
 
         $process = new Process($command);
         $process->disableOutput();

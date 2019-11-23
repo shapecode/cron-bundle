@@ -36,7 +36,7 @@ class EntitySubscriber implements EventSubscriber
 
     protected function setDates(LifecycleEventArgs $args) : void
     {
-        /** @var AbstractEntity|object $entity */
+        /** @var AbstractEntity $entity */
         $entity     = $args->getObject();
         $reflection = new ReflectionClass($entity);
 
@@ -45,11 +45,5 @@ class EntitySubscriber implements EventSubscriber
         }
 
         $entity->setUpdatedAt(new DateTime());
-
-        if ($entity->getCreatedAt() !== null) {
-            return;
-        }
-
-        $entity->setCreatedAt(new DateTime());
     }
 }

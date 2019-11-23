@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use function count;
+use function sprintf;
 
 class CronJobEditCommand extends BaseCommand
 {
@@ -33,14 +34,16 @@ class CronJobEditCommand extends BaseCommand
     {
         $style = new CronStyle($input, $output);
 
+        /** @var string $jobName */
         $jobName = $input->getArgument('job');
+
         $jobRepo = $this->getCronJobRepository();
         $jobs    = $jobRepo->findByCommand($jobName);
 
         $em = $this->getManager();
 
-        if (! count($jobs)) {
-            $style->error("Couldn't find a job by the name of " . $jobName);
+        if (count($jobs) === 0) {
+            $style->error(sprintf('Couldn\'t find a job by the name of %s', $jobName));
 
             return CronJobResult::EXIT_CODE_FAILED;
         }

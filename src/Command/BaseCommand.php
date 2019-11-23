@@ -7,6 +7,7 @@ namespace Shapecode\Bundle\CronBundle\Command;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
+use RuntimeException;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepositoryInterface;
@@ -77,7 +78,13 @@ abstract class BaseCommand extends Command
 
     protected function getRequest() : Request
     {
-        return $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getMasterRequest();
+
+        if ($request === null) {
+            throw new RuntimeException('no master request there');
+        }
+
+        return $request;
     }
 
     protected function getManager() : ObjectManager
@@ -87,12 +94,18 @@ abstract class BaseCommand extends Command
 
     protected function getCronJobRepository() : CronJobRepositoryInterface
     {
-        return $this->getRegistry()->getRepository(CronJobInterface::class);
+        /** @var CronJobRepositoryInterface $repo */
+        $repo = $this->getRegistry()->getRepository(CronJobInterface::class);
+
+        return $repo;
     }
 
     protected function getCronJobResultRepository() : CronJobResultRepositoryInterface
     {
-        return $this->getRegistry()->getRepository(CronJobResultInterface::class);
+        /** @var CronJobResultRepositoryInterface $repo */
+        $repo = $this->getRegistry()->getRepository(CronJobResultInterface::class);
+
+        return $repo;
     }
 
     protected function getEnvironment() : string

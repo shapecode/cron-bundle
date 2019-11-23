@@ -14,7 +14,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @var int
+     * @var int|null
      */
     protected $id;
 
@@ -31,6 +31,12 @@ abstract class AbstractEntity implements AbstractEntityInterface
      * @var DateTime
      */
     protected $updatedAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
+    }
 
     /**
      * @inheritdoc
@@ -61,10 +67,6 @@ abstract class AbstractEntity implements AbstractEntityInterface
      */
     public function getCreatedAt() : DateTime
     {
-        if (empty($this->createdAt)) {
-            $this->setCreatedAt(new DateTime());
-        }
-
         return $this->createdAt;
     }
 
@@ -81,10 +83,6 @@ abstract class AbstractEntity implements AbstractEntityInterface
      */
     public function getUpdatedAt() : DateTime
     {
-        if (empty($this->updatedAt)) {
-            $this->setUpdatedAt(new DateTime());
-        }
-
         return $this->updatedAt;
     }
 }

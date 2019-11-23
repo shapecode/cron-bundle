@@ -42,7 +42,7 @@ class CronScanCommand extends BaseCommand
     /**
      * @inheritdoc
      */
-    protected function configure()
+    protected function configure() : void
     {
         $this->setName('shapecode:cron:scan');
         $this->setDescription('Scans for any new or deleted cron jobs');
@@ -54,14 +54,14 @@ class CronScanCommand extends BaseCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $style = new CronStyle($input, $output);
         $style->comment('Scan for cronjobs started at ' . (new DateTime())->format('r'));
         $style->title('scanning ...');
 
-        $keepDeleted     = $input->getOption('keep-deleted');
-        $defaultDisabled = $input->getOption('default-disabled');
+        $keepDeleted     = (bool) $input->getOption('keep-deleted');
+        $defaultDisabled = (bool) $input->getOption('default-disabled');
 
         // Enumerate the known jobs
         $jobRepo   = $this->getCronJobRepository();
@@ -86,6 +86,11 @@ class CronScanCommand extends BaseCommand
 
                 // Update the job if necessary
                 $currentJob = $jobRepo->findOneByCommand($command, $counter[$command]);
+
+                if ($currentJob === null) {
+                    continue;
+                }
+
                 $currentJob->setDescription($jobMetadata->getDescription());
                 $currentJob->setArguments($jobMetadata->getArguments());
 
@@ -115,10 +120,10 @@ class CronScanCommand extends BaseCommand
         $style->success('Finished scanning for cronjobs');
 
         // Clear any jobs that weren't found
-        if (! $keepDeleted) {
+        if ($keepDeleted === false) {
             $style->title('remove cronjobs');
 
-            if (count($knownJobs)) {
+            if (count($knownJobs) > 0) {
                 foreach ($knownJobs as $deletedJob) {
                     $style->notice('Deleting job: ' . $deletedJob);
                     $jobsToDelete = $jobRepo->findByCommand($deletedJob);

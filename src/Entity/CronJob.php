@@ -99,6 +99,8 @@ class CronJob extends AbstractEntity implements CronJobInterface
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->results = new ArrayCollection();
     }
 
@@ -125,7 +127,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     {
         $arguments = '';
 
-        if ($this->getArguments()) {
+        if ($this->getArguments() !== null) {
             $arguments = ' ' . $this->getArguments();
         }
 
