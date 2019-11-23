@@ -21,7 +21,7 @@ interface CronJobRepositoryInterface extends ObjectRepository
     public function findByCommand(string $command) : array;
 
     /**
-     * @return Collection
+     * @return CronJobInterface[]
      */
     public function getKnownJobs() : Collection;
 }
