@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Tests\Manager;
 
-
 use Doctrine\Common\Annotations\Reader;
+use Mockery;
+use Mockery\Mock;
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
@@ -14,30 +16,27 @@ use Symfony\Component\Console\Command\Command;
 
 class CronJobManagerTest extends TestCase
 {
-
-    /**
-     * @var \Shapecode\Bundle\CronBundle\Manager\CronJobManager|\Mockery\Mock
-     */
+    /** @var CronJobManager|Mock */
     protected $cronJobManagerMock;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         parent::setUp();
 
-        $this->cronJobManagerMock = \Mockery::mock(CronJobManager::class)->makePartial();
+        $this->cronJobManagerMock = Mockery::mock(CronJobManager::class)->makePartial();
     }
 
-    public function testGetApplicationJobs()
+    public function testGetApplicationJobs() : void
     {
-        $commandMock = \Mockery::mock(Command::class)->makePartial();
-        $applicationMock = \Mockery::mock(Application::class)
+        $commandMock       = Mockery::mock(Command::class)->makePartial();
+        $applicationMock   = Mockery::mock(Application::class)
                                    ->shouldReceive('all')
                                    ->andReturn([$commandMock])
                                    ->getMock();
-        $expression = "* * * * *";
+        $expression        = '* * * * *';
         $cronJobAnnotation = new CronJob(['value' => $expression]);
 
-        $readerMock = \Mockery::mock(Reader::class)
+        $readerMock = Mockery::mock(Reader::class)
                               ->shouldReceive('getClassAnnotations')
                               ->andReturn([$cronJobAnnotation])
                               ->getMock();
@@ -63,5 +62,4 @@ class CronJobManagerTest extends TestCase
         $this->assertEquals($commandMock, $jobs[0]->getCommand());
         $this->assertEquals($expression, $jobs[0]->getExpression());
     }
-
 }

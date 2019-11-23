@@ -1,24 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Repository;
 
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 
-/**
- * Class CronJobResultRepository
- *
- * @package Shapecode\Bundle\CronBundle\Repository
- * @author  Nikita Loges
- */
 class CronJobResultRepository extends EntityRepository implements CronJobResultRepositoryInterface
 {
-
     /**
      * @inheritdoc
      */
-    public function deleteOldLogs(\DateTime $time)
+    public function deleteOldLogs(DateTime $time)
     {
         $qb = $this->createQueryBuilder('d');
         $qb->delete($this->getEntityName(), 'd');
@@ -33,9 +29,9 @@ class CronJobResultRepository extends EntityRepository implements CronJobResultR
     /**
      * @inheritdoc
      */
-    public function findMostRecent(?CronJobInterface $job = null): ?CronJobResultInterface
+    public function findMostRecent(?CronJobInterface $job = null) : ?CronJobResultInterface
     {
-        $qb = $this->createQueryBuilder('p');
+        $qb   = $this->createQueryBuilder('p');
         $expr = $qb->expr();
 
         if ($job) {
@@ -47,6 +43,5 @@ class CronJobResultRepository extends EntityRepository implements CronJobResultR
         $qb->setMaxResults(1);
 
         return $qb->getQuery()->getOneOrNullResult();
-
     }
 }

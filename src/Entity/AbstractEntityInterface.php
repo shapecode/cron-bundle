@@ -1,43 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Entity;
 
-/**
- * Class AbstractEntityInterface
- *
- * @package Shapecode\Bundle\CronBundle\Entity
- * @author  Nikita Loges
- */
+use DateTime;
+
 interface AbstractEntityInterface
 {
+    public function getId() : ?int;
 
-    /**
-     * @return int|null
-     */
-    public function getId(): ?int;
+    public function setId(?int $id = null) : void;
 
-    /**
-     * @param integer|null $id
-     */
-    public function setId(?int $id = null): void;
+    public function setCreatedAt(DateTime $createdAt) : void;
 
-    /**
-     * @param \DateTime $createdAt
-     */
-    public function setCreatedAt(\DateTime $createdAt): void;
+    public function getCreatedAt() : DateTime;
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt(): \DateTime;
+    public function setUpdatedAt(DateTime $updatedAt) : void;
 
-    /**
-     * @param \DateTime $updatedAt
-     */
-    public function setUpdatedAt(\DateTime $updatedAt): void;
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): \DateTime;
+    public function getUpdatedAt() : DateTime;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,30 +10,18 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 
 /**
  * Interface CronJobRepositoryInterface
- *
- * @package Shapecode\Bundle\CronBundle\Repository
- * @author  Nikita Loges
  */
 interface CronJobRepositoryInterface extends ObjectRepository
 {
+    public function findOneByCommand(string $command, int $number = 1) : ?CronJobInterface;
 
     /**
-     * @param string $command
-     * @param int    $number
-     *
-     * @return null|CronJobInterface
-     */
-    public function findOneByCommand(string $command, int $number = 1): ?CronJobInterface;
-
-    /**
-     * @param string $command
-     *
      * @return array|CronJobInterface[]
      */
-    public function findByCommand(string $command): array;
+    public function findByCommand(string $command) : array;
 
     /**
      * @return ArrayCollection|string[]
      */
-    public function getKnownJobs(): ArrayCollection;
+    public function getKnownJobs() : ArrayCollection;
 }

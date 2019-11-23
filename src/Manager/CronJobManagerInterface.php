@@ -1,21 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Manager;
 
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 
 /**
  * Interface CronJobManagerInterface
- *
- * @package Shapecode\Bundle\CronBundle\Manager
- * @author  Nikita Loges
  */
 interface CronJobManagerInterface
 {
-
     /**
      * @return CronJobMetadata[]
      */
-    public function getJobs(): array;
-
+    public function getJobs() : array;
 }

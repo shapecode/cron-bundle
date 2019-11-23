@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\DependencyInjection;
 
 use Shapecode\Bundle\CronBundle\Entity as BundleEntities;
@@ -9,15 +11,8 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
-/**
- * Class ShapecodeCronExtension
- *
- * @package Shapecode\Bundle\CronBundle\DependencyInjection
- * @author  Nikita Loges
- */
 class ShapecodeCronExtension extends ConfigurableExtension implements PrependExtensionInterface
 {
-
     /**
      * @inheritdoc
      */
@@ -40,8 +35,8 @@ class ShapecodeCronExtension extends ConfigurableExtension implements PrependExt
                 'resolve_target_entities' => [
                     BundleEntities\CronJobInterface::class       => BundleEntities\CronJob::class,
                     BundleEntities\CronJobResultInterface::class => BundleEntities\CronJobResult::class,
-                ]
-            ]
+                ],
+            ],
         ]);
     }
 }

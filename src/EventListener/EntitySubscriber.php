@@ -1,25 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\EventListener;
 
+use DateTime;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use ReflectionClass;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
 
-/**
- * Class EntitySubscriber
- *
- * @package Shapecode\Bundle\CronBundle\EventListener
- * @author  Nikita Loges
- */
 class EntitySubscriber implements EventSubscriber
 {
-
     /**
      * @inheritDoc
      */
-    public function getSubscribedEvents(): array
+    public function getSubscribedEvents() : array
     {
         return [
             Events::prePersist,
@@ -27,40 +24,32 @@ class EntitySubscriber implements EventSubscriber
         ];
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function prePersist(LifecycleEventArgs $args): void
+    public function prePersist(LifecycleEventArgs $args) : void
     {
         $this->setDates($args);
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    public function preUpdate(LifecycleEventArgs $args): void
+    public function preUpdate(LifecycleEventArgs $args) : void
     {
         $this->setDates($args);
     }
 
-    /**
-     * @param LifecycleEventArgs $args
-     */
-    protected function setDates(LifecycleEventArgs $args): void
+    protected function setDates(LifecycleEventArgs $args) : void
     {
         /** @var AbstractEntity|object $entity */
-        $entity = $args->getObject();
-        $reflection = new \ReflectionClass($entity);
+        $entity     = $args->getObject();
+        $reflection = new ReflectionClass($entity);
 
-        if (!$reflection->isSubclassOf(AbstractEntity::class)) {
+        if (! $reflection->isSubclassOf(AbstractEntity::class)) {
             return;
         }
 
-        $entity->setUpdatedAt(new \DateTime());
+        $entity->setUpdatedAt(new DateTime());
 
-        if ($entity->getCreatedAt() === null) {
-            $entity->setCreatedAt(new \DateTime());
+        if ($entity->getCreatedAt() !== null) {
+            return;
         }
-    }
 
+        $entity->setCreatedAt(new DateTime());
+    }
 }

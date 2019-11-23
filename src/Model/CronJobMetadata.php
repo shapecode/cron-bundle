@@ -1,18 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Model;
 
 use Symfony\Component\Console\Command\Command;
+use function str_replace;
+use function trim;
 
-/**
- * Class CronJobMetadata
- *
- * @package Shapecode\Bundle\CronBundle\Model
- * @author  Nikita Loges
- */
 class CronJobMetadata
 {
-
     /** @var string */
     protected $expression;
 
@@ -28,29 +25,15 @@ class CronJobMetadata
     /** @var int */
     protected $maxInstances;
 
-    /**
-     * @param string      $expression
-     * @param string      $command
-     * @param string|null $arguments
-     * @param int         $maxInstances
-     */
     public function __construct(string $expression, string $command, ?string $arguments = null, int $maxInstances = 1)
     {
-        $this->expression = $expression;
-        $this->command = $command;
-        $this->arguments = $arguments;
+        $this->expression   = $expression;
+        $this->command      = $command;
+        $this->arguments    = $arguments;
         $this->maxInstances = $maxInstances;
     }
 
-    /**
-     * @param string      $expression
-     * @param Command     $command
-     * @param string|null $arguments
-     * @param int         $maxInstances
-     *
-     * @return CronJobMetadata
-     */
-    public static function createByCommand(string $expression, Command $command, ?string $arguments = null, int $maxInstances = 1): CronJobMetadata
+    public static function createByCommand(string $expression, Command $command, ?string $arguments = null, int $maxInstances = 1) : CronJobMetadata
     {
         $meta = new static($expression, $command->getName(), $arguments, $maxInstances);
         $meta->setDescription($command->getDescription());
@@ -58,18 +41,12 @@ class CronJobMetadata
         return $meta;
     }
 
-    /**
-     * @return string
-     */
-    public function getExpression(): string
+    public function getExpression() : string
     {
         return $this->expression;
     }
 
-    /**
-     * @return string
-     */
-    public function getClearedExpression(): string
+    public function getClearedExpression() : string
     {
         $expression = $this->getExpression();
         $expression = str_replace('\\', '', $expression);
@@ -77,56 +54,38 @@ class CronJobMetadata
         return $expression;
     }
 
-    /**
-     * @return string
-     */
-    public function getFullCommand(): string
+    public function getFullCommand() : string
     {
         $arguments = '';
 
-        if (!empty($this->getArguments())) {
+        if (! empty($this->getArguments())) {
             $arguments = ' ' . $this->getArguments();
         }
 
         return trim($this->getCommand() . $arguments);
     }
 
-    /**
-     * @return string
-     */
-    public function getCommand(): string
+    public function getCommand() : string
     {
         return trim($this->command);
     }
 
-    /**
-     * @return null|string
-     */
-    public function getArguments(): ?string
+    public function getArguments() : ?string
     {
         return trim($this->arguments);
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription(): ?string
+    public function getDescription() : ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     */
-    public function setDescription(?string $description): void
+    public function setDescription(?string $description) : void
     {
         $this->description = $description;
     }
 
-    /**
-     * @return int
-     */
-    public function getMaxInstances(): int
+    public function getMaxInstances() : int
     {
         return $this->maxInstances;
     }

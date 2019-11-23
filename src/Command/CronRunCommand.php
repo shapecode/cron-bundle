@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use DateTime;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
@@ -11,16 +14,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
+use function count;
+use function file_exists;
+use function sleep;
+use function sprintf;
 
-/**
- * Class CronRunCommand
- *
- * @package Shapecode\Bundle\CronBundle\Command
- * @author  Nikita Loges
- */
 class CronRunCommand extends BaseCommand
 {
-
     /** @var string|null */
     protected $projectDir;
 
@@ -33,7 +33,7 @@ class CronRunCommand extends BaseCommand
     /**
      * @inheritdoc
      */
-    protected function configure(): void
+    protected function configure() : void
     {
         $this->setName('shapecode:cron:run');
         $this->setDescription('Runs any currently schedule cron jobs');
@@ -45,30 +45,30 @@ class CronRunCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $jobRepo = $this->getCronJobRepository();
-        $style = new CronStyle($input, $output);
+        $style   = new CronStyle($input, $output);
 
         /** @var CronJobInterface[] $jobsToRun */
         $jobsToRun = $jobRepo->findAll();
 
-        $jobCount = \count($jobsToRun);
-        $style->comment('Cronjobs started at ' . (new \DateTime())->format('r'));
+        $jobCount = count($jobsToRun);
+        $style->comment('Cronjobs started at ' . (new DateTime())->format('r'));
 
         $style->title('Execute cronjobs');
         $style->info('Found ' . $jobCount . ' jobs');
 
         // Update the job with it's next scheduled time
-        $now = new \DateTime();
+        $now = new DateTime();
 
         /** @var CronJobRunning[] $processes */
         $processes = [];
-        $em = $this->getManager();
+        $em        = $this->getManager();
 
         foreach ($jobsToRun as $job) {
             sleep(1);
 
             $style->section('Running "' . $job->getFullCommand() . '"');
 
-            if (!$job->isEnable()) {
+            if (! $job->isEnable()) {
                 $style->notice('cronjob is disabled');
 
                 continue;
@@ -98,14 +98,13 @@ class CronRunCommand extends BaseCommand
             } else {
                 $style->success('cronjob started successfully and is running in background');
             }
-
         }
 
         sleep(1);
 
         $style->section('Summary');
 
-        if (\count($processes)) {
+        if (count($processes)) {
             $style->text('waiting for all running jobs ...');
 
             // wait for all processes
@@ -113,7 +112,6 @@ class CronRunCommand extends BaseCommand
 
             $style->success('All jobs are finished.');
         } else {
-
             $style->info('No jobs were executed. See reasons below.');
         }
 
@@ -123,7 +121,7 @@ class CronRunCommand extends BaseCommand
     /**
      * @param CronJobRunning[] $processes
      */
-    public function waitProcesses(array $processes): void
+    public function waitProcesses(array $processes) : void
     {
         $em = $this->getManager();
 
@@ -137,29 +135,24 @@ class CronRunCommand extends BaseCommand
                 if ($process->isRunning()) {
                     $wait = true;
                     break;
-                } else {
-                    $job = $running->getCronJob();
-                    $job->decreaseRunningInstances();
-
-                    $em->persist($job);
-                    $em->flush();
-
-                    unset($processes[$key]);
                 }
+
+                $job = $running->getCronJob();
+                $job->decreaseRunningInstances();
+
+                $em->persist($job);
+                $em->flush();
+
+                unset($processes[$key]);
             }
         }
     }
 
-    /**
-     * @param CronJobInterface $job
-     *
-     * @return Process
-     */
-    protected function runJob(CronJobInterface $job): Process
+    protected function runJob(CronJobInterface $job) : Process
     {
         $consoleBin = $this->getConsoleBin();
-        $php = $this->getPhpExecutable();
-        $env = $this->getEnvironment();
+        $php        = $this->getPhpExecutable();
+        $env        = $this->getEnvironment();
 
         $command = sprintf('%s %s shapecode:cron:process %s --env=%s', $php, $consoleBin, $job->getId(), $env);
 
@@ -170,16 +163,13 @@ class CronRunCommand extends BaseCommand
         return $process;
     }
 
-    /**
-     * @return string
-     */
-    protected function getProjectDir(): string
+    protected function getProjectDir() : string
     {
-        if (null !== $this->projectDir) {
+        if ($this->projectDir !== null) {
             return $this->projectDir;
         }
 
-        $kernel = $this->getKernel();
+        $kernel     = $this->getKernel();
         $projectDir = $kernel->getProjectDir();
 
         $this->projectDir = $projectDir;
@@ -187,12 +177,9 @@ class CronRunCommand extends BaseCommand
         return $projectDir;
     }
 
-    /**
-     * @return string
-     */
-    protected function getConsoleBin(): string
+    protected function getConsoleBin() : string
     {
-        if (null !== $this->consoleBin) {
+        if ($this->consoleBin !== null) {
             return $this->consoleBin;
         }
 
@@ -200,30 +187,27 @@ class CronRunCommand extends BaseCommand
 
         $consolePath = $projectDir . '/bin/console';
 
-        if (file_exists($consolePath)) {
-            $consoleBin = $consolePath;
-        } else {
+        if (! file_exists($consolePath)) {
             throw new RuntimeException('Missing console binary');
         }
+
+        $consoleBin = $consolePath;
 
         $this->consoleBin = $consoleBin;
 
         return $consoleBin;
     }
 
-    /**
-     * @return string
-     */
-    protected function getPhpExecutable(): string
+    protected function getPhpExecutable() : string
     {
-        if (null !== $this->phpExecutable) {
+        if ($this->phpExecutable !== null) {
             return $this->phpExecutable;
         }
 
         $executableFinder = new PhpExecutableFinder();
-        $php = $executableFinder->find();
+        $php              = $executableFinder->find();
 
-        if (false === $php) {
+        if ($php === false) {
             throw new RuntimeException('Unable to find the PHP executable.');
         }
 
@@ -231,5 +215,4 @@ class CronRunCommand extends BaseCommand
 
         return $php;
     }
-
 }

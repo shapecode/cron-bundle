@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
@@ -8,19 +10,12 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class CronStatusCommand
- *
- * @package Shapecode\Bundle\CronBundle\Command
- * @author  Nikita Loges
- */
 class CronStatusCommand extends BaseCommand
 {
-
     /**
      * @inheritdoc
      */
-    protected function configure(): void
+    protected function configure() : void
     {
         $this->setName('shapecode:cron:status');
         $this->setDescription('Displays the current status of cron jobs');
@@ -31,7 +26,7 @@ class CronStatusCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $style = new CronStyle($input, $output);
+        $style   = new CronStyle($input, $output);
         $jobRepo = $this->getCronJobRepository();
 
         $style->title('Cron job status');
@@ -46,7 +41,7 @@ class CronStatusCommand extends BaseCommand
                 $cronJob->getFullCommand(),
             ];
 
-            if (!$cronJob->isEnable()) {
+            if (! $cronJob->isEnable()) {
                 $row[] = 'Not scheduled';
             } else {
                 $row[] = $cronJob->getNextRun()->format('r');

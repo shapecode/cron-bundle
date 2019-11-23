@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use DateTime;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
@@ -14,34 +17,23 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelInterface;
+use function array_search;
+use function count;
+use function in_array;
+use function sprintf;
 
-/**
- * Class CronScanCommand
- *
- * @package Shapecode\Bundle\CronBundle\Command
- * @author  Nikita Loges
- */
 class CronScanCommand extends BaseCommand
 {
-
     /** @var CronJobManagerInterface */
     protected $cronJobManager;
 
-    /**
-     * @param CronJobManagerInterface $manager
-     * @param KernelInterface                  $kernel
-     * @param Reader                  $annotationReader
-     * @param ManagerRegistry         $registry
-     * @param RequestStack            $requestStack
-     */
     public function __construct(
         CronJobManagerInterface $manager,
         KernelInterface $kernel,
         Reader $annotationReader,
         ManagerRegistry $registry,
         RequestStack $requestStack
-    )
-    {
+    ) {
         $this->cronJobManager = $manager;
 
         parent::__construct($kernel, $annotationReader, $registry, $requestStack);
@@ -65,16 +57,16 @@ class CronScanCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $style = new CronStyle($input, $output);
-        $style->comment('Scan for cronjobs started at ' . (new \DateTime())->format('r'));
+        $style->comment('Scan for cronjobs started at ' . (new DateTime())->format('r'));
         $style->title('scanning ...');
 
-        $keepDeleted = $input->getOption('keep-deleted');
+        $keepDeleted     = $input->getOption('keep-deleted');
         $defaultDisabled = $input->getOption('default-disabled');
 
         // Enumerate the known jobs
-        $jobRepo = $this->getCronJobRepository();
+        $jobRepo   = $this->getCronJobRepository();
         $knownJobs = $jobRepo->getKnownJobs()->toArray();
-        $em = $this->getManager();
+        $em        = $this->getManager();
 
         $counter = [];
         foreach ($this->getCronManager()->getJobs() as $jobMetadata) {
@@ -82,15 +74,15 @@ class CronScanCommand extends BaseCommand
 
             $style->section($command);
 
-            if (!isset($counter[$command])) {
+            if (! isset($counter[$command])) {
                 $counter[$command] = 0;
             }
 
             $counter[$command]++;
 
-            if (\in_array($command, $knownJobs, true)) {
+            if (in_array($command, $knownJobs, true)) {
                 // Clear it from the known jobs so that we don't try to delete it
-                unset($knownJobs[\array_search($command, $knownJobs, true)]);
+                unset($knownJobs[array_search($command, $knownJobs, true)]);
 
                 // Update the job if necessary
                 $currentJob = $jobRepo->findOneByCommand($command, $counter[$command]);
@@ -123,10 +115,10 @@ class CronScanCommand extends BaseCommand
         $style->success('Finished scanning for cronjobs');
 
         // Clear any jobs that weren't found
-        if (!$keepDeleted) {
+        if (! $keepDeleted) {
             $style->title('remove cronjobs');
 
-            if (\count($knownJobs)) {
+            if (count($knownJobs)) {
                 foreach ($knownJobs as $deletedJob) {
                     $style->notice('Deleting job: ' . $deletedJob);
                     $jobsToDelete = $jobRepo->findByCommand($deletedJob);
@@ -144,13 +136,7 @@ class CronScanCommand extends BaseCommand
         return CronJobResult::EXIT_CODE_SUCCEEDED;
     }
 
-    /**
-     * @param CronStyle       $output
-     * @param CronJobMetadata $metadata
-     * @param bool            $defaultDisabled
-     * @param int             $counter
-     */
-    protected function newJobFound(CronStyle $output, CronJobMetadata $metadata, bool $defaultDisabled, int $counter): void
+    protected function newJobFound(CronStyle $output, CronJobMetadata $metadata, bool $defaultDisabled, int $counter) : void
     {
         $className = $this->getCronJobRepository()->getClassName();
 
@@ -160,7 +146,7 @@ class CronScanCommand extends BaseCommand
         $newJob->setArguments($metadata->getArguments());
         $newJob->setDescription($metadata->getDescription());
         $newJob->setPeriod($metadata->getClearedExpression());
-        $newJob->setEnable(!$defaultDisabled);
+        $newJob->setEnable(! $defaultDisabled);
         $newJob->setNumber($counter);
         $newJob->calculateNextRun();
 
@@ -170,10 +156,7 @@ class CronScanCommand extends BaseCommand
         $this->getManager()->persist($newJob);
     }
 
-    /**
-     * @return CronJobManagerInterface
-     */
-    protected function getCronManager(): CronJobManagerInterface
+    protected function getCronManager() : CronJobManagerInterface
     {
         return $this->cronJobManager;
     }

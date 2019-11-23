@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
@@ -10,20 +12,17 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
+use function get_class;
+use function number_format;
+use function str_replace;
 
-/**
- * Class CronProcessCommand
- *
- * @package Shapecode\Bundle\CronBundle\Command
- * @author  Nikita Loges
- */
 class CronProcessCommand extends BaseCommand
 {
-
     /**
      * @inheritDoc
      */
-    protected function configure(): void
+    protected function configure() : void
     {
         $this->setName('shapecode:cron:process');
 
@@ -40,21 +39,21 @@ class CronProcessCommand extends BaseCommand
         /** @var CronJobInterface $job */
         $job = $this->getCronJobRepository()->find($input->getArgument('cron'));
 
-        if (!$job) {
+        if (! $job) {
             $style->error('No job found');
 
             return 1;
         }
 
         $command = $job->getFullCommand() . ' -n';
-        $watch = 'job-' . str_replace(' ', '-', $command);
+        $watch   = 'job-' . str_replace(' ', '-', $command);
 
         $style->title('Running ' . $command);
 
-        $jobInput = new StringInput($command);
+        $jobInput  = new StringInput($command);
         $jobOutput = new BufferedOutput();
 
-        if (true === $jobInput->hasParameterOption(['--quiet', '-q'], true)) {
+        if ($jobInput->hasParameterOption(['--quiet', '-q'], true) === true) {
             $jobOutput->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
 
@@ -65,7 +64,7 @@ class CronProcessCommand extends BaseCommand
         } else {
             try {
                 $statusCode = $this->getApplication()->doRun($jobInput, $jobOutput);
-            } catch (\Exception $ex) {
+            } catch (Throwable $ex) {
                 $statusCode = CronJobResultInterface::EXIT_CODE_FAILED;
                 $style->error('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
             }
@@ -80,15 +79,15 @@ class CronProcessCommand extends BaseCommand
         switch ($statusCode) {
             case 0:
                 $statusStr = CronJobResultInterface::SUCCEEDED;
-                $block = 'success';
+                $block     = 'success';
                 break;
             case 2:
                 $statusStr = CronJobResultInterface::SKIPPED;
-                $block = 'info';
+                $block     = 'info';
                 break;
             default:
                 $statusStr = CronJobResultInterface::FAILED;
-                $block = 'error';
+                $block     = 'error';
         }
 
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
@@ -100,15 +99,9 @@ class CronProcessCommand extends BaseCommand
         return $statusCode;
     }
 
-    /**
-     * @param CronJobInterface $job
-     * @param float            $timeTaken
-     * @param BufferedOutput   $output
-     * @param int              $statusCode
-     */
-    protected function recordJobResult(CronJobInterface $job, float $timeTaken, BufferedOutput $output, int $statusCode): void
+    protected function recordJobResult(CronJobInterface $job, float $timeTaken, BufferedOutput $output, int $statusCode) : void
     {
-        $cronJobRepository = $this->getCronJobRepository();
+        $cronJobRepository    = $this->getCronJobRepository();
         $cronJobResultManager = $this->getManager();
 
         /** @var CronJobInterface $job */
@@ -116,7 +109,7 @@ class CronProcessCommand extends BaseCommand
 
         $className = $this->getCronJobResultRepository()->getClassName();
 
-        $buffer = (!$output->isQuiet()) ? $output->fetch() : '';
+        $buffer = ! $output->isQuiet() ? $output->fetch() : '';
 
         /** @var CronJobResultInterface $result */
         $result = new $className();
@@ -128,5 +121,4 @@ class CronProcessCommand extends BaseCommand
         $cronJobResultManager->persist($result);
         $cronJobResultManager->flush();
     }
-
 }

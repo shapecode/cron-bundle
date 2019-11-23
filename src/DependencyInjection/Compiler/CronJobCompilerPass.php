@@ -1,25 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\DependencyInjection\Compiler;
 
+use RuntimeException;
 use Shapecode\Bundle\CronBundle\EventListener\ServiceJobLoaderListener;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * Class CronJobCompilerPass
- *
- * @package Shapecode\Bundle\CronBundle\DependencyInjection\Compiler
- * @author  Nikita Loges
- */
 class CronJobCompilerPass implements CompilerPassInterface
 {
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    public function process(ContainerBuilder $container): void
+    public function process(ContainerBuilder $container) : void
     {
         $definition = $container->findDefinition(ServiceJobLoaderListener::class);
 
@@ -27,20 +20,19 @@ class CronJobCompilerPass implements CompilerPassInterface
 
         foreach ($tagged as $id => $configs) {
             foreach ($configs as $config) {
-                if (!isset($config['expression'])) {
-                    throw new \RuntimeException('missing expression config');
+                if (! isset($config['expression'])) {
+                    throw new RuntimeException('missing expression config');
                 }
 
                 $expression = $config['expression'];
-                $arguments = $config['arguments'] ?? null;
+                $arguments  = $config['arguments'] ?? null;
 
                 $definition->addMethodCall('addCommand', [
                     $expression,
                     new Reference($id),
-                    $arguments
+                    $arguments,
                 ]);
             }
         }
     }
-
 }

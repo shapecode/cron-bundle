@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\CronJob;
 
 use Shapecode\Bundle\CronBundle\Event\GenericCleanUpEvent;
@@ -8,15 +10,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-/**
- * Class GenericCleanUpDailyCommand
- *
- * @package Shapecode\Bundle\CronBundle\CronJob
- * @author  Nikita Loges
- */
 class GenericCleanUpDailyCommand extends Command
 {
-
     /** @var EventDispatcherInterface */
     protected $eventDispatcher;
 

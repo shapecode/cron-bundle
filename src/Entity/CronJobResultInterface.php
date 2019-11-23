@@ -1,71 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Entity;
 
-/**
- * Class CronJobResultInterface
- *
- * @package Shapecode\Bundle\CronBundle\Entity
- * @author  Nikita Loges
- */
+use DateTime;
+
 interface CronJobResultInterface extends AbstractEntityInterface
 {
-
     public const SUCCEEDED = 'succeeded';
-    public const FAILED = 'failed';
-    public const SKIPPED = 'skipped';
+    public const FAILED    = 'failed';
+    public const SKIPPED   = 'skipped';
 
     public const EXIT_CODE_SUCCEEDED = 0;
-    public const EXIT_CODE_FAILED = 1;
-    public const EXIT_CODE_SKIPPED = 2;
+    public const EXIT_CODE_FAILED    = 1;
+    public const EXIT_CODE_SKIPPED   = 2;
 
-    /**
-     * @param \DateTime $runAt
-     */
-    public function setRunAt(\DateTime $runAt): void;
+    public function setRunAt(DateTime $runAt) : void;
 
-    /**
-     * @return \DateTime
-     */
-    public function getRunAt(): \DateTime;
+    public function getRunAt() : DateTime;
 
-    /**
-     * @param float $runTime
-     */
-    public function setRunTime(float $runTime): void;
+    public function setRunTime(float $runTime) : void;
 
-    /**
-     * @return float
-     */
-    public function getRunTime(): float;
+    public function getRunTime() : float;
 
-    /**
-     * @param integer $result
-     */
-    public function setStatusCode(int $result): void;
+    public function setStatusCode(int $result) : void;
 
-    /**
-     * @return integer
-     */
-    public function getStatusCode(): int;
+    public function getStatusCode() : int;
 
-    /**
-     * @param string $output
-     */
-    public function setOutput(?string $output): void;
+    public function setOutput(?string $output) : void;
 
-    /**
-     * @return string
-     */
-    public function getOutput(): ?string;
+    public function getOutput() : ?string;
 
-    /**
-     * @param CronJobInterface $job
-     */
-    public function setCronJob(CronJobInterface $job): void;
+    public function setCronJob(CronJobInterface $job) : void;
 
-    /**
-     * @return CronJobInterface
-     */
-    public function getCronJob(): CronJobInterface;
+    public function getCronJob() : CronJobInterface;
 }

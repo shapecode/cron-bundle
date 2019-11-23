@@ -1,18 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Service;
 
 /**
  * Interface CronJobResultServiceInterface
- *
- * @package Shapecode\Bundle\CronBundle\Service
- * @author  Nikita Loges
  */
 interface CronJobResultServiceInterface
 {
-
-    /**
-     *
-     */
-    public function prune(): void;
+    public function prune() : void;
 }

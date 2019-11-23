@@ -1,39 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Shapecode\Bundle\CronBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Class AbstractEntity
- *
- * @package Shapecode\Bundle\CronBundle\Entity
- * @author  Nikita Loges
- */
 abstract class AbstractEntity implements AbstractEntityInterface
 {
-
     /**
      * @ORM\Column(type="bigint", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @var int
      */
     protected $id;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @var DateTime
      */
     protected $createdAt;
 
     /**
      * @ORM\Column(type="datetime")
+     *
+     * @var DateTime
      */
     protected $updatedAt;
 
     /**
      * @inheritdoc
      */
-    public function getId(): ?int
+    public function getId() : ?int
     {
         return $this->id;
     }
@@ -41,7 +43,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function setId(?int $id = null): void
+    public function setId(?int $id = null) : void
     {
         $this->id = $id;
     }
@@ -49,7 +51,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function setCreatedAt(\DateTime $createdAt): void
+    public function setCreatedAt(DateTime $createdAt) : void
     {
         $this->createdAt = $createdAt;
     }
@@ -57,10 +59,10 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt() : DateTime
     {
         if (empty($this->createdAt)) {
-            $this->setCreatedAt(new \DateTime());
+            $this->setCreatedAt(new DateTime());
         }
 
         return $this->createdAt;
@@ -69,7 +71,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function setUpdatedAt(\DateTime $updatedAt): void
+    public function setUpdatedAt(DateTime $updatedAt) : void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -77,10 +79,10 @@ abstract class AbstractEntity implements AbstractEntityInterface
     /**
      * @inheritdoc
      */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt() : DateTime
     {
         if (empty($this->updatedAt)) {
-            $this->setUpdatedAt(new \DateTime());
+            $this->setUpdatedAt(new DateTime());
         }
 
         return $this->updatedAt;
