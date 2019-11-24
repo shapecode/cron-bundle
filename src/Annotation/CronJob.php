@@ -9,13 +9,13 @@ use Doctrine\Common\Annotations\Annotation;
 /**
  * @Annotation
  */
-class CronJob extends Annotation
+final class CronJob extends Annotation
 {
     /** @var string|null */
-    protected $arguments;
+    private $arguments;
 
     /** @var int */
-    protected $maxInstances = 1;
+    private $maxInstances = 1;
 
     public function getValue() : string
     {

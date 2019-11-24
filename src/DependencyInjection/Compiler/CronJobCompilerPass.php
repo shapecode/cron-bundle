@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class CronJobCompilerPass implements CompilerPassInterface
+final class CronJobCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container) : void
     {

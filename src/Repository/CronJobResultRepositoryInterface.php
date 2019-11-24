@@ -14,10 +14,7 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
  */
 interface CronJobResultRepositoryInterface extends ObjectRepository
 {
-    /**
-     * @return mixed
-     */
-    public function deleteOldLogs(DateTime $time);
+    public function deleteOldLogs(DateTime $time) : void;
 
     public function findMostRecent(?CronJobInterface $job = null) : ?CronJobResultInterface;
 }

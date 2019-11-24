@@ -8,13 +8,13 @@ use Shapecode\Bundle\CronBundle\Event\GenericCleanUpEvent;
 use Shapecode\Bundle\CronBundle\Service\CronJobResultServiceInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ResultAutoPruneListener implements EventSubscriberInterface
+final class ResultAutoPruneListener implements EventSubscriberInterface
 {
     /** @var CronJobResultServiceInterface */
-    protected $cronjobService;
+    private $cronjobService;
 
     /** @var bool */
-    protected $autoPrune;
+    private $autoPrune;
 
     public function __construct(CronJobResultServiceInterface $cronjobService, bool $autoPrune)
     {
@@ -22,9 +22,6 @@ class ResultAutoPruneListener implements EventSubscriberInterface
         $this->autoPrune      = $autoPrune;
     }
 
-    /**
-     * @inheritDoc
-     */
     public static function getSubscribedEvents() : array
     {
         return [

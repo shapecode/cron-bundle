@@ -11,11 +11,8 @@ use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
-class ShapecodeCronExtension extends ConfigurableExtension implements PrependExtensionInterface
+final class ShapecodeCronExtension extends ConfigurableExtension implements PrependExtensionInterface
 {
-    /**
-     * @inheritdoc
-     */
     public function loadInternal(array $config, ContainerBuilder $container) : void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -25,9 +22,6 @@ class ShapecodeCronExtension extends ConfigurableExtension implements PrependExt
         $container->setParameter('shapecode_cron.results.interval', $config['results']['interval']);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function prepend(ContainerBuilder $container) : void
     {
         $container->prependExtensionConfig('doctrine', [

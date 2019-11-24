@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Event;
 
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class LoadJobsEvent extends Event
 {

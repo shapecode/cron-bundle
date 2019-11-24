@@ -94,9 +94,6 @@ class CronJob extends AbstractEntity implements CronJobInterface
      */
     protected $enable = true;
 
-    /**
-     * @inheritdoc
-     */
     public function __construct()
     {
         parent::__construct();
@@ -104,25 +101,16 @@ class CronJob extends AbstractEntity implements CronJobInterface
         $this->results = new ArrayCollection();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setCommand(string $command) : void
     {
         $this->command = $command;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getCommand() : string
     {
         return $this->command;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getFullCommand() : string
     {
         $arguments = '';
@@ -134,49 +122,31 @@ class CronJob extends AbstractEntity implements CronJobInterface
         return $this->getCommand() . $arguments;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getArguments() : ?string
     {
         return $this->arguments;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setArguments(?string $arguments) : void
     {
         $this->arguments = $arguments;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getDescription() : ?string
     {
         return $this->description;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setDescription(?string $description) : void
     {
         $this->description = $description;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getRunningInstances() : int
     {
         return $this->runningInstances;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setRunningInstances(int $runningInstances) : void
     {
         $this->runningInstances = $runningInstances;
@@ -184,12 +154,12 @@ class CronJob extends AbstractEntity implements CronJobInterface
 
     public function increaseRunningInstances() : void
     {
-        $this->runningInstances += 1;
+        ++$this->runningInstances;
     }
 
     public function decreaseRunningInstances() : void
     {
-        $this->runningInstances -= 1;
+        --$this->runningInstances;
     }
 
     public function getMaxInstances() : int
@@ -202,97 +172,61 @@ class CronJob extends AbstractEntity implements CronJobInterface
         $this->maxInstances = $maxInstances;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getNumber() : int
     {
         return $this->number;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setNumber(int $number) : void
     {
         $this->number = $number;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getPeriod() : string
     {
         return $this->period;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getInterval() : DateInterval
     {
         return new DateInterval($this->getPeriod());
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setPeriod(string $period) : void
     {
         $this->period = $period;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getLastUse() : ?DateTime
     {
         return $this->lastUse;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setLastUse(DateTime $lastUse) : void
     {
         $this->lastUse = $lastUse;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setNextRun(DateTime $nextRun) : void
     {
         $this->nextRun = $nextRun;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getNextRun() : DateTime
     {
         return $this->nextRun;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getResults() : Collection
     {
         return $this->results;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function hasResult(CronJobResultInterface $result) : bool
     {
         return $this->getResults()->contains($result);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function addResult(CronJobResultInterface $result) : void
     {
         if ($this->hasResult($result)) {
@@ -303,9 +237,6 @@ class CronJob extends AbstractEntity implements CronJobInterface
         $this->getResults()->add($result);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function removeResult(CronJobResultInterface $result) : void
     {
         if (! $this->hasResult($result)) {
@@ -331,9 +262,6 @@ class CronJob extends AbstractEntity implements CronJobInterface
         $this->setNextRun($cron->getNextRunDate());
     }
 
-    /**
-     * @inheritDoc
-     */
     public function __toString() : string
     {
         return $this->getCommand();

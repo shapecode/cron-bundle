@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use DateTime;
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
@@ -15,33 +14,25 @@ use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\KernelInterface;
 use function array_search;
 use function count;
 use function in_array;
 use function sprintf;
 
-class CronScanCommand extends BaseCommand
+final class CronScanCommand extends BaseCommand
 {
     /** @var CronJobManagerInterface */
-    protected $cronJobManager;
+    private $cronJobManager;
 
     public function __construct(
         CronJobManagerInterface $manager,
-        KernelInterface $kernel,
-        Reader $annotationReader,
-        ManagerRegistry $registry,
-        RequestStack $requestStack
+        ManagerRegistry $registry
     ) {
         $this->cronJobManager = $manager;
 
-        parent::__construct($kernel, $annotationReader, $registry, $requestStack);
+        parent::__construct($registry);
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function configure() : void
     {
         $this->setName('shapecode:cron:scan');
@@ -51,9 +42,6 @@ class CronScanCommand extends BaseCommand
         $this->addOption('default-disabled', 'd', InputOption::VALUE_NONE, 'If set, new jobs will be disabled by default');
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $style = new CronStyle($input, $output);
@@ -69,7 +57,7 @@ class CronScanCommand extends BaseCommand
         $em        = $this->getManager();
 
         $counter = [];
-        foreach ($this->getCronManager()->getJobs() as $jobMetadata) {
+        foreach ($this->cronJobManager->getJobs() as $jobMetadata) {
             $command = $jobMetadata->getCommand();
 
             $style->section($command);
@@ -141,7 +129,7 @@ class CronScanCommand extends BaseCommand
         return CronJobResult::EXIT_CODE_SUCCEEDED;
     }
 
-    protected function newJobFound(CronStyle $output, CronJobMetadata $metadata, bool $defaultDisabled, int $counter) : void
+    private function newJobFound(CronStyle $output, CronJobMetadata $metadata, bool $defaultDisabled, int $counter) : void
     {
         $className = $this->getCronJobRepository()->getClassName();
 
@@ -159,10 +147,5 @@ class CronScanCommand extends BaseCommand
         $output->success($message);
 
         $this->getManager()->persist($newJob);
-    }
-
-    protected function getCronManager() : CronJobManagerInterface
-    {
-        return $this->cronJobManager;
     }
 }

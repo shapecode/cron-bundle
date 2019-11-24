@@ -13,27 +13,20 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class AnnotationJobLoaderListener implements EventSubscriberInterface
+final class AnnotationJobLoaderListener implements EventSubscriberInterface
 {
-    /** @var KernelInterface */
-    protected $kernel;
-
     /** @var Application */
-    protected $application;
+    private $application;
 
     /** @var Reader */
-    protected $reader;
+    private $reader;
 
     public function __construct(KernelInterface $kernel, Reader $reader)
     {
-        $this->kernel      = $kernel;
         $this->application = new Application($kernel);
         $this->reader      = $reader;
     }
 
-    /**
-     * @inheritdoc
-     */
     public static function getSubscribedEvents() : array
     {
         return [

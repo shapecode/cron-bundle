@@ -38,49 +38,31 @@ abstract class AbstractEntity implements AbstractEntityInterface
         $this->updatedAt = new DateTime();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getId() : ?int
     {
         return $this->id;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setId(?int $id = null) : void
     {
         $this->id = $id;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setCreatedAt(DateTime $createdAt) : void
     {
         $this->createdAt = $createdAt;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getCreatedAt() : DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setUpdatedAt(DateTime $updatedAt) : void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getUpdatedAt() : DateTime
     {
         return $this->updatedAt;

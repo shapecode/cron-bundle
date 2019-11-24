@@ -8,9 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 
-/**
- * Interface CronJobRepositoryInterface
- */
 interface CronJobRepositoryInterface extends ObjectRepository
 {
     public function findOneByCommand(string $command, int $number = 1) : ?CronJobInterface;
@@ -20,8 +17,5 @@ interface CronJobRepositoryInterface extends ObjectRepository
      */
     public function findByCommand(string $command) : array;
 
-    /**
-     * @return CronJobInterface[]
-     */
     public function getKnownJobs() : Collection;
 }

@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-class CronJobController
+final class CronJobController
 {
     /** @var KernelInterface */
     private $kernel;

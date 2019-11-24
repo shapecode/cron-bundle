@@ -12,19 +12,19 @@ use function trim;
 final class CronJobMetadata
 {
     /** @var string */
-    protected $expression;
+    private $expression;
 
     /** @var string */
-    protected $command;
+    private $command;
 
     /** @var string|null */
-    protected $description;
+    private $description;
 
     /** @var string|null */
-    protected $arguments;
+    private $arguments;
 
     /** @var int */
-    protected $maxInstances;
+    private $maxInstances;
 
     public function __construct(string $expression, string $command, ?string $arguments = null, int $maxInstances = 1)
     {
@@ -65,7 +65,7 @@ final class CronJobMetadata
     {
         $arguments = '';
 
-        if ($this->getArguments() !== null && $this->getArguments() !== '') {
+        if ($this->getArguments() !== null) {
             $arguments = ' ' . $this->getArguments();
         }
 

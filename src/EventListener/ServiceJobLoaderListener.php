@@ -9,7 +9,7 @@ use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ServiceJobLoaderListener implements EventSubscriberInterface
+final class ServiceJobLoaderListener implements EventSubscriberInterface
 {
     /** @var CronJobMetadata[] */
     protected $jobs = [];
@@ -19,9 +19,6 @@ class ServiceJobLoaderListener implements EventSubscriberInterface
         $this->jobs[] = CronJobMetadata::createByCommand($expression, $command, $arguments, $maxInstances);
     }
 
-    /**
-     * @inheritdoc
-     */
     public static function getSubscribedEvents() : array
     {
         return [

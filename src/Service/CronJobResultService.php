@@ -9,13 +9,13 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepositoryInterface;
 
-class CronJobResultService implements CronJobResultServiceInterface
+final class CronJobResultService implements CronJobResultServiceInterface
 {
     /** @var ManagerRegistry */
-    protected $registry;
+    private $registry;
 
     /** @var string */
-    protected $pruneInterval;
+    private $pruneInterval;
 
     public function __construct(ManagerRegistry $registry, string $pruneInterval)
     {

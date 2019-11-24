@@ -6,44 +6,14 @@ parameters:
 			path: src/Command/CronProcessCommand.php
 
 		-
-			message: "#^Property Shapecode\\\\Bundle\\\\CronBundle\\\\CronJob\\\\GenericCleanUpDailyCommand\\:\\:\\$eventDispatcher \\(Symfony\\\\Component\\\\EventDispatcher\\\\EventDispatcherInterface\\) does not accept Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\.$#"
-			count: 1
-			path: src/CronJob/GenericCleanUpDailyCommand.php
-
-		-
 			message: "#^Method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:dispatch\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 3
 			path: src/CronJob/GenericCleanUpDailyCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$event of method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:dispatch\\(\\) expects object, string given\\.$#"
-			count: 3
-			path: src/CronJob/GenericCleanUpDailyCommand.php
-
-		-
-			message: "#^Property Shapecode\\\\Bundle\\\\CronBundle\\\\CronJob\\\\GenericCleanUpHourlyCommand\\:\\:\\$eventDispatcher \\(Symfony\\\\Component\\\\EventDispatcher\\\\EventDispatcherInterface\\) does not accept Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\.$#"
-			count: 1
-			path: src/CronJob/GenericCleanUpHourlyCommand.php
-
-		-
 			message: "#^Method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:dispatch\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 3
 			path: src/CronJob/GenericCleanUpHourlyCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$event of method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:dispatch\\(\\) expects object, string given\\.$#"
-			count: 3
-			path: src/CronJob/GenericCleanUpHourlyCommand.php
-
-		-
-			message: "#^Call to function method_exists\\(\\) with Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\TreeBuilder and 'getRootNode' will always evaluate to true\\.$#"
-			count: 1
-			path: src/DependencyInjection/Configuration.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Config\\\\Definition\\\\Builder\\\\TreeBuilder\\:\\:root\\(\\)\\.$#"
-			count: 1
-			path: src/DependencyInjection/Configuration.php
 
 		-
 			message: "#^Class Shapecode\\\\Bundle\\\\CronBundle\\\\Event\\\\GenericCleanUpEvent extends deprecated class Symfony\\\\Component\\\\EventDispatcher\\\\Event\\:\nsince Symfony 4\\.3, use \"Symfony\\\\Contracts\\\\EventDispatcher\\\\Event\" instead$#"
@@ -51,21 +21,6 @@ parameters:
 			path: src/Event/GenericCleanUpEvent.php
 
 		-
-			message: "#^Class Shapecode\\\\Bundle\\\\CronBundle\\\\Event\\\\LoadJobsEvent extends deprecated class Symfony\\\\Component\\\\EventDispatcher\\\\Event\\:\nsince Symfony 4\\.3, use \"Symfony\\\\Contracts\\\\EventDispatcher\\\\Event\" instead$#"
-			count: 1
-			path: src/Event/LoadJobsEvent.php
-
-		-
-			message: "#^Property Shapecode\\\\Bundle\\\\CronBundle\\\\Manager\\\\CronJobManager\\:\\:\\$eventDispatcher \\(Symfony\\\\Component\\\\EventDispatcher\\\\EventDispatcherInterface\\) does not accept Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\.$#"
-			count: 1
-			path: src/Manager/CronJobManager.php
-
-		-
 			message: "#^Method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:dispatch\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: src/Manager/CronJobManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$event of method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:dispatch\\(\\) expects object, string given\\.$#"
 			count: 1
 			path: src/Manager/CronJobManager.php

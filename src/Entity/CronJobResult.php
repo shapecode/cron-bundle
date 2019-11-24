@@ -48,9 +48,6 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
      */
     protected $cronJob;
 
-    /**
-     * @inheritdoc
-     */
     public function __construct()
     {
         parent::__construct();
@@ -58,33 +55,21 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
         $this->runAt = new DateTime();
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setRunAt(DateTime $runAt) : void
     {
         $this->runAt = $runAt;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getRunAt() : DateTime
     {
         return $this->runAt;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setRunTime(float $runTime) : void
     {
         $this->runTime = $runTime;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getRunTime() : float
     {
         return $this->runTime;
@@ -100,41 +85,26 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
         $this->statusCode = $statusCode;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setOutput(?string $output) : void
     {
         $this->output = $output;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getOutput() : ?string
     {
         return $this->output;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function setCronJob(CronJobInterface $job) : void
     {
         $this->cronJob = $job;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function getCronJob() : CronJobInterface
     {
         return $this->cronJob;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function __toString() : string
     {
         return $this->getCronJob()->getCommand() . ' - ' . $this->getRunAt()->format('d.m.Y H:i P');

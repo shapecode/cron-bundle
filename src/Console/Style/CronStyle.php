@@ -6,7 +6,7 @@ namespace Shapecode\Bundle\CronBundle\Console\Style;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class CronStyle extends SymfonyStyle
+final class CronStyle extends SymfonyStyle
 {
     public function info(string $message) : void
     {

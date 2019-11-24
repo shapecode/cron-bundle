@@ -11,11 +11,8 @@ use Doctrine\ORM\Events;
 use ReflectionClass;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
 
-class EntitySubscriber implements EventSubscriber
+final class EntitySubscriber implements EventSubscriber
 {
-    /**
-     * @inheritDoc
-     */
     public function getSubscribedEvents() : array
     {
         return [
@@ -34,7 +31,7 @@ class EntitySubscriber implements EventSubscriber
         $this->setDates($args);
     }
 
-    protected function setDates(LifecycleEventArgs $args) : void
+    private function setDates(LifecycleEventArgs $args) : void
     {
         /** @var AbstractEntity $entity */
         $entity     = $args->getObject();

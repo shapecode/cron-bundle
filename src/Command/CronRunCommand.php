@@ -5,43 +5,47 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use DateTime;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use function count;
 use function file_exists;
 use function sleep;
-use function sprintf;
 
-class CronRunCommand extends BaseCommand
+final class CronRunCommand extends BaseCommand
 {
     /** @var string|null */
-    protected $projectDir;
+    private $phpExecutable;
 
     /** @var string|null */
-    protected $phpExecutable;
+    private $consoleBin;
 
-    /** @var string|null */
-    protected $consoleBin;
+    /** @var KernelInterface */
+    private $kernel;
 
-    /**
-     * @inheritdoc
-     */
+    public function __construct(
+        KernelInterface $kernel,
+        ManagerRegistry $registry
+    ) {
+        parent::__construct($registry);
+
+        $this->kernel = $kernel;
+    }
+
     protected function configure() : void
     {
         $this->setName('shapecode:cron:run');
         $this->setDescription('Runs any currently schedule cron jobs');
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $jobRepo = $this->getCronJobRepository();
@@ -153,7 +157,6 @@ class CronRunCommand extends BaseCommand
             $this->getConsoleBin(),
             'shapecode:cron:process',
             $job->getId(),
-            sprintf('--env=%s', $this->getEnvironment()),
         ];
 
         $process = new Process($command);
@@ -163,27 +166,13 @@ class CronRunCommand extends BaseCommand
         return $process;
     }
 
-    protected function getProjectDir() : string
-    {
-        if ($this->projectDir !== null) {
-            return $this->projectDir;
-        }
-
-        $kernel     = $this->getKernel();
-        $projectDir = $kernel->getProjectDir();
-
-        $this->projectDir = $projectDir;
-
-        return $projectDir;
-    }
-
     protected function getConsoleBin() : string
     {
         if ($this->consoleBin !== null) {
             return $this->consoleBin;
         }
 
-        $projectDir = $this->getProjectDir();
+        $projectDir = $this->kernel->getProjectDir();
 
         $consolePath = $projectDir . '/bin/console';
 

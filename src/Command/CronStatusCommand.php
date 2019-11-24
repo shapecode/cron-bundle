@@ -10,20 +10,14 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CronStatusCommand extends BaseCommand
+final class CronStatusCommand extends BaseCommand
 {
-    /**
-     * @inheritdoc
-     */
     protected function configure() : void
     {
         $this->setName('shapecode:cron:status');
         $this->setDescription('Displays the current status of cron jobs');
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $style   = new CronStyle($input, $output);

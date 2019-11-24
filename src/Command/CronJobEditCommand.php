@@ -13,11 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function count;
 use function sprintf;
 
-class CronJobEditCommand extends BaseCommand
+final class CronJobEditCommand extends BaseCommand
 {
-    /**
-     * @inheritdoc
-     */
     protected function configure() : void
     {
         $this->setName('shapecode:cron:edit');
@@ -27,9 +24,6 @@ class CronJobEditCommand extends BaseCommand
         $this->addOption('enable', null, InputOption::VALUE_REQUIRED, 'Enable or disable this cron (y or n)');
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $style = new CronStyle($input, $output);

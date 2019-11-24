@@ -7,13 +7,13 @@ namespace Shapecode\Bundle\CronBundle\Model;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Symfony\Component\Process\Process;
 
-class CronJobRunning
+final class CronJobRunning
 {
     /** @var CronJobInterface */
-    protected $cronJob;
+    private $cronJob;
 
     /** @var Process */
-    protected $process;
+    private $process;
 
     public function __construct(CronJobInterface $cronJob, Process $process)
     {
