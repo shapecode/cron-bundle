@@ -45,6 +45,7 @@
         "symfony/process": "^4.4|^5.0",
         "symfony/stopwatch": "^4.4|^5.0",
         "symfony/event-dispatcher": "^4.4|^5.0",
+        "symfony/event-dispatcher-contracts": "^1.1|^2.0",
 
         "doctrine/annotations": "^1.8",
         "doctrine/event-manager": "^1.1",
@@ -66,7 +67,6 @@
         "maglnet/composer-require-checker": "^2.0",
         "phpunit/phpunit": "^8.4",
         "symfony/var-dumper": "^4.3",
-        "mockery/mockery": "^1.0",
         "icanhazstring/composer-unused": "^0.6.2"
     },
     "suggest": {

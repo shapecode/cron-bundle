@@ -6,10 +6,10 @@ namespace Shapecode\Bundle\CronBundle\Tests\Command;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
+use PHPUnit\Framework\TestCase;
 use Shapecode\Bundle\CronBundle\Command\CronRunCommand;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
-use Shapecode\Bundle\CronBundle\Tests\TestCase;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Process\Process;
 

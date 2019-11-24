@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Tests\Manager;
 
+use PHPUnit\Framework\TestCase;
 use Shapecode\Bundle\CronBundle\Event\LoadJobsEvent;
 use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
-use Shapecode\Bundle\CronBundle\Tests\TestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class CronJobManagerTest extends TestCase
