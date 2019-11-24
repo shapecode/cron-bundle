@@ -31,16 +31,17 @@ class CronJobManagerTest extends TestCase
 
         $cronJobManager = new CronJobManager($eventDispatcher);
 
+        /** @var CronJobMetadata[] $jobs */
         $jobs = $cronJobManager->getJobs();
 
         $this->assertCount(1, $jobs);
-
         $this->assertInstanceOf(CronJobMetadata::class, $jobs[0]);
         $this->assertEquals($command, $jobs[0]->getCommand());
         $this->assertEquals($expression, $jobs[0]->getExpression());
 
         // Run second time to assert the same result.
         $jobs = $cronJobManager->getJobs();
+
         $this->assertCount(1, $jobs);
         $this->assertInstanceOf(CronJobMetadata::class, $jobs[0]);
         $this->assertEquals($command, $jobs[0]->getCommand());
