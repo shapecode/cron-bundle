@@ -33,6 +33,9 @@ class CronJobManager implements CronJobManagerInterface
         return $event->getJobs();
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getJobs() : array
     {
         if ($this->jobs === null) {

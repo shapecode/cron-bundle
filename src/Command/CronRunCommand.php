@@ -20,7 +20,7 @@ use function count;
 use function file_exists;
 use function sleep;
 
-final class CronRunCommand extends BaseCommand
+class CronRunCommand extends BaseCommand
 {
     /** @var string|null */
     private $phpExecutable;
@@ -87,13 +87,13 @@ final class CronRunCommand extends BaseCommand
             $job->increaseRunningInstances();
             $process = $this->runJob($job);
 
-                $job->calculateNextRun();
-                $job->setLastUse($now);
+            $job->calculateNextRun();
+            $job->setLastUse($now);
 
-                $em->persist($job);
-                $em->flush();
+            $em->persist($job);
+            $em->flush();
 
-                $processes[] = new CronJobRunning($job, $process);
+            $processes[] = new CronJobRunning($job, $process);
 
             if ($job->getRunningInstances() > $job->getMaxInstances()) {
                 $style->notice('cronjob will not be executed. The number of maximum instances has been exceeded.');
@@ -127,15 +127,11 @@ final class CronRunCommand extends BaseCommand
     {
         $em = $this->getManager();
 
-        $wait = true;
-        while ($wait) {
-            $wait = false;
-
+        while (count($processes) > 0) {
             foreach ($processes as $key => $running) {
                 $process = $running->getProcess();
 
-                if ($process->isRunning()) {
-                    $wait = true;
+                if ($process->isRunning() === true) {
                     break;
                 }
 
@@ -150,7 +146,7 @@ final class CronRunCommand extends BaseCommand
         }
     }
 
-    protected function runJob(CronJobInterface $job) : Process
+    private function runJob(CronJobInterface $job) : Process
     {
         $command = [
             $this->getPhpExecutable(),
@@ -166,7 +162,7 @@ final class CronRunCommand extends BaseCommand
         return $process;
     }
 
-    protected function getConsoleBin() : string
+    private function getConsoleBin() : string
     {
         if ($this->consoleBin !== null) {
             return $this->consoleBin;
@@ -187,7 +183,7 @@ final class CronRunCommand extends BaseCommand
         return $consoleBin;
     }
 
-    protected function getPhpExecutable() : string
+    private function getPhpExecutable() : string
     {
         if ($this->phpExecutable !== null) {
             return $this->phpExecutable;
