@@ -27,6 +27,9 @@ final class AnnotationJobLoaderListener implements EventSubscriberInterface
         $this->reader      = $reader;
     }
 
+    /**
+     * @inheritDoc
+     */
     public static function getSubscribedEvents() : array
     {
         return [

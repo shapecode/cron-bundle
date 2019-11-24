@@ -22,6 +22,9 @@ class CronJobRepository extends EntityRepository implements CronJobRepositoryInt
         return $object;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function findByCommand(string $command) : array
     {
         return $this->findBy([
@@ -29,6 +32,9 @@ class CronJobRepository extends EntityRepository implements CronJobRepositoryInt
         ]);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getKnownJobs() : Collection
     {
         $data = new ArrayCollection($this->findAll());

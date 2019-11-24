@@ -22,6 +22,9 @@ final class ResultAutoPruneListener implements EventSubscriberInterface
         $this->autoPrune      = $autoPrune;
     }
 
+    /**
+     * @inheritDoc
+     */
     public static function getSubscribedEvents() : array
     {
         return [

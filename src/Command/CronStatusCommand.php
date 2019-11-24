@@ -18,7 +18,7 @@ final class CronStatusCommand extends BaseCommand
         $this->setDescription('Displays the current status of cron jobs');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $style   = new CronStyle($input, $output);
         $jobRepo = $this->getCronJobRepository();

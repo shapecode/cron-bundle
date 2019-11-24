@@ -24,7 +24,7 @@ final class CronJobEditCommand extends BaseCommand
         $this->addOption('enable', null, InputOption::VALUE_REQUIRED, 'Enable or disable this cron (y or n)');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $style = new CronStyle($input, $output);
 

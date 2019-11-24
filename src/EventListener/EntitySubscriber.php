@@ -13,6 +13,9 @@ use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
 
 final class EntitySubscriber implements EventSubscriber
 {
+    /**
+     * @inheritDoc
+     */
     public function getSubscribedEvents() : array
     {
         return [

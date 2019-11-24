@@ -33,7 +33,7 @@ final class CronPruneLogsCommand extends Command
         $this->setDescription('Cleans the logs for each cron job.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $output->writeln('Cleaning logs for all cron jobs');
 

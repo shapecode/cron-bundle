@@ -46,7 +46,7 @@ class CronRunCommand extends BaseCommand
         $this->setDescription('Runs any currently schedule cron jobs');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $jobRepo = $this->getCronJobRepository();
         $style   = new CronStyle($input, $output);

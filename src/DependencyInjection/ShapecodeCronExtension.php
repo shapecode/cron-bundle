@@ -13,6 +13,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 final class ShapecodeCronExtension extends ConfigurableExtension implements PrependExtensionInterface
 {
+    /**
+     * @inheritDoc
+     */
     public function loadInternal(array $config, ContainerBuilder $container) : void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));

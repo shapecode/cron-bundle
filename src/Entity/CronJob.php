@@ -217,6 +217,9 @@ class CronJob extends AbstractEntity implements CronJobInterface
         return $this->nextRun;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getResults() : Collection
     {
         return $this->results;

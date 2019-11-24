@@ -31,7 +31,7 @@ final class CronProcessCommand extends BaseCommand
         $this->addArgument('cron', InputArgument::REQUIRED);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $style = new CronStyle($input, $output);
 

@@ -19,6 +19,9 @@ final class ServiceJobLoaderListener implements EventSubscriberInterface
         $this->jobs[] = CronJobMetadata::createByCommand($expression, $command, $arguments, $maxInstances);
     }
 
+    /**
+     * @inheritDoc
+     */
     public static function getSubscribedEvents() : array
     {
         return [
