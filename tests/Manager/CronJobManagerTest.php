@@ -10,7 +10,7 @@ use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class CronJobManagerTest extends TestCase
+final class CronJobManagerTest extends TestCase
 {
     public function testGetApplicationJobs() : void
     {

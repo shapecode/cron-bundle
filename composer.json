@@ -67,7 +67,8 @@
         "maglnet/composer-require-checker": "^2.0",
         "phpunit/phpunit": "^8.4",
         "symfony/var-dumper": "^4.3",
-        "icanhazstring/composer-unused": "^0.6.2"
+        "icanhazstring/composer-unused": "^0.6.2",
+        "dg/bypass-finals": "^1.1"
     },
     "suggest": {
         "shapecode/cron-sonata-admin-bundle": "to manage cronjobs in the sonata admin panel"

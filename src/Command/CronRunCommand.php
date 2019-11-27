@@ -10,34 +10,25 @@ use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
+use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Process\Exception\RuntimeException;
-use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use function count;
-use function file_exists;
 use function sleep;
 
-class CronRunCommand extends BaseCommand
+final class CronRunCommand extends BaseCommand
 {
-    /** @var string|null */
-    private $phpExecutable;
-
-    /** @var string|null */
-    private $consoleBin;
-
-    /** @var KernelInterface */
-    private $kernel;
+    /** @var CommandHelper */
+    private $commandHelper;
 
     public function __construct(
-        KernelInterface $kernel,
+        CommandHelper $commandHelper,
         ManagerRegistry $registry
     ) {
         parent::__construct($registry);
 
-        $this->kernel = $kernel;
+        $this->commandHelper = $commandHelper;
     }
 
     protected function configure() : void
@@ -143,14 +134,16 @@ class CronRunCommand extends BaseCommand
 
                 unset($processes[$key]);
             }
+
+            sleep(1);
         }
     }
 
     private function runJob(CronJobInterface $job) : Process
     {
         $command = [
-            $this->getPhpExecutable(),
-            $this->getConsoleBin(),
+            $this->commandHelper->getPhpExecutable(),
+            $this->commandHelper->getConsoleBin(),
             'shapecode:cron:process',
             $job->getId(),
         ];
@@ -160,44 +153,5 @@ class CronRunCommand extends BaseCommand
         $process->start();
 
         return $process;
-    }
-
-    private function getConsoleBin() : string
-    {
-        if ($this->consoleBin !== null) {
-            return $this->consoleBin;
-        }
-
-        $projectDir = $this->kernel->getProjectDir();
-
-        $consolePath = $projectDir . '/bin/console';
-
-        if (! file_exists($consolePath)) {
-            throw new RuntimeException('Missing console binary');
-        }
-
-        $consoleBin = $consolePath;
-
-        $this->consoleBin = $consoleBin;
-
-        return $consoleBin;
-    }
-
-    private function getPhpExecutable() : string
-    {
-        if ($this->phpExecutable !== null) {
-            return $this->phpExecutable;
-        }
-
-        $executableFinder = new PhpExecutableFinder();
-        $php              = $executableFinder->find();
-
-        if ($php === false) {
-            throw new RuntimeException('Unable to find the PHP executable.');
-        }
-
-        $this->phpExecutable = $php;
-
-        return $php;
     }
 }

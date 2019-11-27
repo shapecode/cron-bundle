@@ -12,10 +12,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 final class ServiceJobLoaderListener implements EventSubscriberInterface
 {
     /** @var CronJobMetadata[] */
-    protected $jobs = [];
+    private $jobs = [];
 
-    public function addCommand(string $expression, Command $command, ?string $arguments = null, int $maxInstances = 1) : void
-    {
+    public function addCommand(
+        string $expression,
+        Command $command,
+        ?string $arguments = null,
+        int $maxInstances = 1
+    ) : void {
         $this->jobs[] = CronJobMetadata::createByCommand($expression, $command, $arguments, $maxInstances);
     }
 

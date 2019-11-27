@@ -16,7 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 use function get_class;
+use function is_callable;
 use function number_format;
+use function sprintf;
 use function str_replace;
 
 final class CronProcessCommand extends BaseCommand
@@ -92,7 +94,14 @@ final class CronProcessCommand extends BaseCommand
         }
 
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
-        $style->{$block}($statusStr . ' in ' . number_format(($duration / 1000), 4) . ' seconds');
+
+        $seconds = $duration > 0 ? number_format(($duration / 1000), 4) : 0;
+        $message = sprintf('%s in %s seconds', $statusStr, $seconds);
+
+        $callback = [$style, $block];
+        if (is_callable($callback)) {
+            $callback($message);
+        }
 
         // Record the result
         $this->recordJobResult($job, $duration, $jobOutput, $statusCode);

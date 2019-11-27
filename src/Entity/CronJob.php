@@ -101,6 +101,16 @@ class CronJob extends AbstractEntity implements CronJobInterface
         $this->results = new ArrayCollection();
     }
 
+    public static function create(string $command, string $period) : self
+    {
+        $job = new self();
+        $job->setCommand($command);
+        $job->setPeriod($period);
+        $job->calculateNextRun();
+
+        return $job;
+    }
+
     public function setCommand(string $command) : void
     {
         $this->command = $command;

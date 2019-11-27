@@ -9,7 +9,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepositoryInterface;
 
-final class CronJobResultService implements CronJobResultServiceInterface
+class CronJobResultService implements CronJobResultServiceInterface
 {
     /** @var ManagerRegistry */
     private $registry;

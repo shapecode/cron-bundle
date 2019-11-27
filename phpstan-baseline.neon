@@ -1,9 +1,5 @@
 parameters:
 	ignoreErrors:
-		-
-			message: "#^Variable method call on Shapecode\\\\Bundle\\\\CronBundle\\\\Console\\\\Style\\\\CronStyle\\.$#"
-			count: 1
-			path: src/Command/CronProcessCommand.php
 
 		-
 			message: "#^Method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:dispatch\\(\\) invoked with 2 parameters, 1 required\\.$#"
@@ -14,11 +10,6 @@ parameters:
 			message: "#^Method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:dispatch\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 3
 			path: src/CronJob/GenericCleanUpHourlyCommand.php
-
-		-
-			message: "#^Class Shapecode\\\\Bundle\\\\CronBundle\\\\Event\\\\GenericCleanUpEvent extends deprecated class Symfony\\\\Component\\\\EventDispatcher\\\\Event\\:\nsince Symfony 4\\.3, use \"Symfony\\\\Contracts\\\\EventDispatcher\\\\Event\" instead$#"
-			count: 1
-			path: src/Event/GenericCleanUpEvent.php
 
 		-
 			message: "#^Method Symfony\\\\Contracts\\\\EventDispatcher\\\\EventDispatcherInterface\\:\\:dispatch\\(\\) invoked with 2 parameters, 1 required\\.$#"

@@ -6,9 +6,9 @@ namespace Shapecode\Bundle\CronBundle\Event;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
-class GenericCleanUpEvent extends Event
+final class GenericCleanUpEvent extends Event
 {
     public const HOURLY_START   = 'shapecode_cron.generic_cleanup.hourly.start';
     public const HOURLY_PROCESS = 'shapecode_cron.generic_cleanup.hourly.process';
@@ -19,10 +19,10 @@ class GenericCleanUpEvent extends Event
     public const DAILY_END     = 'shapecode_cron.generic_cleanup.daily.end';
 
     /** @var InputInterface */
-    protected $input;
+    private $input;
 
     /** @var OutputInterface */
-    protected $output;
+    private $output;
 
     public function __construct(InputInterface $input, OutputInterface $output)
     {

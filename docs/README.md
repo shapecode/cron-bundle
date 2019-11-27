@@ -25,27 +25,21 @@ Add the bundle to your project through composer:
 composer require shapecode/cron-bundle
 ```
 
-Add the bundle to your application kernel:
+Add the bundle to your config if it flex did not do it for you:
 ```php
 <?php
 
-// application/ApplicationKernel.php
-public function registerBundles()
-{
-	// ...
-	$bundles = array(
-	    // ...
-            new Shapecode\Bundle\CronBundle\ShapecodeCronBundle(),
-	);
+// config/bundles.php
+return [
     // ...
-
-    return $bundles;
-}
+    Shapecode\Bundle\CronBundle\ShapecodeCronBundle::class,
+    // ...
+];
 ```
 
 Update your DB schema ...
 
-... with Doctrine standard method ...
+... with Doctrine schema update method ...
 ```bash
 php bin/console doctrine:schema:update --force
 ```
@@ -58,6 +52,8 @@ Creating your own tasks with CronBundle couldn't be easier - all you have to do 
 ```php
 <?php
 
+declare(strict_types=1);
+
 namespace App\DemoBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
@@ -66,29 +62,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class DemoCommand
- * @package App\DemoBundle\Command
- * @author Nikita Loges
- *
  * @CronJob("*\/5 * * * *")
  * Will be executed every 5 minutes
  */
 class DemoCommand extends Command
 {
     
-    /**
-     * @inheritdoc
-     */
-    public function configure()
+    public function configure() : void
     {
 		// Must have a name configured
 		// ...
     }
     
-    /**
-     * @inheritdoc
-     */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output) : void
     {
 		// Your code here
     }
