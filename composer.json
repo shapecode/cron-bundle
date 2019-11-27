@@ -86,7 +86,7 @@
     "scripts": {
         "check": [
             "@crc",
-            "@cs-fix",
+            "composer unused",
             "@cs-check",
             "@phpstan"
         ],
