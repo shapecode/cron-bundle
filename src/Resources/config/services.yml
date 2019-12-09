@@ -8,16 +8,17 @@ services:
             $pruneInterval: '%shapecode_cron.results.interval%'
 
     # manager
-    Shapecode\Bundle\CronBundle\Manager\CronJobManager: ~
-    Shapecode\Bundle\CronBundle\Manager\CronJobManagerInterface: '@Shapecode\Bundle\CronBundle\Manager\CronJobManager'
+    Shapecode\Bundle\CronBundle\Manager\:
+        resource: '../../Manager/*'
 
     # commands
-    Shapecode\Bundle\CronBundle\Command\CronJobEditCommand: ~
-    Shapecode\Bundle\CronBundle\Command\CronProcessCommand: ~
-    Shapecode\Bundle\CronBundle\Command\CronPruneLogsCommand: ~
-    Shapecode\Bundle\CronBundle\Command\CronRunCommand: ~
-    Shapecode\Bundle\CronBundle\Command\CronScanCommand: ~
-    Shapecode\Bundle\CronBundle\Command\CronStatusCommand: ~
+    Shapecode\Bundle\CronBundle\Command\:
+        resource: '../../Command/*'
+
+    # controller
+    Shapecode\Bundle\CronBundle\Controller\:
+        resource: '../../Controller/*'
+        tags: ['controller.service_arguments']
 
     # cronjobs
     Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpDailyCommand:
@@ -32,13 +33,11 @@ services:
 
     # event listener
     Shapecode\Bundle\CronBundle\EventListener\EntitySubscriber:
-        tags:
-            - { name: doctrine.event_subscriber }
+        tags: ['doctrine.event_subscriber']
 
-    Shapecode\Bundle\CronBundle\EventListener\AnnotationJobLoaderListener: ~
-    Shapecode\Bundle\CronBundle\EventListener\ResultAutoPruneListener: ~
-    Shapecode\Bundle\CronBundle\EventListener\ServiceJobLoaderListener: ~
+    Shapecode\Bundle\CronBundle\EventListener\:
+        resource: '../../EventListener/*'
 
     # service
-    Shapecode\Bundle\CronBundle\Service\CronJobResultServiceInterface: '@Shapecode\Bundle\CronBundle\Service\CronJobResultService'
-    Shapecode\Bundle\CronBundle\Service\CronJobResultService: ~
+    Shapecode\Bundle\CronBundle\Service\:
+        resource: '../../Service/*'
