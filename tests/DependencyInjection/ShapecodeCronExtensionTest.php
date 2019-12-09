@@ -27,6 +27,9 @@ use Shapecode\Bundle\CronBundle\Service\CronJobResultServiceInterface;
 
 class ShapecodeCronExtensionTest extends AbstractExtensionTestCase
 {
+    /**
+     * @inheritDoc
+     */
     protected function getContainerExtensions() : array
     {
         return [
