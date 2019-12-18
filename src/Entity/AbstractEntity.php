@@ -40,6 +40,10 @@ abstract class AbstractEntity implements AbstractEntityInterface
 
     public function getId() : ?int
     {
+        if ($this->id !== null) {
+            return (int) $this->id;
+        }
+
         return $this->id;
     }
 
