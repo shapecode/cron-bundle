@@ -14,7 +14,7 @@ abstract class AbstractEntity implements AbstractEntityInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @var int|null
+     * @var string|int|null
      */
     protected $id;
 
