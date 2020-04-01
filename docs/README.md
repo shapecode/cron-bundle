@@ -1,5 +1,4 @@
-Shapecode - Cron Bundle
-=======================
+# Shapecode - Cron Bundle
 
 [![paypal](https://img.shields.io/badge/Donate-Paypal-blue.svg)](http://paypal.me/nloges)
 
@@ -15,8 +14,7 @@ Shapecode - Cron Bundle
 This bundle provides a simple interface for registering repeated scheduled
 tasks within your application.
 
-Install instructions
---------------------------------
+## Install instructions
 
 Installing this bundle can be done through these simple steps:
 
@@ -44,8 +42,7 @@ Update your DB schema ...
 php bin/console doctrine:schema:update --force
 ```
 
-Creating your own tasks
---------------------------------
+## Creating your own tasks
 
 Creating your own tasks with CronBundle couldn't be easier - all you have to do is create a normal Symfony2 Command (or ContainerAwareCommand) and tag it with the CronJob annotation, as demonstrated below:
 
@@ -91,8 +88,7 @@ $ php bin/console shapecode:cron:scan
 $ php bin/console shapecode:cron:run
 ```
 
-Running your cron jobs automatically
---------------------------------
+## Running your cron jobs automatically
 
 This bundle is designed around the idea that your tasks will be run with a minimum interval - the tasks will be run no more frequently than you schedule them, but they can only run when you trigger then (by running `bin/console shapecode:cron:run`).
 
@@ -101,3 +97,17 @@ To facilitate this, you can create a cron job on your system like this:
 */5 * * * * php /path/to/symfony/bin/console shapecode:cron:run
 ```
 This will schedule your tasks to run at most every 5 minutes - for instance, tasks which are scheduled to run every 3 minutes will only run every 5 minutes.
+
+## Config
+
+### Clean Up
+
+By default your logs will be cleared after 7 days to avoid to many entries in database.  
+You can change this by setting configs.
+
+```yaml
+shapecode_cron:
+    results:
+        auto_prune: true # default
+        interval: 7 days ago # default. A date time interval specification
+```
