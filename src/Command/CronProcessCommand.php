@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
+use function assert;
 use function get_class;
 use function is_callable;
 use function number_format;
@@ -37,8 +38,8 @@ final class CronProcessCommand extends BaseCommand
     {
         $style = new CronStyle($input, $output);
 
-        /** @var CronJobInterface|null $job */
         $job = $this->getCronJobRepository()->find($input->getArgument('cron'));
+        assert($job instanceof CronJobInterface || $job === null);
 
         if ($job === null) {
             $style->error('No job found');
@@ -95,7 +96,7 @@ final class CronProcessCommand extends BaseCommand
 
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
 
-        $seconds = $duration > 0 ? number_format(($duration / 1000), 4) : 0;
+        $seconds = $duration > 0 ? number_format($duration / 1000, 4) : 0;
         $message = sprintf('%s in %s seconds', $statusStr, $seconds);
 
         $callback = [$style, $block];
@@ -114,15 +115,15 @@ final class CronProcessCommand extends BaseCommand
         $cronJobRepository    = $this->getCronJobRepository();
         $cronJobResultManager = $this->getManager();
 
-        /** @var CronJobInterface $job */
         $job = $cronJobRepository->find($job->getId());
+        assert($job instanceof CronJobInterface);
 
         $className = $this->getCronJobResultRepository()->getClassName();
 
         $buffer = ! $output->isQuiet() ? $output->fetch() : '';
 
-        /** @var CronJobResultInterface $result */
         $result = new $className();
+        assert($result instanceof CronJobResultInterface);
         $result->setCronJob($job);
         $result->setRunTime($timeTaken);
         $result->setOutput($buffer);

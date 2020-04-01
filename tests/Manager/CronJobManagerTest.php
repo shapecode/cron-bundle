@@ -22,10 +22,12 @@ final class CronJobManagerTest extends TestCase
             ->expects(self::once())
             ->method('dispatch')
             ->willReturnCallback(
-                static function (LoadJobsEvent $event) use ($expression, $command) : void {
+                static function (LoadJobsEvent $event) use ($expression, $command) : LoadJobsEvent {
                     $event->addJob(
                         new CronJobMetadata($expression, $command)
                     );
+
+                    return $event;
                 }
             );
 

@@ -4,13 +4,15 @@ includes:
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-phpunit/rules.neon
-    - phpstan-baseline.neon
 
 parameters:
-	level: max
-	paths:
-		- src
-		- tests
+    level: max
+    paths:
+        - src
+        - tests
 
-	excludes_analyse:
-		- src/DependencyInjection/Configuration
+    excludes_analyse:
+        - src/DependencyInjection/Configuration
+
+    checkGenericClassInNonGenericObjectType: false
+    checkMissingIterableValueType: false

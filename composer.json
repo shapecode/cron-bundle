@@ -57,19 +57,17 @@
         "mtdowling/cron-expression": "^1.1"
     },
     "require-dev":{
-        "doctrine/coding-standard": "^6.0",
+        "doctrine/coding-standard": "~7.0",
         "roave/security-advisories": "dev-master",
-        "squizlabs/php_codesniffer": "^3.4",
-        "phpstan/phpstan": "^0.11.16",
-        "phpstan/phpstan-deprecation-rules": "^0.11.2",
-        "phpstan/phpstan-phpunit": "^0.11.2",
-        "phpstan/phpstan-strict-rules": "^0.11.1",
-        "maglnet/composer-require-checker": "^2.0",
-        "phpunit/phpunit": "^8.4",
-        "symfony/var-dumper": "^4.3",
-        "icanhazstring/composer-unused": "^0.6.2",
-        "dg/bypass-finals": "^1.1",
-        "matthiasnoback/symfony-dependency-injection-test": "^4.1"
+        "squizlabs/php_codesniffer": "~3.4",
+        "phpstan/phpstan": "~0.12",
+        "phpstan/phpstan-deprecation-rules": "~0.12",
+        "phpstan/phpstan-phpunit": "~0.12",
+        "phpstan/phpstan-strict-rules": "~0.12",
+        "maglnet/composer-require-checker": "~2.0",
+        "phpunit/phpunit": "~9.0",
+        "symfony/var-dumper": "~5.0",
+        "dg/bypass-finals": "~1.1"
     },
     "suggest": {
         "shapecode/cron-sonata-admin-bundle": "to manage cronjobs in the sonata admin panel"
@@ -91,6 +89,7 @@
             "@cs-check",
             "@phpstan"
         ],
+        "unused": "php composer-unused.phar --excludeDir=var",
         "phpstan": "./vendor/bin/phpstan analyse ./src",
         "crc": "./vendor/bin/composer-require-checker --config-file=./composer-require-checker.json",
         "phpunit": "./vendor/bin/phpunit",
@@ -104,5 +103,25 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "platform": {
+            "php": "7.3.13"
+        },
+        "preferred-install": "dist"
+    },
+    "funding": [
+        {
+            "type": "paypal",
+            "url": "http://paypal.me/nloges"
+        },
+        {
+            "type": "liberapay",
+            "url": "https://liberapay.com/nicklog"
+        },
+        {
+            "type": "other",
+            "url": "https://www.doctrine-project.org/sponsorship.html"
+        }
+    ]
 }

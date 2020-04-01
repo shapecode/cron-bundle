@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use function array_search;
+use function assert;
 use function count;
 use function in_array;
 use function sprintf;
@@ -133,8 +134,8 @@ final class CronScanCommand extends BaseCommand
     {
         $className = $this->getCronJobRepository()->getClassName();
 
-        /** @var CronJobInterface $newJob */
         $newJob = new $className();
+        assert($newJob instanceof CronJobInterface);
         $newJob->setCommand($metadata->getCommand());
         $newJob->setArguments($metadata->getArguments());
         $newJob->setDescription($metadata->getDescription());

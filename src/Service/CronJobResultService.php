@@ -8,6 +8,7 @@ use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepositoryInterface;
+use function assert;
 
 class CronJobResultService implements CronJobResultServiceInterface
 {
@@ -27,8 +28,8 @@ class CronJobResultService implements CronJobResultServiceInterface
     {
         $time = new DateTime($this->pruneInterval);
 
-        /** @var CronJobResultRepositoryInterface $repo */
         $repo = $this->registry->getRepository(CronJobResultInterface::class);
+        assert($repo instanceof CronJobResultRepositoryInterface);
 
         $repo->deleteOldLogs($time);
     }

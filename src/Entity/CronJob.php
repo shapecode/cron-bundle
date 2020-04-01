@@ -228,7 +228,7 @@ class CronJob extends AbstractEntity implements CronJobInterface
     }
 
     /**
-     * @inheritDoc
+     * @return ArrayCollection|PersistentCollection|Collection|CronJobResult[]
      */
     public function getResults() : Collection
     {

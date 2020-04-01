@@ -48,6 +48,7 @@ final class CronRunCommandTest extends TestCase
             if ($param === CronJobInterface::class) {
                 return $cronJobRepo;
             }
+
             if ($param === CronJobResultInterface::class) {
                 return $cronJobResultRepo;
             }

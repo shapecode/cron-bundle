@@ -10,7 +10,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use function assert;
 use function count;
+use function is_string;
 use function sprintf;
 
 final class CronJobEditCommand extends BaseCommand
@@ -28,8 +30,8 @@ final class CronJobEditCommand extends BaseCommand
     {
         $style = new CronStyle($input, $output);
 
-        /** @var string $jobName */
         $jobName = $input->getArgument('job');
+        assert(is_string($jobName));
 
         $jobRepo = $this->getCronJobRepository();
         $jobs    = $jobRepo->findByCommand($jobName);

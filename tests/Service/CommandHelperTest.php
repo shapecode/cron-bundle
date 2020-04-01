@@ -7,8 +7,8 @@ namespace Shapecode\Bundle\CronBundle\Tests\Service;
 use PHPUnit\Framework\TestCase;
 use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\HttpKernel\Kernel;
-use const PHP_BINARY;
 use function realpath;
+use const PHP_BINARY;
 
 class CommandHelperTest extends TestCase
 {
