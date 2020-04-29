@@ -15,7 +15,7 @@ final class CronJob extends Annotation
     private $arguments;
 
     /** @var int */
-    private $maxInstances = 1;
+    public $maxInstances = 1;
 
     public function getValue() : string
     {
