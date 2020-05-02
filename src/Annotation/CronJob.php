@@ -12,23 +12,8 @@ use Doctrine\Common\Annotations\Annotation;
 final class CronJob extends Annotation
 {
     /** @var string|null */
-    private $arguments;
+    public $arguments;
 
     /** @var int */
-    private $maxInstances = 1;
-
-    public function getValue() : string
-    {
-        return $this->value;
-    }
-
-    public function getArguments() : ?string
-    {
-        return $this->arguments;
-    }
-
-    public function getMaxInstances() : int
-    {
-        return $this->maxInstances;
-    }
+    public $maxInstances = 1;
 }
