@@ -98,6 +98,16 @@ To facilitate this, you can create a cron job on your system like this:
 ```
 This will schedule your tasks to run at most every 5 minutes - for instance, tasks which are scheduled to run every 3 minutes will only run every 5 minutes.
 
+## Disabling and enabling individual cron jobs from the command line
+
+This bundle allows you to easily disable and enable individual scheduled CronJobs from the command-line.
+
+To <strong>disable</strong> a CronJob, run: `bin/console shapecode:cron:edit your:cron:job --enable n`, where `your:cron:job` is the name of the CronJob in your project you would like to disable.
+
+Running the above will disable your CronJob until you manually enable it again. Please note that even though the `next_run` field on the `cron_job` table will still hold a datetime value, your disabled cronjob will not be run.
+
+To <strong>enable</strong> a cron job, run: `bin/console shapecode:cron:edit your:cron:job --enable y`, where `your:cron:job` is the name of the CronJob in your project you would like to enable.
+
 ## Config
 
 ### Clean Up
