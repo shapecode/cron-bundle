@@ -8,13 +8,12 @@ use Shapecode\Bundle\CronBundle\Event\LoadJobsEvent;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class CronJobManager implements CronJobManagerInterface
+class CronJobManager
 {
     /** @var CronJobMetadata[]|null */
-    private $jobs;
+    private ?array $jobs = null;
 
-    /** @var EventDispatcherInterface */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     public function __construct(EventDispatcherInterface $eventDispatcher)
     {
@@ -34,7 +33,7 @@ class CronJobManager implements CronJobManagerInterface
     }
 
     /**
-     * @inheritDoc
+     * @return CronJobMetadata[]
      */
     public function getJobs(): array
     {

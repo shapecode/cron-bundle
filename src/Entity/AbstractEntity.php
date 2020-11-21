@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Entity;
 
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-abstract class AbstractEntity implements AbstractEntityInterface
+abstract class AbstractEntity
 {
     /**
      * @ORM\Column(type="bigint", options={"unsigned"=true})
@@ -18,19 +19,11 @@ abstract class AbstractEntity implements AbstractEntityInterface
      */
     protected $id;
 
-    /**
-     * @ORM\Column(type="datetime")
-     *
-     * @var DateTime
-     */
-    protected $createdAt;
+    /** @ORM\Column(type="datetime") */
+    protected DateTimeInterface $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime")
-     *
-     * @var DateTime
-     */
-    protected $updatedAt;
+    /** @ORM\Column(type="datetime") */
+    protected DateTimeInterface $updatedAt;
 
     public function __construct()
     {
@@ -52,22 +45,17 @@ abstract class AbstractEntity implements AbstractEntityInterface
         $this->id = $id;
     }
 
-    public function setCreatedAt(DateTime $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setUpdatedAt(DateTime $updatedAt): void
+    public function setUpdatedAt(DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): DateTimeInterface
     {
         return $this->updatedAt;
     }

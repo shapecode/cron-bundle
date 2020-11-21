@@ -12,14 +12,11 @@ use function file_exists;
 
 final class CommandHelper
 {
-    /** @var string|null */
-    private $phpExecutable;
+    private ?string $phpExecutable = null;
 
-    /** @var string|null */
-    private $consoleBin;
+    private ?string $consoleBin = null;
 
-    /** @var KernelInterface */
-    private $kernel;
+    private KernelInterface $kernel;
 
     public function __construct(KernelInterface $kernel)
     {

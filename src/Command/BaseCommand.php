@@ -6,18 +6,17 @@ namespace Shapecode\Bundle\CronBundle\Command;
 
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
-use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
-use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
-use Shapecode\Bundle\CronBundle\Repository\CronJobRepositoryInterface;
-use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepositoryInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJob;
+use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
+use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
+use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository;
 use Symfony\Component\Console\Command\Command;
 
 use function assert;
 
 abstract class BaseCommand extends Command
 {
-    /** @var ManagerRegistry */
-    private $registry;
+    private ManagerRegistry $registry;
 
     public function __construct(
         ManagerRegistry $registry
@@ -32,18 +31,18 @@ abstract class BaseCommand extends Command
         return $this->registry->getManager();
     }
 
-    final protected function getCronJobRepository(): CronJobRepositoryInterface
+    final protected function getCronJobRepository(): CronJobRepository
     {
-        $repo = $this->registry->getRepository(CronJobInterface::class);
-        assert($repo instanceof CronJobRepositoryInterface);
+        $repo = $this->registry->getRepository(CronJob::class);
+        assert($repo instanceof CronJobRepository);
 
         return $repo;
     }
 
-    final protected function getCronJobResultRepository(): CronJobResultRepositoryInterface
+    final protected function getCronJobResultRepository(): CronJobResultRepository
     {
-        $repo = $this->registry->getRepository(CronJobResultInterface::class);
-        assert($repo instanceof CronJobResultRepositoryInterface);
+        $repo = $this->registry->getRepository(CronJobResult::class);
+        assert($repo instanceof CronJobResultRepository);
 
         return $repo;
     }

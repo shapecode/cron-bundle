@@ -3,35 +3,15 @@ services:
         autowire: true
         autoconfigure: true
         public: false
-        bind:
-            $autoPrune: '%shapecode_cron.results.auto_prune%'
-            $pruneInterval: '%shapecode_cron.results.interval%'
 
-    # manager
-    Shapecode\Bundle\CronBundle\Manager\:
-        resource: '../../Manager/*'
-
-    # commands
-    Shapecode\Bundle\CronBundle\Command\:
-        resource: '../../Command/*'
-
-    # controller
     Shapecode\Bundle\CronBundle\Controller\:
         resource: '../../Controller/*'
         tags: ['controller.service_arguments']
-
-    # cronjobs
-    Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpDailyCommand:
-        tags:
-            - { name: console.command }
-            - { name: shapecode_cron.cron_job, expression: '@daily' }
-
-    Shapecode\Bundle\CronBundle\CronJob\GenericCleanUpHourlyCommand:
-        tags:
-            - { name: console.command }
-            - { name: shapecode_cron.cron_job, expression: '@hourly' }
-
-    # event listener
+        
+    Shapecode\Bundle\CronBundle\Command\:
+        resource: '../../Command/*'
+        
+    Shapecode\Bundle\CronBundle\Manager\CronJobManager: ~
     Shapecode\Bundle\CronBundle\EventListener\EntitySubscriber:
         tags: ['doctrine.event_subscriber']
 
@@ -39,5 +19,4 @@ services:
         resource: '../../EventListener/*'
 
     # service
-    Shapecode\Bundle\CronBundle\Service\:
-        resource: '../../Service/*'
+    Shapecode\Bundle\CronBundle\Service\CommandHelper: ~

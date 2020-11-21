@@ -7,25 +7,26 @@ namespace Shapecode\Bundle\CronBundle\Repository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
-use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJob;
 
-use function assert;
-
-class CronJobRepository extends EntityRepository implements CronJobRepositoryInterface
+/**
+ * @method CronJob|null find($id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method CronJob[] findAll()
+ * @method CronJob|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CronJob[] findBy(array $criteria, array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ */
+class CronJobRepository extends EntityRepository
 {
-    public function findOneByCommand(string $command, int $number = 1): ?CronJobInterface
+    public function findOneByCommand(string $command, int $number = 1): ?CronJob
     {
-        $object = $this->findOneBy([
+        return $this->findOneBy([
             'command' => $command,
             'number'  => $number,
         ]);
-        assert($object instanceof CronJobInterface || $object === null);
-
-        return $object;
     }
 
     /**
-     * @inheritDoc
+     * @return CronJob[]
      */
     public function findByCommand(string $command): array
     {
@@ -35,13 +36,13 @@ class CronJobRepository extends EntityRepository implements CronJobRepositoryInt
     }
 
     /**
-     * @inheritDoc
+     * @return Collection|string[]
      */
     public function getKnownJobs(): Collection
     {
         $data = new ArrayCollection($this->findAll());
 
-        return $data->map(static function (CronJobInterface $o): string {
+        return $data->map(static function (CronJob $o): string {
             return $o->getCommand();
         });
     }

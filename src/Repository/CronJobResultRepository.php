@@ -6,36 +6,25 @@ namespace Shapecode\Bundle\CronBundle\Repository;
 
 use DateTime;
 use Doctrine\ORM\EntityRepository;
-use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
-use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 
-class CronJobResultRepository extends EntityRepository implements CronJobResultRepositoryInterface
+/**
+ * @method CronJobResult|null find($id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method CronJobResult[] findAll()
+ * @method CronJobResult|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CronJobResult[] findBy(array $criteria, array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ */
+class CronJobResultRepository extends EntityRepository
 {
     public function deleteOldLogs(DateTime $time): void
     {
-        $qb = $this->createQueryBuilder('d');
-        $qb->delete($this->getEntityName(), 'd');
-        $expr = $qb->expr();
-
-        $qb->andWhere($expr->lte('d.createdAt', ':createdAt'));
-        $qb->setParameter('createdAt', $time);
-
-        $qb->getQuery()->execute();
-    }
-
-    public function findMostRecent(?CronJobInterface $job = null): ?CronJobResultInterface
-    {
-        $qb   = $this->createQueryBuilder('p');
-        $expr = $qb->expr();
-
-        if ($job !== null) {
-            $qb->andWhere($expr->eq('p.cronJob', ':cronJob'));
-            $qb->setParameter('cronJob', $job->getId());
-        }
-
-        $qb->orderBy('p.createdAt', 'DESC');
-        $qb->setMaxResults(1);
-
-        return $qb->getQuery()->getOneOrNullResult();
+        $this->_em->createQuery(
+            <<<'DQL'
+                DELETE FROM Shapecode\Bundle\CronBundle\Entity\CronJobResult d 
+                WHERE d.createdAt <= :createdAt
+            DQL
+        )
+            ->setParameter('createdAt', $time)
+            ->execute();
     }
 }

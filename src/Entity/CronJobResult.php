@@ -5,69 +5,60 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Entity;
 
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+
+use function sprintf;
 
 /**
  * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository")
  */
-class CronJobResult extends AbstractEntity implements CronJobResultInterface
+class CronJobResult extends AbstractEntity
 {
-    /**
-     * @ORM\Column(type="datetime")
-     *
-     * @var DateTime
-     */
-    protected $runAt;
+    public const SUCCEEDED = 'succeeded';
+    public const FAILED    = 'failed';
+    public const SKIPPED   = 'skipped';
 
-    /**
-     * @ORM\Column(type="float")
-     *
-     * @var float
-     */
-    protected $runTime;
+    public const EXIT_CODE_SUCCEEDED = 0;
+    public const EXIT_CODE_FAILED    = 1;
+    public const EXIT_CODE_SKIPPED   = 2;
 
-    /**
-     * @ORM\Column(type="integer")
-     *
-     * @var int
-     */
-    protected $statusCode;
+    /** @ORM\Column(type="datetime") */
+    private DateTimeInterface $runAt;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null
-     */
-    protected $output;
+    /** @ORM\Column(type="float") */
+    private float $runTime;
+
+    /** @ORM\Column(type="integer") */
+    private int $statusCode;
+
+    /** @ORM\Column(type="text", nullable=true) */
+    private ?string $output;
 
     /**
      * @ORM\ManyToOne(targetEntity="Shapecode\Bundle\CronBundle\Entity\CronJob", inversedBy="results", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     *
-     * @var CronJobInterface
      */
-    protected $cronJob;
+    private CronJob $cronJob;
 
-    public function __construct()
-    {
+    public function __construct(
+        CronJob $cronJob,
+        float $runTime,
+        int $statusCode,
+        ?string $output
+    ) {
         parent::__construct();
 
-        $this->runAt = new DateTime();
+        $this->runTime    = $runTime;
+        $this->statusCode = $statusCode;
+        $this->output     = $output;
+        $this->cronJob    = $cronJob;
+        $this->runAt      = new DateTime();
     }
 
-    public function setRunAt(DateTime $runAt): void
-    {
-        $this->runAt = $runAt;
-    }
-
-    public function getRunAt(): DateTime
+    public function getRunAt(): DateTimeInterface
     {
         return $this->runAt;
-    }
-
-    public function setRunTime(float $runTime): void
-    {
-        $this->runTime = $runTime;
     }
 
     public function getRunTime(): float
@@ -80,33 +71,22 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
         return $this->statusCode;
     }
 
-    public function setStatusCode(int $statusCode): void
-    {
-        $this->statusCode = $statusCode;
-    }
-
-    public function setOutput(?string $output): void
-    {
-        $this->output = $output;
-    }
-
     public function getOutput(): ?string
     {
         return $this->output;
     }
 
-    public function setCronJob(CronJobInterface $job): void
-    {
-        $this->cronJob = $job;
-    }
-
-    public function getCronJob(): CronJobInterface
+    public function getCronJob(): CronJob
     {
         return $this->cronJob;
     }
 
     public function __toString(): string
     {
-        return $this->getCronJob()->getCommand() . ' - ' . $this->getRunAt()->format('d.m.Y H:i P');
+        return sprintf(
+            '%s - %s',
+            $this->getCronJob()->getCommand(),
+            $this->getRunAt()->format('d.m.Y H:i P')
+        );
     }
 }

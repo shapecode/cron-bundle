@@ -12,7 +12,7 @@ final class LoadJobsEvent extends Event
     public const NAME = 'shapecode_cron.load_jobs';
 
     /** @var CronJobMetadata[]|array */
-    private $jobs = [];
+    private array $jobs = [];
 
     public function addJob(CronJobMetadata $cronJobMetadata): void
     {

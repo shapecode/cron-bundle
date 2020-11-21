@@ -8,10 +8,7 @@ use DateTime;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use ReflectionClass;
-use Shapecode\Bundle\CronBundle\Entity\AbstractEntityInterface;
-
-use function assert;
+use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
 
 final class EntitySubscriber implements EventSubscriber
 {
@@ -38,14 +35,12 @@ final class EntitySubscriber implements EventSubscriber
 
     private function setDates(LifecycleEventArgs $args): void
     {
-        $entity     = $args->getObject();
-        $reflection = new ReflectionClass($entity);
+        $entity = $args->getObject();
 
-        if (! $reflection->implementsInterface(AbstractEntityInterface::class)) {
+        if (! $entity instanceof AbstractEntity) {
             return;
         }
 
-        assert($entity instanceof AbstractEntityInterface);
         $entity->setUpdatedAt(new DateTime());
     }
 }

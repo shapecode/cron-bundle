@@ -15,11 +15,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 final class AnnotationJobLoaderListener implements EventSubscriberInterface
 {
-    /** @var Application */
-    private $application;
+    private Application $application;
 
-    /** @var Reader */
-    private $reader;
+    private Reader $reader;
 
     public function __construct(KernelInterface $kernel, Reader $reader)
     {

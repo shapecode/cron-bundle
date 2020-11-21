@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
-use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,8 +13,9 @@ final class CronStatusCommand extends BaseCommand
 {
     protected function configure(): void
     {
-        $this->setName('shapecode:cron:status');
-        $this->setDescription('Displays the current status of cron jobs');
+        $this
+            ->setName('shapecode:cron:status')
+            ->setDescription('Displays the current status of cron jobs');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -25,7 +25,6 @@ final class CronStatusCommand extends BaseCommand
 
         $style->title('Cron job status');
 
-        /** @var CronJobInterface[] $cronJobs */
         $cronJobs = $jobRepo->findAll();
 
         $tableContent = [];

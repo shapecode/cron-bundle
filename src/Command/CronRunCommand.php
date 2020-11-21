@@ -7,8 +7,8 @@ namespace Shapecode\Bundle\CronBundle\Command;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
-use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
-use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJob;
+use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
 use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,8 +20,7 @@ use function sleep;
 
 final class CronRunCommand extends BaseCommand
 {
-    /** @var CommandHelper */
-    private $commandHelper;
+    private CommandHelper $commandHelper;
 
     public function __construct(
         CommandHelper $commandHelper,
@@ -34,8 +33,9 @@ final class CronRunCommand extends BaseCommand
 
     protected function configure(): void
     {
-        $this->setName('shapecode:cron:run');
-        $this->setDescription('Runs any currently schedule cron jobs');
+        $this
+            ->setName('shapecode:cron:run')
+            ->setDescription('Runs any currently schedule cron jobs');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -43,7 +43,6 @@ final class CronRunCommand extends BaseCommand
         $jobRepo = $this->getCronJobRepository();
         $style   = new CronStyle($input, $output);
 
-        /** @var CronJobInterface[] $jobsToRun */
         $jobsToRun = $jobRepo->findAll();
 
         $jobCount = count($jobsToRun);
@@ -109,7 +108,7 @@ final class CronRunCommand extends BaseCommand
             $style->info('No jobs were executed. See reasons below.');
         }
 
-        return CronJobResultInterface::EXIT_CODE_SUCCEEDED;
+        return CronJobResult::EXIT_CODE_SUCCEEDED;
     }
 
     /**
@@ -140,7 +139,7 @@ final class CronRunCommand extends BaseCommand
         }
     }
 
-    private function runJob(CronJobInterface $job): Process
+    private function runJob(CronJob $job): Process
     {
         $command = [
             $this->commandHelper->getPhpExecutable(),

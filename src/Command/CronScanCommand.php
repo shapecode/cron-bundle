@@ -7,27 +7,25 @@ namespace Shapecode\Bundle\CronBundle\Command;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
-use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
+use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
-use Shapecode\Bundle\CronBundle\Manager\CronJobManagerInterface;
+use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function array_search;
-use function assert;
 use function count;
 use function in_array;
 use function sprintf;
 
 final class CronScanCommand extends BaseCommand
 {
-    /** @var CronJobManagerInterface */
-    private $cronJobManager;
+    private CronJobManager $cronJobManager;
 
     public function __construct(
-        CronJobManagerInterface $manager,
+        CronJobManager $manager,
         ManagerRegistry $registry
     ) {
         $this->cronJobManager = $manager;
@@ -37,11 +35,13 @@ final class CronScanCommand extends BaseCommand
 
     protected function configure(): void
     {
-        $this->setName('shapecode:cron:scan');
-        $this->setDescription('Scans for any new or deleted cron jobs');
+        $this
+            ->setName('shapecode:cron:scan')
+            ->setDescription('Scans for any new or deleted cron jobs');
 
-        $this->addOption('keep-deleted', 'k', InputOption::VALUE_NONE, 'If set, deleted cron jobs will not be removed');
-        $this->addOption('default-disabled', 'd', InputOption::VALUE_NONE, 'If set, new jobs will be disabled by default');
+        $this
+            ->addOption('keep-deleted', 'k', InputOption::VALUE_NONE, 'If set, deleted cron jobs will not be removed')
+            ->addOption('default-disabled', 'd', InputOption::VALUE_NONE, 'If set, new jobs will be disabled by default');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -94,8 +94,6 @@ final class CronScanCommand extends BaseCommand
                     $currentJob->getMaxInstances() !== $jobMetadata->getMaxInstances() ||
                     $currentJob->getArguments() !== $jobMetadata->getArguments()
                 ) {
-                    $oldExpression = $currentJob->getPeriod();
-
                     $currentJob->setPeriod($jobMetadata->getClearedExpression());
                     $currentJob->setArguments($jobMetadata->getArguments());
                     $currentJob->setMaxInstances($jobMetadata->getMaxInstances());
@@ -134,17 +132,16 @@ final class CronScanCommand extends BaseCommand
 
     private function newJobFound(CronStyle $output, CronJobMetadata $metadata, bool $defaultDisabled, int $counter): void
     {
-        $className = $this->getCronJobRepository()->getClassName();
-
-        $newJob = new $className();
-        assert($newJob instanceof CronJobInterface);
-        $newJob->setCommand($metadata->getCommand());
-        $newJob->setArguments($metadata->getArguments());
-        $newJob->setDescription($metadata->getDescription());
-        $newJob->setPeriod($metadata->getClearedExpression());
-        $newJob->setEnable(! $defaultDisabled);
-        $newJob->setNumber($counter);
-        $newJob->calculateNextRun();
+        $newJob =
+            CronJob::create(
+                $metadata->getCommand(),
+                $metadata->getClearedExpression()
+            )
+            ->setArguments($metadata->getArguments())
+            ->setDescription($metadata->getDescription())
+            ->setEnable(! $defaultDisabled)
+            ->setNumber($counter)
+            ->calculateNextRun();
 
         $message = sprintf('Found new job: "%s" with period %s', $newJob->getFullCommand(), $newJob->getPeriod());
         $output->success($message);

@@ -11,9 +11,7 @@ use Doctrine\Common\Annotations\Annotation;
  */
 final class CronJob extends Annotation
 {
-    /** @var string|null */
-    public $arguments;
+    public ?string $arguments = null;
 
-    /** @var int */
-    public $maxInstances = 1;
+    public int $maxInstances = 1;
 }

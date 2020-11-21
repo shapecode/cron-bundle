@@ -12,41 +12,49 @@ use function trim;
 
 final class CronJobMetadata
 {
-    /** @var string */
-    private $expression;
+    private string $expression;
 
-    /** @var string */
-    private $command;
+    private string $command;
 
-    /** @var string|null */
-    private $description;
+    private ?string $description;
 
-    /** @var string|null */
-    private $arguments;
+    private ?string $arguments;
 
-    /** @var int */
-    private $maxInstances;
+    private int $maxInstances;
 
-    public function __construct(string $expression, string $command, ?string $arguments = null, int $maxInstances = 1)
-    {
+    public function __construct(
+        string $expression,
+        string $command,
+        ?string $arguments = null,
+        int $maxInstances = 1,
+        ?string $description = null
+    ) {
         $this->expression   = $expression;
         $this->command      = $command;
         $this->arguments    = $arguments;
         $this->maxInstances = $maxInstances;
+        $this->description  = $description;
     }
 
-    public static function createByCommand(string $expression, Command $command, ?string $arguments = null, int $maxInstances = 1): CronJobMetadata
-    {
+    public static function createByCommand(
+        string $expression,
+        Command $command,
+        ?string $arguments = null,
+        int $maxInstances = 1
+    ): CronJobMetadata {
         $commandName = $command->getName();
 
         if ($commandName === null) {
             throw new RuntimeException('command has to have a name provided');
         }
 
-        $meta = new static($expression, $commandName, $arguments, $maxInstances);
-        $meta->setDescription($command->getDescription());
-
-        return $meta;
+        return new static(
+            $expression,
+            $commandName,
+            $arguments,
+            $maxInstances,
+            $command->getDescription()
+        );
     }
 
     public function getExpression(): string
@@ -90,11 +98,6 @@ final class CronJobMetadata
     public function getDescription(): ?string
     {
         return $this->description;
-    }
-
-    public function setDescription(?string $description): void
-    {
-        $this->description = $description;
     }
 
     public function getMaxInstances(): int

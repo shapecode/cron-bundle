@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 final class ServiceJobLoaderListener implements EventSubscriberInterface
 {
     /** @var CronJobMetadata[] */
-    private $jobs = [];
+    private array $jobs = [];
 
     public function addCommand(
         string $expression,
