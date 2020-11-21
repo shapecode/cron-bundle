@@ -88,7 +88,8 @@
             "@crc",
             "@unuse",
             "@cs-check",
-            "@phpstan"
+            "@phpstan",
+            "@phpunit"
         ],
         "phpstan": "phpstan analyse --ansi",
         "phpstan-update-baseline": "phpstan analyse --ansi --generate-baseline phpstan-baseline.neon",
