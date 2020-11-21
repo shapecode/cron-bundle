@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 final class CronJobCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container) : void
+    public function process(ContainerBuilder $container): void
     {
         $definition = $container->findDefinition(ServiceJobLoaderListener::class);
 

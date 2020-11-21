@@ -8,6 +8,7 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepositoryInterface;
+
 use function assert;
 
 class CronJobResultService implements CronJobResultServiceInterface
@@ -24,7 +25,7 @@ class CronJobResultService implements CronJobResultServiceInterface
         $this->pruneInterval = $pruneInterval;
     }
 
-    public function prune() : void
+    public function prune(): void
     {
         $time = new DateTime($this->pruneInterval);
 

@@ -16,7 +16,7 @@ final class ShapecodeCronExtension extends ConfigurableExtension implements Prep
     /**
      * @inheritDoc
      */
-    public function loadInternal(array $config, ContainerBuilder $container) : void
+    public function loadInternal(array $config, ContainerBuilder $container): void
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
@@ -25,7 +25,7 @@ final class ShapecodeCronExtension extends ConfigurableExtension implements Prep
         $container->setParameter('shapecode_cron.results.interval', $config['results']['interval']);
     }
 
-    public function prepend(ContainerBuilder $container) : void
+    public function prepend(ContainerBuilder $container): void
     {
         $container->prependExtensionConfig('doctrine', [
             'orm' => [

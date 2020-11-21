@@ -14,6 +14,7 @@ use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function array_search;
 use function assert;
 use function count;
@@ -34,7 +35,7 @@ final class CronScanCommand extends BaseCommand
         parent::__construct($registry);
     }
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('shapecode:cron:scan');
         $this->setDescription('Scans for any new or deleted cron jobs');
@@ -43,7 +44,7 @@ final class CronScanCommand extends BaseCommand
         $this->addOption('default-disabled', 'd', InputOption::VALUE_NONE, 'If set, new jobs will be disabled by default');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style = new CronStyle($input, $output);
         $style->comment('Scan for cronjobs started at ' . (new DateTime())->format('r'));
@@ -88,7 +89,8 @@ final class CronScanCommand extends BaseCommand
                 $style->text('expression: ' . $jobMetadata->getClearedExpression());
                 $style->text('instances: ' . $jobMetadata->getMaxInstances());
 
-                if ($currentJob->getPeriod() !== $jobMetadata->getClearedExpression() ||
+                if (
+                    $currentJob->getPeriod() !== $jobMetadata->getClearedExpression() ||
                     $currentJob->getMaxInstances() !== $jobMetadata->getMaxInstances() ||
                     $currentJob->getArguments() !== $jobMetadata->getArguments()
                 ) {
@@ -130,7 +132,7 @@ final class CronScanCommand extends BaseCommand
         return CronJobResult::EXIT_CODE_SUCCEEDED;
     }
 
-    private function newJobFound(CronStyle $output, CronJobMetadata $metadata, bool $defaultDisabled, int $counter) : void
+    private function newJobFound(CronStyle $output, CronJobMetadata $metadata, bool $defaultDisabled, int $counter): void
     {
         $className = $this->getCronJobRepository()->getClassName();
 

@@ -9,12 +9,9 @@ use Doctrine\Common\Persistence\ObjectRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 
-/**
- * Interface CronJobResultRepositoryInterface
- */
 interface CronJobResultRepositoryInterface extends ObjectRepository
 {
-    public function deleteOldLogs(DateTime $time) : void;
+    public function deleteOldLogs(DateTime $time): void;
 
-    public function findMostRecent(?CronJobInterface $job = null) : ?CronJobResultInterface;
+    public function findMostRecent(?CronJobInterface $job = null): ?CronJobResultInterface;
 }

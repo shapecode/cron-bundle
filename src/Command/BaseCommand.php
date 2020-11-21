@@ -11,6 +11,7 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepositoryInterface;
 use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepositoryInterface;
 use Symfony\Component\Console\Command\Command;
+
 use function assert;
 
 abstract class BaseCommand extends Command
@@ -26,12 +27,12 @@ abstract class BaseCommand extends Command
         $this->registry = $registry;
     }
 
-    final protected function getManager() : ObjectManager
+    final protected function getManager(): ObjectManager
     {
         return $this->registry->getManager();
     }
 
-    final protected function getCronJobRepository() : CronJobRepositoryInterface
+    final protected function getCronJobRepository(): CronJobRepositoryInterface
     {
         $repo = $this->registry->getRepository(CronJobInterface::class);
         assert($repo instanceof CronJobRepositoryInterface);
@@ -39,7 +40,7 @@ abstract class BaseCommand extends Command
         return $repo;
     }
 
-    final protected function getCronJobResultRepository() : CronJobResultRepositoryInterface
+    final protected function getCronJobResultRepository(): CronJobResultRepositoryInterface
     {
         $repo = $this->registry->getRepository(CronJobResultInterface::class);
         assert($repo instanceof CronJobResultRepositoryInterface);

@@ -14,7 +14,7 @@ final class LoadJobsEvent extends Event
     /** @var CronJobMetadata[]|array */
     private $jobs = [];
 
-    public function addJob(CronJobMetadata $cronJobMetadata) : void
+    public function addJob(CronJobMetadata $cronJobMetadata): void
     {
         $this->jobs[] = $cronJobMetadata;
     }
@@ -22,7 +22,7 @@ final class LoadJobsEvent extends Event
     /**
      * @return CronJobMetadata[]
      */
-    public function getJobs() : array
+    public function getJobs(): array
     {
         return $this->jobs;
     }

@@ -8,11 +8,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
+
 use function assert;
 
 class CronJobRepository extends EntityRepository implements CronJobRepositoryInterface
 {
-    public function findOneByCommand(string $command, int $number = 1) : ?CronJobInterface
+    public function findOneByCommand(string $command, int $number = 1): ?CronJobInterface
     {
         $object = $this->findOneBy([
             'command' => $command,
@@ -26,7 +27,7 @@ class CronJobRepository extends EntityRepository implements CronJobRepositoryInt
     /**
      * @inheritDoc
      */
-    public function findByCommand(string $command) : array
+    public function findByCommand(string $command): array
     {
         return $this->findBy([
             'command' => $command,
@@ -36,11 +37,11 @@ class CronJobRepository extends EntityRepository implements CronJobRepositoryInt
     /**
      * @inheritDoc
      */
-    public function getKnownJobs() : Collection
+    public function getKnownJobs(): Collection
     {
         $data = new ArrayCollection($this->findAll());
 
-        return $data->map(static function (CronJobInterface $o) : string {
+        return $data->map(static function (CronJobInterface $o): string {
             return $o->getCommand();
         });
     }

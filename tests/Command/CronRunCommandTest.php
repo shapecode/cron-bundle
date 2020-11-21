@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Kernel;
 
 final class CronRunCommandTest extends TestCase
 {
-    public function testRun() : void
+    public function testRun(): void
     {
         $kernel = $this->createMock(Kernel::class);
         $kernel->method('getProjectDir')->willReturn(__DIR__);

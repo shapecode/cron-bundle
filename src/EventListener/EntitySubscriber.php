@@ -10,6 +10,7 @@ use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use ReflectionClass;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntityInterface;
+
 use function assert;
 
 final class EntitySubscriber implements EventSubscriber
@@ -17,7 +18,7 @@ final class EntitySubscriber implements EventSubscriber
     /**
      * @inheritDoc
      */
-    public function getSubscribedEvents() : array
+    public function getSubscribedEvents(): array
     {
         return [
             Events::prePersist,
@@ -25,17 +26,17 @@ final class EntitySubscriber implements EventSubscriber
         ];
     }
 
-    public function prePersist(LifecycleEventArgs $args) : void
+    public function prePersist(LifecycleEventArgs $args): void
     {
         $this->setDates($args);
     }
 
-    public function preUpdate(LifecycleEventArgs $args) : void
+    public function preUpdate(LifecycleEventArgs $args): void
     {
         $this->setDates($args);
     }
 
-    private function setDates(LifecycleEventArgs $args) : void
+    private function setDates(LifecycleEventArgs $args): void
     {
         $entity     = $args->getObject();
         $reflection = new ReflectionClass($entity);

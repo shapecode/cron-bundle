@@ -25,14 +25,14 @@ final class ResultAutoPruneListener implements EventSubscriberInterface
     /**
      * @inheritDoc
      */
-    public static function getSubscribedEvents() : array
+    public static function getSubscribedEvents(): array
     {
         return [
             GenericCleanUpEvent::HOURLY_PROCESS => 'onHourlyProcess',
         ];
     }
 
-    public function onHourlyProcess(GenericCleanUpEvent $genericCleanUpEvent) : void
+    public function onHourlyProcess(GenericCleanUpEvent $genericCleanUpEvent): void
     {
         if (! $this->autoPrune) {
             return;

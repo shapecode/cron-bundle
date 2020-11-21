@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
+
 use function assert;
 use function get_class;
 use function is_callable;
@@ -27,14 +28,14 @@ final class CronProcessCommand extends BaseCommand
     /** @var Stopwatch|null */
     private $stopwatch;
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('shapecode:cron:process');
 
         $this->addArgument('cron', InputArgument::REQUIRED);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style = new CronStyle($input, $output);
 
@@ -110,7 +111,7 @@ final class CronProcessCommand extends BaseCommand
         return $statusCode;
     }
 
-    private function recordJobResult(CronJobInterface $job, float $timeTaken, BufferedOutput $output, int $statusCode) : void
+    private function recordJobResult(CronJobInterface $job, float $timeTaken, BufferedOutput $output, int $statusCode): void
     {
         $cronJobRepository    = $this->getCronJobRepository();
         $cronJobResultManager = $this->getManager();
@@ -133,7 +134,7 @@ final class CronProcessCommand extends BaseCommand
         $cronJobResultManager->flush();
     }
 
-    private function getStopWatch() : Stopwatch
+    private function getStopWatch(): Stopwatch
     {
         if ($this->stopwatch === null) {
             $this->stopwatch = new Stopwatch();

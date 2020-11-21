@@ -12,7 +12,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class CronJobManagerTest extends TestCase
 {
-    public function testGetApplicationJobs() : void
+    public function testGetApplicationJobs(): void
     {
         $expression = '* * * * *';
         $command    = 'value';
@@ -22,7 +22,7 @@ final class CronJobManagerTest extends TestCase
             ->expects(self::once())
             ->method('dispatch')
             ->willReturnCallback(
-                static function (LoadJobsEvent $event) use ($expression, $command) : LoadJobsEvent {
+                static function (LoadJobsEvent $event) use ($expression, $command): LoadJobsEvent {
                     $event->addJob(
                         new CronJobMetadata($expression, $command)
                     );
@@ -33,20 +33,17 @@ final class CronJobManagerTest extends TestCase
 
         $cronJobManager = new CronJobManager($eventDispatcher);
 
-        /** @var CronJobMetadata[] $jobs */
         $jobs = $cronJobManager->getJobs();
 
-        $this->assertCount(1, $jobs);
-        $this->assertInstanceOf(CronJobMetadata::class, $jobs[0]);
-        $this->assertEquals($command, $jobs[0]->getCommand());
-        $this->assertEquals($expression, $jobs[0]->getExpression());
+        self::assertCount(1, $jobs);
+        self::assertEquals($command, $jobs[0]->getCommand());
+        self::assertEquals($expression, $jobs[0]->getExpression());
 
         // Run second time to assert the same result.
         $jobs = $cronJobManager->getJobs();
 
-        $this->assertCount(1, $jobs);
-        $this->assertInstanceOf(CronJobMetadata::class, $jobs[0]);
-        $this->assertEquals($command, $jobs[0]->getCommand());
-        $this->assertEquals($expression, $jobs[0]->getExpression());
+        self::assertCount(1, $jobs);
+        self::assertEquals($command, $jobs[0]->getCommand());
+        self::assertEquals($expression, $jobs[0]->getExpression());
     }
 }

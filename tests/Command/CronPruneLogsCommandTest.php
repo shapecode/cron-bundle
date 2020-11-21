@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 
 final class CronPruneLogsCommandTest extends TestCase
 {
-    public function testRun() : void
+    public function testRun(): void
     {
         $prune   = $this->createMock(CronJobResultServiceInterface::class);
         $command = new CronPruneLogsCommand($prune);

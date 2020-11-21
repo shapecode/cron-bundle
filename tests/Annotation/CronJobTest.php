@@ -10,9 +10,11 @@ use ReflectionClass;
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Shapecode\Bundle\CronBundle\Tests\Annotation\data\TestModel;
 
+use function assert;
+
 final class CronJobTest extends TestCase
 {
-    public function testCreation() : void
+    public function testCreation(): void
     {
         $annotation = new CronJob([
             'value' => 'pwd',
@@ -33,12 +35,13 @@ final class CronJobTest extends TestCase
         self::assertEquals(5, $annotation->maxInstances);
     }
 
-    public function testReader() : void
+    public function testReader(): void
     {
         $reader = new AnnotationReader();
 
         $ref        = new ReflectionClass(TestModel::class);
         $annotation = $reader->getClassAnnotation($ref, CronJob::class);
+        assert($annotation instanceof CronJob);
 
         self::assertEquals('ls', $annotation->value);
         self::assertEquals('-l', $annotation->arguments);

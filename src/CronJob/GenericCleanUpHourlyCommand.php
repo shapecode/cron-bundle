@@ -22,12 +22,12 @@ final class GenericCleanUpHourlyCommand extends Command
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('shapecode:cron:generic-cleanup:hourly');
     }
 
-    public function execute(InputInterface $input, OutputInterface $output) : int
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         // start cron
         $event = new GenericCleanUpEvent($input, $output);

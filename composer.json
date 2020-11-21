@@ -57,7 +57,8 @@
         "dragonmantank/cron-expression": "^3.0"
     },
     "require-dev":{
-        "doctrine/coding-standard": "~7.0",
+        "icanhazstring/composer-unused": "~0.7",
+        "doctrine/coding-standard": "~8.2",
         "roave/security-advisories": "dev-master",
         "squizlabs/php_codesniffer": "~3.4",
         "phpstan/phpstan": "~0.12",
@@ -85,16 +86,17 @@
     "scripts": {
         "check": [
             "@crc",
-            "composer unused",
+            "@unuse",
             "@cs-check",
             "@phpstan"
         ],
-        "unused": "php composer-unused.phar --excludeDir=var",
-        "phpstan": "./vendor/bin/phpstan analyse ./src",
-        "crc": "./vendor/bin/composer-require-checker --config-file=./composer-require-checker.json",
-        "phpunit": "./vendor/bin/phpunit",
-        "cs-fix": "./vendor/bin/phpcbf",
-        "cs-check": "./vendor/bin/phpcs -s"
+        "phpstan": "phpstan analyse --ansi",
+        "phpstan-update-baseline": "phpstan analyse --ansi --generate-baseline phpstan-baseline.neon",
+        "crc": "vendor/bin/composer-require-checker --config-file=./composer-require-checker.json --ansi",
+        "phpunit": "phpunit --colors=always",
+        "cs-check": "phpcs -s",
+        "cs-fix": "phpcbf",
+        "unuse": "composer unused --excludeDir=vendor --excludeDir=var --excludeDir=node_modules --ansi"
     },
     "extra": {
         "branch-alias": {

@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function assert;
 use function count;
 use function is_string;
@@ -17,7 +18,7 @@ use function sprintf;
 
 final class CronJobEditCommand extends BaseCommand
 {
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('shapecode:cron:edit');
         $this->setDescription('Changes the status of a cron job');
@@ -26,7 +27,7 @@ final class CronJobEditCommand extends BaseCommand
         $this->addOption('enable', null, InputOption::VALUE_REQUIRED, 'Enable or disable this cron (y or n)');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style = new CronStyle($input, $output);
 

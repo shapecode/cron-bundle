@@ -11,7 +11,7 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface;
 
 class CronJobResultRepository extends EntityRepository implements CronJobResultRepositoryInterface
 {
-    public function deleteOldLogs(DateTime $time) : void
+    public function deleteOldLogs(DateTime $time): void
     {
         $qb = $this->createQueryBuilder('d');
         $qb->delete($this->getEntityName(), 'd');
@@ -23,7 +23,7 @@ class CronJobResultRepository extends EntityRepository implements CronJobResultR
         $qb->getQuery()->execute();
     }
 
-    public function findMostRecent(?CronJobInterface $job = null) : ?CronJobResultInterface
+    public function findMostRecent(?CronJobInterface $job = null): ?CronJobResultInterface
     {
         $qb   = $this->createQueryBuilder('p');
         $expr = $qb->expr();

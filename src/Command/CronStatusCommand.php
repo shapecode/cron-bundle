@@ -12,13 +12,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 final class CronStatusCommand extends BaseCommand
 {
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('shapecode:cron:status');
         $this->setDescription('Displays the current status of cron jobs');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style   = new CronStyle($input, $output);
         $jobRepo = $this->getCronJobRepository();

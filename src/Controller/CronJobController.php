@@ -20,7 +20,7 @@ final class CronJobController
         $this->kernel = $kernel;
     }
 
-    public function runAction() : Response
+    public function runAction(): Response
     {
         $application = new Application($this->kernel);
         $application->setAutoExit(false);

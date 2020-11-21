@@ -21,12 +21,12 @@ final class CronJobRunning
         $this->process = $process;
     }
 
-    public function getCronJob() : CronJobInterface
+    public function getCronJob(): CronJobInterface
     {
         return $this->cronJob;
     }
 
-    public function getProcess() : Process
+    public function getProcess(): Process
     {
         return $this->process;
     }

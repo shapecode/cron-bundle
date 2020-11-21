@@ -7,12 +7,14 @@ namespace Shapecode\Bundle\CronBundle\Tests\Service;
 use PHPUnit\Framework\TestCase;
 use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\HttpKernel\Kernel;
+
 use function realpath;
+
 use const PHP_BINARY;
 
 class CommandHelperTest extends TestCase
 {
-    public function testGetConsoleBin() : void
+    public function testGetConsoleBin(): void
     {
         $path = realpath(__DIR__ . '/../Fixtures');
 
@@ -24,7 +26,7 @@ class CommandHelperTest extends TestCase
         self::assertEquals($path . '/bin/console', $helper->getConsoleBin());
     }
 
-    public function testGetPhpExecutable() : void
+    public function testGetPhpExecutable(): void
     {
         $kernel = $this->createMock(Kernel::class);
         $kernel->method('getProjectDir')->willReturn(__DIR__);

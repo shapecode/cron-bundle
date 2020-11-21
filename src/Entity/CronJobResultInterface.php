@@ -16,23 +16,23 @@ interface CronJobResultInterface extends AbstractEntityInterface
     public const EXIT_CODE_FAILED    = 1;
     public const EXIT_CODE_SKIPPED   = 2;
 
-    public function setRunAt(DateTime $runAt) : void;
+    public function setRunAt(DateTime $runAt): void;
 
-    public function getRunAt() : DateTime;
+    public function getRunAt(): DateTime;
 
-    public function setRunTime(float $runTime) : void;
+    public function setRunTime(float $runTime): void;
 
-    public function getRunTime() : float;
+    public function getRunTime(): float;
 
-    public function setStatusCode(int $result) : void;
+    public function setStatusCode(int $result): void;
 
-    public function getStatusCode() : int;
+    public function getStatusCode(): int;
 
-    public function setOutput(?string $output) : void;
+    public function setOutput(?string $output): void;
 
-    public function getOutput() : ?string;
+    public function getOutput(): ?string;
 
-    public function setCronJob(CronJobInterface $job) : void;
+    public function setCronJob(CronJobInterface $job): void;
 
-    public function getCronJob() : CronJobInterface;
+    public function getCronJob(): CronJobInterface;
 }

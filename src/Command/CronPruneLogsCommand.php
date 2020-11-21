@@ -22,7 +22,7 @@ final class CronPruneLogsCommand extends Command
         $this->resultService = $resultService;
     }
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('shapecode:cron:result:prune');
 
@@ -33,7 +33,7 @@ final class CronPruneLogsCommand extends Command
         $this->setDescription('Cleans the logs for each cron job.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Cleaning logs for all cron jobs');
 

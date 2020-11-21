@@ -42,7 +42,7 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="Shapecode\Bundle\CronBundle\Entity\CronJob", inversedBy="results", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      *
      * @var CronJobInterface
      */
@@ -55,57 +55,57 @@ class CronJobResult extends AbstractEntity implements CronJobResultInterface
         $this->runAt = new DateTime();
     }
 
-    public function setRunAt(DateTime $runAt) : void
+    public function setRunAt(DateTime $runAt): void
     {
         $this->runAt = $runAt;
     }
 
-    public function getRunAt() : DateTime
+    public function getRunAt(): DateTime
     {
         return $this->runAt;
     }
 
-    public function setRunTime(float $runTime) : void
+    public function setRunTime(float $runTime): void
     {
         $this->runTime = $runTime;
     }
 
-    public function getRunTime() : float
+    public function getRunTime(): float
     {
         return $this->runTime;
     }
 
-    public function getStatusCode() : int
+    public function getStatusCode(): int
     {
         return $this->statusCode;
     }
 
-    public function setStatusCode(int $statusCode) : void
+    public function setStatusCode(int $statusCode): void
     {
         $this->statusCode = $statusCode;
     }
 
-    public function setOutput(?string $output) : void
+    public function setOutput(?string $output): void
     {
         $this->output = $output;
     }
 
-    public function getOutput() : ?string
+    public function getOutput(): ?string
     {
         return $this->output;
     }
 
-    public function setCronJob(CronJobInterface $job) : void
+    public function setCronJob(CronJobInterface $job): void
     {
         $this->cronJob = $job;
     }
 
-    public function getCronJob() : CronJobInterface
+    public function getCronJob(): CronJobInterface
     {
         return $this->cronJob;
     }
 
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->getCronJob()->getCommand() . ' - ' . $this->getRunAt()->format('d.m.Y H:i P');
     }

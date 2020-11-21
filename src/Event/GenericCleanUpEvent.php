@@ -30,12 +30,12 @@ final class GenericCleanUpEvent extends Event
         $this->output = $output;
     }
 
-    public function getInput() : InputInterface
+    public function getInput(): InputInterface
     {
         return $this->input;
     }
 
-    public function getOutput() : OutputInterface
+    public function getOutput(): OutputInterface
     {
         return $this->output;
     }

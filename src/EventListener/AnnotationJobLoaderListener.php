@@ -30,14 +30,14 @@ final class AnnotationJobLoaderListener implements EventSubscriberInterface
     /**
      * @inheritDoc
      */
-    public static function getSubscribedEvents() : array
+    public static function getSubscribedEvents(): array
     {
         return [
             LoadJobsEvent::NAME => 'onLoadJobs',
         ];
     }
 
-    public function onLoadJobs(LoadJobsEvent $event) : void
+    public function onLoadJobs(LoadJobsEvent $event): void
     {
         foreach ($this->application->all() as $command) {
             // Check for an @CronJob annotation

@@ -14,6 +14,7 @@ use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+
 use function count;
 use function sleep;
 
@@ -31,13 +32,13 @@ final class CronRunCommand extends BaseCommand
         $this->commandHelper = $commandHelper;
     }
 
-    protected function configure() : void
+    protected function configure(): void
     {
         $this->setName('shapecode:cron:run');
         $this->setDescription('Runs any currently schedule cron jobs');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $jobRepo = $this->getCronJobRepository();
         $style   = new CronStyle($input, $output);
@@ -114,7 +115,7 @@ final class CronRunCommand extends BaseCommand
     /**
      * @param CronJobRunning[] $processes
      */
-    public function waitProcesses(array $processes) : void
+    public function waitProcesses(array $processes): void
     {
         $em = $this->getManager();
 
@@ -139,7 +140,7 @@ final class CronRunCommand extends BaseCommand
         }
     }
 
-    private function runJob(CronJobInterface $job) : Process
+    private function runJob(CronJobInterface $job): Process
     {
         $command = [
             $this->commandHelper->getPhpExecutable(),

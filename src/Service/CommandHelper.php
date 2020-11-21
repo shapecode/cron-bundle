@@ -7,6 +7,7 @@ namespace Shapecode\Bundle\CronBundle\Service;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\PhpExecutableFinder;
+
 use function file_exists;
 
 final class CommandHelper
@@ -25,7 +26,7 @@ final class CommandHelper
         $this->kernel = $kernel;
     }
 
-    public function getConsoleBin() : string
+    public function getConsoleBin(): string
     {
         if ($this->consoleBin !== null) {
             return $this->consoleBin;
@@ -46,7 +47,7 @@ final class CommandHelper
         return $consoleBin;
     }
 
-    public function getPhpExecutable() : string
+    public function getPhpExecutable(): string
     {
         if ($this->phpExecutable !== null) {
             return $this->phpExecutable;

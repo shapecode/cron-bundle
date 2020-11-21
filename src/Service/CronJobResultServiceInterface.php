@@ -6,5 +6,5 @@ namespace Shapecode\Bundle\CronBundle\Service;
 
 interface CronJobResultServiceInterface
 {
-    public function prune() : void;
+    public function prune(): void;
 }

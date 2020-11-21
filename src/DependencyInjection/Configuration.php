@@ -11,7 +11,7 @@ final class Configuration implements ConfigurationInterface
 {
     private const ROOT_NODE = 'shapecode_cron';
 
-    public function getConfigTreeBuilder() : TreeBuilder
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder(self::ROOT_NODE);
         $rootNode    = $treeBuilder->getRootNode();

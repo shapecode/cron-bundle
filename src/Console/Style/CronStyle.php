@@ -8,12 +8,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class CronStyle extends SymfonyStyle
 {
-    public function info(string $message) : void
+    public function info(string $message): void
     {
         $this->block($message, 'Info', 'fg=white;bg=blue', ' ', true);
     }
 
-    public function notice(string $message) : void
+    public function notice(string $message): void
     {
         $this->block($message, 'Note', 'fg=black;bg=yellow', ' ', true);
     }

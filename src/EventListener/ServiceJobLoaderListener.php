@@ -19,21 +19,21 @@ final class ServiceJobLoaderListener implements EventSubscriberInterface
         Command $command,
         ?string $arguments = null,
         int $maxInstances = 1
-    ) : void {
+    ): void {
         $this->jobs[] = CronJobMetadata::createByCommand($expression, $command, $arguments, $maxInstances);
     }
 
     /**
      * @inheritDoc
      */
-    public static function getSubscribedEvents() : array
+    public static function getSubscribedEvents(): array
     {
         return [
             LoadJobsEvent::NAME => 'onLoadJobs',
         ];
     }
 
-    public function onLoadJobs(LoadJobsEvent $event) : void
+    public function onLoadJobs(LoadJobsEvent $event): void
     {
         foreach ($this->jobs as $job) {
             $event->addJob($job);

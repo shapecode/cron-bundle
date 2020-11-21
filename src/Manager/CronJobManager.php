@@ -24,7 +24,7 @@ class CronJobManager implements CronJobManagerInterface
     /**
      * @return CronJobMetadata[]
      */
-    private function initJobs() : array
+    private function initJobs(): array
     {
         $event = new LoadJobsEvent();
 
@@ -36,7 +36,7 @@ class CronJobManager implements CronJobManagerInterface
     /**
      * @inheritDoc
      */
-    public function getJobs() : array
+    public function getJobs(): array
     {
         if ($this->jobs === null) {
             $this->jobs = $this->initJobs();

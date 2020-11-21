@@ -11,15 +11,15 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 
 interface CronJobRepositoryInterface extends ObjectRepository
 {
-    public function findOneByCommand(string $command, int $number = 1) : ?CronJobInterface;
+    public function findOneByCommand(string $command, int $number = 1): ?CronJobInterface;
 
     /**
      * @return CronJobInterface[]
      */
-    public function findByCommand(string $command) : array;
+    public function findByCommand(string $command): array;
 
     /**
      * @return ArrayCollection|Collection|string[]
      */
-    public function getKnownJobs() : Collection;
+    public function getKnownJobs(): Collection;
 }

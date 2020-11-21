@@ -6,6 +6,7 @@ namespace Shapecode\Bundle\CronBundle\Model;
 
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
+
 use function str_replace;
 use function trim;
 
@@ -34,7 +35,7 @@ final class CronJobMetadata
         $this->maxInstances = $maxInstances;
     }
 
-    public static function createByCommand(string $expression, Command $command, ?string $arguments = null, int $maxInstances = 1) : CronJobMetadata
+    public static function createByCommand(string $expression, Command $command, ?string $arguments = null, int $maxInstances = 1): CronJobMetadata
     {
         $commandName = $command->getName();
 
@@ -48,12 +49,12 @@ final class CronJobMetadata
         return $meta;
     }
 
-    public function getExpression() : string
+    public function getExpression(): string
     {
         return $this->expression;
     }
 
-    public function getClearedExpression() : string
+    public function getClearedExpression(): string
     {
         $expression = $this->getExpression();
         $expression = str_replace('\\', '', $expression);
@@ -61,7 +62,7 @@ final class CronJobMetadata
         return $expression;
     }
 
-    public function getFullCommand() : string
+    public function getFullCommand(): string
     {
         $arguments = '';
 
@@ -72,12 +73,12 @@ final class CronJobMetadata
         return trim($this->getCommand() . $arguments);
     }
 
-    public function getCommand() : string
+    public function getCommand(): string
     {
         return trim($this->command);
     }
 
-    public function getArguments() : ?string
+    public function getArguments(): ?string
     {
         if ($this->arguments === null) {
             return null;
@@ -86,17 +87,17 @@ final class CronJobMetadata
         return trim($this->arguments);
     }
 
-    public function getDescription() : ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescription(?string $description) : void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
 
-    public function getMaxInstances() : int
+    public function getMaxInstances(): int
     {
         return $this->maxInstances;
     }
