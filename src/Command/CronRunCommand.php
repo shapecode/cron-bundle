@@ -13,6 +13,7 @@ use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
 use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 
 use function count;
@@ -122,8 +123,23 @@ final class CronRunCommand extends BaseCommand
             foreach ($processes as $key => $running) {
                 $process = $running->getProcess();
 
-                if ($process->isRunning() === true) {
-                    break;
+                try {
+                    /*
+                     * Check if timeout is reached (if specified).
+                     * If timeout is reached, the process is stopped immediately and
+                     * a ProcessTimedOutException is thrown. This exception is caught
+                     * by this try/catch block.
+                     */
+
+                    $process->checkTimeout();
+
+                    if ($process->isRunning() === true) {
+                        break;
+                    }
+                } catch (ProcessTimedOutException $e) {
+                    /*
+                     * Nothing to do here. The process is stopped, proceed as normal.
+                     */
                 }
 
                 $job = $running->getCronJob();
