@@ -152,7 +152,7 @@ final class CronRunCommand extends BaseCommand
         $process->disableOutput();
 
         $timeout = $this->commandHelper->getTimeout();
-        if($timeout != null && $timeout > 0) {
+        if ($timeout !== null && $timeout > 0) {
             $process->setTimeout($timeout);
         }
 

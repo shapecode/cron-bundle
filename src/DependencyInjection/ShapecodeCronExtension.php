@@ -22,7 +22,7 @@ final class ShapecodeCronExtension extends Extension
         $loader->load('services.yml');
 
         $configuration = new Configuration();
-        $config = $this->processConfiguration($configuration, $configs);
+        $config        = $this->processConfiguration($configuration, $configs);
 
         $definition = $container->getDefinition(CommandHelper::class);
         $definition->setArgument('timeout', $config['timeout']);

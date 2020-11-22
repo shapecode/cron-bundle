@@ -16,14 +16,14 @@ final class CommandHelper
 
     private ?string $consoleBin = null;
 
-    private ?int $timeout = null;
+    private ?float $timeout = null;
 
     private KernelInterface $kernel;
 
-    public function __construct(KernelInterface $kernel, ?int $timeout = null)
+    public function __construct(KernelInterface $kernel, ?float $timeout = null)
     {
         $this->timeout = $timeout;
-        $this->kernel = $kernel;
+        $this->kernel  = $kernel;
     }
 
     public function getConsoleBin(): string
@@ -65,7 +65,8 @@ final class CommandHelper
         return $php;
     }
 
-    public function getTimeout(): ?int {
+    public function getTimeout(): ?float
+    {
         return $this->timeout;
     }
 }
