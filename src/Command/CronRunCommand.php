@@ -150,6 +150,12 @@ final class CronRunCommand extends BaseCommand
 
         $process = new Process($command);
         $process->disableOutput();
+
+        $timeout = $this->commandHelper->getTimeout();
+        if($timeout != null && $timeout > 0) {
+            $process->setTimeout($timeout);
+        }
+
         $process->start();
 
         return $process;
