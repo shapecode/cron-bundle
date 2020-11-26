@@ -13,8 +13,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 final class ShapecodeCronExtension extends ConfigurableExtension
 {
     /**
-     * @inheritDoc
      * @return void
+     *
+     * @inheritDoc
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
