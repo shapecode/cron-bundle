@@ -124,22 +124,12 @@ final class CronRunCommand extends BaseCommand
                 $process = $running->getProcess();
 
                 try {
-                    /*
-                     * Check if timeout is reached (if specified).
-                     * If timeout is reached, the process is stopped immediately and
-                     * a ProcessTimedOutException is thrown. This exception is caught
-                     * by this try/catch block.
-                     */
-
                     $process->checkTimeout();
 
                     if ($process->isRunning() === true) {
                         break;
                     }
                 } catch (ProcessTimedOutException $e) {
-                    /*
-                     * Nothing to do here. The process is stopped, proceed as normal.
-                     */
                 }
 
                 $job = $running->getCronJob();

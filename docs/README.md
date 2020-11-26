@@ -113,10 +113,18 @@ To <strong>enable</strong> a cron job, run: `bin/console shapecode:cron:edit you
 ### Clean Up
 
 By default your logs will be cleared after 7 days to avoid to many entries in database.  
-You can change this by setting configs.
+You can change this by setting configs. 
+
+By default, all cronjobs run until they are finished. When running cronjob from a controller, a timeout for running cronjobs 
+can be useful as the HTTP request might get killed by PHP due to a maximum execution limit. By specifying a timeout,
+all jobs get killed automatically and the correct job result (which would not indicate any success) will be persisted
+(see [#26](https://github.com/shapecode/cron-bundle/issues/26#issuecomment-731738093)) A default value of `null` specifies 
+no timeout, otherwise you can specify the timeout in seconds (as `float`). See [Process component docs](https://symfony.com/doc/current/components/process.html#process-timeout).
+**Important:** The timeout is applied to every cronjob, regardsless from where (controller or CLI) it is executed.
 
 ```yaml
 shapecode_cron:
+    timeout: null # default. A number (of type float) can be specified
     results:
         auto_prune: true # default
         interval: 7 days ago # default. A date time interval specification

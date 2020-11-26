@@ -16,7 +16,7 @@ final class CommandHelper
 
     private ?string $consoleBin = null;
 
-    private ?float $timeout = null;
+    private ?float $timeout;
 
     private KernelInterface $kernel;
 

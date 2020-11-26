@@ -71,7 +71,7 @@ final class CronRunCommandTest extends TestCase
         $commandHelper = $this->createMock(CommandHelper::class);
         $commandHelper->method('getConsoleBin')->willReturn('/bin/console');
         $commandHelper->method('getPhpExecutable')->willReturn('php');
-        $commandHelper->method('getTimeout')->willReturn(30);
+        $commandHelper->method('getTimeout')->willReturn(30.0);
 
         $manager = $this->createMock(ObjectManager::class);
 

@@ -8,23 +8,20 @@ use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
-final class ShapecodeCronExtension extends Extension
+final class ShapecodeCronExtension extends ConfigurableExtension
 {
     /**
      * @inheritDoc
      */
-    public function load(array $configs, ContainerBuilder $container): void
+    protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
         $locator = new FileLocator(__DIR__ . '/../Resources/config');
         $loader  = new Loader\YamlFileLoader($container, $locator);
         $loader->load('services.yml');
 
-        $configuration = new Configuration();
-        $config        = $this->processConfiguration($configuration, $configs);
-
         $definition = $container->getDefinition(CommandHelper::class);
-        $definition->setArgument('timeout', $config['timeout']);
+        $definition->setArgument('timeout', $mergedConfig['timeout']);
     }
 }
