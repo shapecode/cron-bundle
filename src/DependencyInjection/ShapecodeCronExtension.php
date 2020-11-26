@@ -14,6 +14,7 @@ final class ShapecodeCronExtension extends ConfigurableExtension
 {
     /**
      * @inheritDoc
+     * @return void
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
