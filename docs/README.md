@@ -118,9 +118,8 @@ You can change this by setting configs.
 By default, all cronjobs run until they are finished (or exceed the [default timeout of 60s set by the Process component](https://symfony.com/doc/current/components/process.html#process-timeout). When running cronjob from a controller, a timeout for running cronjobs 
 can be useful as the HTTP request might get killed by PHP due to a maximum execution limit. By specifying a timeout,
 all jobs get killed automatically and the correct job result (which would not indicate any success) will be persisted
-(see [#26](https://github.com/shapecode/cron-bundle/issues/26#issuecomment-731738093)) A default value of `null` specifies 
-no timeout, otherwise you can specify the timeout in seconds (as `float`). See [Process component docs](https://symfony.com/doc/current/components/process.html#process-timeout).
-**Important:** The timeout is applied to every cronjob, regardsless from where (controller or CLI) it is executed.
+(see [#26](https://github.com/shapecode/cron-bundle/issues/26#issuecomment-731738093)). A default value of `null` lets the Process component use its default timeout, otherwise the specified timeout in seconds (as `float`) is applied (see [Process component docs](https://symfony.com/doc/current/components/process.html#process-timeout)).
+**Important:** The timeout is applied to every cronjob, regardless from where (controller or CLI) it is executed.
 
 ```yaml
 shapecode_cron:
