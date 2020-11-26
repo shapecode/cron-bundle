@@ -22,6 +22,6 @@ final class ShapecodeCronExtension extends ConfigurableExtension
         $loader->load('services.yml');
 
         $definition = $container->getDefinition(CommandHelper::class);
-        $definition->setArgument('timeout', $mergedConfig['timeout']);
+        $definition->setArgument('$timeout', $mergedConfig['timeout']);
     }
 }
