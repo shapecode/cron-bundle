@@ -11,7 +11,7 @@ final class CronStyle extends SymfonyStyle
     /**
      * @param string|array<mixed> $message
      */
-    public function info($message) : void
+    public function info($message): void
     {
         $this->block($message, 'Info', 'fg=white;bg=blue', ' ', true);
     }
@@ -19,7 +19,7 @@ final class CronStyle extends SymfonyStyle
     /**
      * @param string|string[] $message
      */
-    public function notice($message) : void
+    public function notice($message): void
     {
         $this->block($message, 'Note', 'fg=black;bg=yellow', ' ', true);
     }

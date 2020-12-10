@@ -223,7 +223,7 @@ class CronJob extends AbstractEntity
 
     public function calculateNextRun(): self
     {
-        $cron = CronExpression::factory($this->getPeriod());
+        $cron = new CronExpression($this->getPeriod());
         $this->setNextRun($cron->getNextRunDate());
 
         return $this;
