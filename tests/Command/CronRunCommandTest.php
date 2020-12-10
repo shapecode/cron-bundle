@@ -28,6 +28,50 @@ final class CronRunCommandTest extends TestCase
         $commandHelper = $this->createMock(CommandHelper::class);
         $commandHelper->method('getConsoleBin')->willReturn('/bin/console');
         $commandHelper->method('getPhpExecutable')->willReturn('php');
+        $commandHelper->method('getTimeout')->willReturn(null);
+
+        $manager = $this->createMock(ObjectManager::class);
+
+        $job = CronJob::create('pwd', '* * * * *');
+        $job->setNextRun(new DateTime());
+
+        $cronJobRepo = $this->createMock(CronJobRepository::class);
+        $cronJobRepo->method('findAll')->willReturn([
+            $job,
+        ]);
+
+        $cronJobResultRepo = $this->createMock(CronJobResultRepository::class);
+
+        $registry = $this->createMock(ManagerRegistry::class);
+        $registry->method('getManager')->willReturn($manager);
+        $registry->method('getRepository')->willReturnCallback(static function (string $param) use ($cronJobRepo, $cronJobResultRepo) {
+            if ($param === CronJob::class) {
+                return $cronJobRepo;
+            }
+
+            if ($param === CronJobResult::class) {
+                return $cronJobResultRepo;
+            }
+        });
+
+        $input  = $this->createMock(InputInterface::class);
+        $output = new BufferedOutput();
+
+        $command = new CronRunCommand($commandHelper, $registry);
+        $command->run($input, $output);
+
+        self::assertEquals('shapecode:cron:run', $command->getName());
+    }
+
+    public function testRunWithTimeout(): void
+    {
+        $kernel = $this->createMock(Kernel::class);
+        $kernel->method('getProjectDir')->willReturn(__DIR__);
+
+        $commandHelper = $this->createMock(CommandHelper::class);
+        $commandHelper->method('getConsoleBin')->willReturn('/bin/console');
+        $commandHelper->method('getPhpExecutable')->willReturn('php');
+        $commandHelper->method('getTimeout')->willReturn(30.0);
 
         $manager = $this->createMock(ObjectManager::class);
 
