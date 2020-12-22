@@ -6,8 +6,8 @@ namespace Shapecode\Bundle\CronBundle\EventListener;
 
 use DateTime;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
 
 final class EntitySubscriber implements EventSubscriber

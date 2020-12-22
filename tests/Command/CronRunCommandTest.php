@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Tests\Command;
 
 use DateTime;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Shapecode\Bundle\CronBundle\Command\CronRunCommand;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
