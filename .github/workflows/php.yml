@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: composer install --prefer-dist --no-progress --no-suggest
       - run: composer validate
-      - run: composer crc
+      - uses: docker://phpga/composer-require-checker-ga
       - run: composer unuse
       - run: composer cs-check
       - run: composer phpstan
