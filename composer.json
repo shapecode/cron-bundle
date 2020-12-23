@@ -66,7 +66,6 @@
         "phpstan/phpstan-strict-rules": "~0.12",
         "phpstan/phpstan-symfony": "~0.12",
         "phpstan/phpstan-doctrine": "~0.12",
-        "maglnet/composer-require-checker": "~2.0",
         "phpunit/phpunit": "~9.0",
         "symfony/var-dumper": "~5.0",
         "dg/bypass-finals": "~1.1"
@@ -83,7 +82,6 @@
     },
     "scripts": {
         "check": [
-            "@crc",
             "@unuse",
             "@cs-check",
             "@phpstan",
@@ -91,7 +89,6 @@
         ],
         "phpstan": "phpstan analyse --ansi",
         "phpstan-update-baseline": "phpstan analyse --ansi --generate-baseline phpstan-baseline.neon",
-        "crc": "vendor/bin/composer-require-checker --config-file=./composer-require-checker.json --ansi",
         "phpunit": "phpunit --colors=always",
         "cs-check": "phpcs -s",
         "cs-fix": "phpcbf",
