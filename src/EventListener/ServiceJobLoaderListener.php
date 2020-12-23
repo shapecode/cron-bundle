@@ -24,7 +24,7 @@ final class ServiceJobLoaderListener implements EventSubscriberInterface
     }
 
     /**
-     * @inheritDoc
+     * @return array<string, string>
      */
     public static function getSubscribedEvents(): array
     {

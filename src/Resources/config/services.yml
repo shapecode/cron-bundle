@@ -6,14 +6,14 @@ services:
 
     Shapecode\Bundle\CronBundle\Controller\:
         resource: '../../Controller/*'
-        tags: ['controller.service_arguments']
-        
+        tags: [ 'controller.service_arguments' ]
+
     Shapecode\Bundle\CronBundle\Command\:
         resource: '../../Command/*'
-        
+
     Shapecode\Bundle\CronBundle\Manager\CronJobManager: ~
     Shapecode\Bundle\CronBundle\EventListener\EntitySubscriber:
-        tags: ['doctrine.event_subscriber']
+        tags: [ 'doctrine.event_subscriber' ]
 
     Shapecode\Bundle\CronBundle\EventListener\:
         resource: '../../EventListener/*'

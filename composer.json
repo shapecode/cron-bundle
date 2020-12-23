@@ -64,13 +64,12 @@
         "phpstan/phpstan-deprecation-rules": "~0.12",
         "phpstan/phpstan-phpunit": "~0.12",
         "phpstan/phpstan-strict-rules": "~0.12",
+        "phpstan/phpstan-symfony": "~0.12",
+        "phpstan/phpstan-doctrine": "~0.12",
         "maglnet/composer-require-checker": "~2.0",
         "phpunit/phpunit": "~9.0",
         "symfony/var-dumper": "~5.0",
         "dg/bypass-finals": "~1.1"
-    },
-    "suggest": {
-        "shapecode/cron-sonata-admin-bundle": "to manage cronjobs in the sonata admin panel"
     },
     "autoload": {
         "psr-4": {

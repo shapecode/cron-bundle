@@ -14,6 +14,7 @@ use Shapecode\Bundle\CronBundle\Entity\CronJob;
  * @method CronJob[] findAll()
  * @method CronJob|null findOneBy(array $criteria, array $orderBy = null)
  * @method CronJob[] findBy(array $criteria, array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ * @extends EntityRepository<CronJob>
  */
 class CronJobRepository extends EntityRepository
 {
@@ -30,13 +31,11 @@ class CronJobRepository extends EntityRepository
      */
     public function findByCommand(string $command): array
     {
-        return $this->findBy([
-            'command' => $command,
-        ]);
+        return $this->findBy(['command' => $command]);
     }
 
     /**
-     * @return Collection|string[]
+     * @return Collection<int, string>|string[]
      */
     public function getKnownJobs(): Collection
     {

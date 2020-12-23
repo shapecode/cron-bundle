@@ -13,6 +13,7 @@ use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
  * @method CronJobResult[] findAll()
  * @method CronJobResult|null findOneBy(array $criteria, array $orderBy = null)
  * @method CronJobResult[] findBy(array $criteria, array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ * @extends EntityRepository<CronJobResult>
  */
 class CronJobResultRepository extends EntityRepository
 {

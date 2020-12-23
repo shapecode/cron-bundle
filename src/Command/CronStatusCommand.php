@@ -20,10 +20,10 @@ final class CronStatusCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $style   = new CronStyle($input, $output);
+        $io      = new CronStyle($input, $output);
         $jobRepo = $this->getCronJobRepository();
 
-        $style->title('Cron job status');
+        $io->title('Cron job status');
 
         $cronJobs = $jobRepo->findAll();
 
@@ -52,7 +52,7 @@ final class CronStatusCommand extends BaseCommand
         }
 
         $header = ['ID', 'Command', 'Next Schedule', 'Last run', 'Enabled'];
-        $style->table($header, $tableContent);
+        $io->table($header, $tableContent);
 
         return CronJobResult::EXIT_CODE_SUCCEEDED;
     }

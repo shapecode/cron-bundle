@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Entity;
 
 use Cron\CronExpression;
-use DateInterval;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\PersistentCollection;
 
 /**
  * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobRepository")
@@ -52,9 +50,9 @@ class CronJob extends AbstractEntity
      *     orphanRemoval=true
      * )
      *
-     * @var ArrayCollection|PersistentCollection|Collection|CronJobResult[]
+     * @var Collection<int, CronJobResult>
      */
-    private $results;
+    private Collection $results;
 
     /** @ORM\Column(type="boolean", options={"default"=1}) */
     private bool $enable = true;
@@ -197,7 +195,7 @@ class CronJob extends AbstractEntity
     }
 
     /**
-     * @return ArrayCollection|PersistentCollection|Collection|CronJobResult[]
+     * @return Collection<int, CronJobResult>
      */
     public function getResults(): Collection
     {

@@ -48,7 +48,7 @@ final class CronJobMetadata
             throw new RuntimeException('command has to have a name provided');
         }
 
-        return new static(
+        return new self(
             $expression,
             $commandName,
             $arguments,

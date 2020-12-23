@@ -35,12 +35,12 @@ final class CronProcessCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $style = new CronStyle($input, $output);
+        $io = new CronStyle($input, $output);
 
         $job = $this->getCronJobRepository()->find($input->getArgument('cron'));
 
         if ($job === null) {
-            $style->error('No job found');
+            $io->error('No job found');
 
             return 1;
         }
@@ -48,7 +48,7 @@ final class CronProcessCommand extends BaseCommand
         $command = $job->getFullCommand() . ' -n';
         $watch   = 'job-' . str_replace(' ', '-', $command);
 
-        $style->title('Running ' . $command);
+        $io->title('Running ' . $command);
 
         $jobInput  = new StringInput($command);
         $jobOutput = new BufferedOutput();
@@ -72,7 +72,7 @@ final class CronProcessCommand extends BaseCommand
                 $statusCode = $application->doRun($jobInput, $jobOutput);
             } catch (Throwable $ex) {
                 $statusCode = CronJobResult::EXIT_CODE_FAILED;
-                $style->error('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
+                $io->error('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
             }
         }
 
@@ -97,7 +97,7 @@ final class CronProcessCommand extends BaseCommand
         $seconds = $duration > 0 ? number_format($duration / 1000, 4) : 0;
         $message = sprintf('%s in %s seconds', $statusStr, $seconds);
 
-        $callback = [$style, $block];
+        $callback = [$io, $block];
         if (is_callable($callback)) {
             $callback($message);
         }

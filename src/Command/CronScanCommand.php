@@ -46,9 +46,9 @@ final class CronScanCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $style = new CronStyle($input, $output);
-        $style->comment('Scan for cronjobs started at ' . (new DateTime())->format('r'));
-        $style->title('scanning ...');
+        $io = new CronStyle($input, $output);
+        $io->comment('Scan for cronjobs started at ' . (new DateTime())->format('r'));
+        $io->title('scanning ...');
 
         $keepDeleted     = (bool) $input->getOption('keep-deleted');
         $defaultDisabled = (bool) $input->getOption('default-disabled');
@@ -62,7 +62,7 @@ final class CronScanCommand extends BaseCommand
         foreach ($this->cronJobManager->getJobs() as $jobMetadata) {
             $command = $jobMetadata->getCommand();
 
-            $style->section($command);
+            $io->section($command);
 
             if (! isset($counter[$command])) {
                 $counter[$command] = 0;
@@ -84,10 +84,10 @@ final class CronScanCommand extends BaseCommand
                 $currentJob->setDescription($jobMetadata->getDescription());
                 $currentJob->setArguments($jobMetadata->getArguments());
 
-                $style->text('command: ' . $jobMetadata->getCommand());
-                $style->text('arguments: ' . $jobMetadata->getArguments());
-                $style->text('expression: ' . $jobMetadata->getClearedExpression());
-                $style->text('instances: ' . $jobMetadata->getMaxInstances());
+                $io->text('command: ' . $jobMetadata->getCommand());
+                $io->text('arguments: ' . $jobMetadata->getArguments());
+                $io->text('expression: ' . $jobMetadata->getClearedExpression());
+                $io->text('instances: ' . $jobMetadata->getMaxInstances());
 
                 if (
                     $currentJob->getPeriod() !== $jobMetadata->getClearedExpression() ||
@@ -99,29 +99,29 @@ final class CronScanCommand extends BaseCommand
                     $currentJob->setMaxInstances($jobMetadata->getMaxInstances());
 
                     $currentJob->calculateNextRun();
-                    $style->notice('cronjob updated');
+                    $io->notice('cronjob updated');
                 }
             } else {
-                $this->newJobFound($style, $jobMetadata, $defaultDisabled, $counter[$command]);
+                $this->newJobFound($io, $jobMetadata, $defaultDisabled, $counter[$command]);
             }
         }
 
-        $style->success('Finished scanning for cronjobs');
+        $io->success('Finished scanning for cronjobs');
 
         // Clear any jobs that weren't found
         if ($keepDeleted === false) {
-            $style->title('remove cronjobs');
+            $io->title('remove cronjobs');
 
             if (count($knownJobs) > 0) {
                 foreach ($knownJobs as $deletedJob) {
-                    $style->notice('Deleting job: ' . $deletedJob);
+                    $io->notice('Deleting job: ' . $deletedJob);
                     $jobsToDelete = $jobRepo->findByCommand($deletedJob);
                     foreach ($jobsToDelete as $jobToDelete) {
                         $em->remove($jobToDelete);
                     }
                 }
             } else {
-                $style->info('No cronjob has to be removed.');
+                $io->info('No cronjob has to be removed.');
             }
         }
 
@@ -130,7 +130,7 @@ final class CronScanCommand extends BaseCommand
         return CronJobResult::EXIT_CODE_SUCCEEDED;
     }
 
-    private function newJobFound(CronStyle $output, CronJobMetadata $metadata, bool $defaultDisabled, int $counter): void
+    private function newJobFound(CronStyle $io, CronJobMetadata $metadata, bool $defaultDisabled, int $counter): void
     {
         $newJob =
             CronJob::create(
@@ -144,7 +144,7 @@ final class CronScanCommand extends BaseCommand
             ->calculateNextRun();
 
         $message = sprintf('Found new job: "%s" with period %s', $newJob->getFullCommand(), $newJob->getPeriod());
-        $output->success($message);
+        $io->success($message);
 
         $this->getManager()->persist($newJob);
     }

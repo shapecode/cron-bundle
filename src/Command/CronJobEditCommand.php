@@ -29,7 +29,7 @@ final class CronJobEditCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $style = new CronStyle($input, $output);
+        $io = new CronStyle($input, $output);
 
         $jobName = $input->getArgument('job');
         assert(is_string($jobName));
@@ -40,7 +40,7 @@ final class CronJobEditCommand extends BaseCommand
         $em = $this->getManager();
 
         if (count($jobs) === 0) {
-            $style->error(sprintf('Couldn\'t find a job by the name of %s', $jobName));
+            $io->error(sprintf('Couldn\'t find a job by the name of %s', $jobName));
 
             return CronJobResult::EXIT_CODE_FAILED;
         }
@@ -55,9 +55,9 @@ final class CronJobEditCommand extends BaseCommand
         $em->flush();
 
         if ($enable) {
-            $style->success('cron enabled');
+            $io->success('cron enabled');
         } else {
-            $style->success('cron disabled');
+            $io->success('cron disabled');
         }
 
         return CronJobResult::EXIT_CODE_SUCCEEDED;
