@@ -70,17 +70,6 @@ final class CronJobMetadata
         return $expression;
     }
 
-    public function getFullCommand(): string
-    {
-        $arguments = '';
-
-        if ($this->getArguments() !== null) {
-            $arguments = ' ' . $this->getArguments();
-        }
-
-        return trim($this->getCommand() . $arguments);
-    }
-
     public function getCommand(): string
     {
         return trim($this->command);

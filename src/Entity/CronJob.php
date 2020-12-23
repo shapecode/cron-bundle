@@ -165,11 +165,6 @@ class CronJob extends AbstractEntity
         return $this->period;
     }
 
-    public function getInterval(): DateInterval
-    {
-        return new DateInterval($this->getPeriod());
-    }
-
     public function setPeriod(string $period): self
     {
         $this->period = $period;
