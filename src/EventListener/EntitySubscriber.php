@@ -6,8 +6,8 @@ namespace Shapecode\Bundle\CronBundle\EventListener;
 
 use DateTime;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use ReflectionClass;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntityInterface;
 use function assert;
