@@ -6,7 +6,7 @@ namespace Shapecode\Bundle\CronBundle\EventListener;
 
 use DateTime;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use ReflectionClass;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntityInterface;
