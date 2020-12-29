@@ -6,7 +6,7 @@ namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Persistence\ObjectRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJobInterface;
 
 interface CronJobRepositoryInterface extends ObjectRepository
