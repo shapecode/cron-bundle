@@ -44,7 +44,7 @@ class CronJob extends AbstractEntity
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="Shapecode\Bundle\CronBundle\Entity\CronJobResultInterface",
+     *     targetEntity="Shapecode\Bundle\CronBundle\Entity\CronJobResult",
      *     mappedBy="cronJob",
      *     cascade={"persist", "remove"},
      *     orphanRemoval=true
