@@ -20,3 +20,4 @@ services:
 
     # service
     Shapecode\Bundle\CronBundle\Service\CommandHelper: ~
+    Shapecode\Bundle\CronBundle\Service\AttributeReader: ~

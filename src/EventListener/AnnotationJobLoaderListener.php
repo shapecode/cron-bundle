@@ -9,9 +9,14 @@ use ReflectionClass;
 use Shapecode\Bundle\CronBundle\Annotation\CronJob;
 use Shapecode\Bundle\CronBundle\Event\LoadJobsEvent;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
+use Shapecode\Bundle\CronBundle\Service\AttributeReader;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+
+use function array_merge;
+use function phpversion;
+use function version_compare;
 
 final class AnnotationJobLoaderListener implements EventSubscriberInterface
 {
@@ -19,10 +24,13 @@ final class AnnotationJobLoaderListener implements EventSubscriberInterface
 
     private Reader $reader;
 
-    public function __construct(KernelInterface $kernel, Reader $reader)
+    private AttributeReader $attributeReader;
+
+    public function __construct(KernelInterface $kernel, Reader $reader, AttributeReader $attributeReader)
     {
-        $this->application = new Application($kernel);
-        $this->reader      = $reader;
+        $this->application     = new Application($kernel);
+        $this->reader          = $reader;
+        $this->attributeReader = $attributeReader;
     }
 
     /**
@@ -41,7 +49,16 @@ final class AnnotationJobLoaderListener implements EventSubscriberInterface
             // Check for an @CronJob annotation
             $reflClass = new ReflectionClass($command);
 
-            foreach ($this->reader->getClassAnnotations($reflClass) as $annotation) {
+            $annotations = $this->reader->getClassAnnotations($reflClass);
+
+            if (version_compare(phpversion(), '8.0.0', '>=')) {
+                $annotations = array_merge(
+                    $annotations,
+                    $this->attributeReader->getClassAttributes($reflClass, CronJob::class)
+                );
+            }
+
+            foreach ($annotations as $annotation) {
                 if (! ($annotation instanceof CronJob)) {
                     continue;
                 }
