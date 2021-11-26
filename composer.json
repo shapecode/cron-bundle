@@ -67,7 +67,8 @@
         "phpstan/phpstan-symfony": "~1.0",
         "phpstan/phpstan-doctrine": "~1.0",
         "phpunit/phpunit": "~9.5",
-        "symfony/var-dumper": "~5.3"
+        "symfony/var-dumper": "~5.3",
+        "maglnet/composer-require-checker": "^3.5"
     },
     "autoload": {
         "psr-4": {
@@ -86,6 +87,7 @@
             "@phpstan",
             "@phpunit"
         ],
+        "crc": "composer-require-checker --config-file=./composer-require-checker.json --ansi",
         "phpstan": "phpstan analyse --ansi",
         "phpstan-update-baseline": "phpstan analyse --ansi --generate-baseline phpstan-baseline.neon",
         "phpunit": "phpunit --colors=always",
