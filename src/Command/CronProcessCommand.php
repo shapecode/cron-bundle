@@ -45,10 +45,10 @@ final class CronProcessCommand extends BaseCommand
             return 1;
         }
 
-        $command = $job->getFullCommand() . ' -n';
-        $watch   = 'job-' . str_replace(' ', '-', $command);
+        $command = sprintf('%s -n', $job->getFullCommand());
+        $watch   = sprintf('job-%s', str_replace(' ', '-', $command));
 
-        $io->title('Running ' . $command);
+        $io->title(sprintf('Running %s', $command));
 
         $jobInput  = new StringInput($command);
         $jobOutput = new BufferedOutput();
@@ -72,7 +72,7 @@ final class CronProcessCommand extends BaseCommand
                 $statusCode = $application->doRun($jobInput, $jobOutput);
             } catch (Throwable $ex) {
                 $statusCode = CronJobResult::EXIT_CODE_FAILED;
-                $io->error('Job execution failed with exception ' . get_class($ex) . ': ' . $ex->getMessage());
+                $io->error(sprintf('Job execution failed with exception %s: %s', get_class($ex), $ex->getMessage()));
             }
         }
 

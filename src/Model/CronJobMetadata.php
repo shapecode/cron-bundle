@@ -64,10 +64,7 @@ final class CronJobMetadata
 
     public function getClearedExpression(): string
     {
-        $expression = $this->getExpression();
-        $expression = str_replace('\\', '', $expression);
-
-        return $expression;
+        return str_replace('\\', '', $this->getExpression());
     }
 
     public function getCommand(): string

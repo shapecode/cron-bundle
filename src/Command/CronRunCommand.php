@@ -18,6 +18,7 @@ use Symfony\Component\Process\Process;
 
 use function count;
 use function sleep;
+use function sprintf;
 
 final class CronRunCommand extends BaseCommand
 {
@@ -47,10 +48,10 @@ final class CronRunCommand extends BaseCommand
         $jobsToRun = $jobRepo->findAll();
 
         $jobCount = count($jobsToRun);
-        $style->comment('Cronjobs started at ' . (new DateTime())->format('r'));
+        $style->comment(sprintf('Cronjobs started at %s', (new DateTime())->format('r')));
 
         $style->title('Execute cronjobs');
-        $style->info('Found ' . $jobCount . ' jobs');
+        $style->info(sprintf('Found %d jobs', $jobCount));
 
         // Update the job with it's next scheduled time
         $now = new DateTime();
@@ -62,7 +63,7 @@ final class CronRunCommand extends BaseCommand
         foreach ($jobsToRun as $job) {
             sleep(1);
 
-            $style->section('Running "' . $job->getFullCommand() . '"');
+            $style->section(sprintf('Running "%s"', $job->getFullCommand()));
 
             if (! $job->isEnable()) {
                 $style->notice('cronjob is disabled');
@@ -71,7 +72,7 @@ final class CronRunCommand extends BaseCommand
             }
 
             if ($job->getNextRun() > $now) {
-                $style->notice('cronjob will not be executed. Next run is: ' . $job->getNextRun()->format('r'));
+                $style->notice(sprintf('cronjob will not be executed. Next run is: %s', $job->getNextRun()->format('r')));
 
                 continue;
             }

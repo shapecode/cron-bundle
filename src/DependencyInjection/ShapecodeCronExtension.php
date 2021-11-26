@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 final class ShapecodeCronExtension extends ConfigurableExtension
 {
     /**
-     * @param array<mixed, mixed> $mergedConfig
+     * @param array<mixed> $mergedConfig
      */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
     {

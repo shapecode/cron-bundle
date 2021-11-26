@@ -17,7 +17,7 @@ final class CronStyle extends SymfonyStyle
     }
 
     /**
-     * @param string|string[] $message
+     * @param string|list<string> $message
      */
     public function notice($message): void
     {

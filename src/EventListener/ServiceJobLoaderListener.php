@@ -28,9 +28,7 @@ final class ServiceJobLoaderListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
-        return [
-            LoadJobsEvent::NAME => 'onLoadJobs',
-        ];
+        return [LoadJobsEvent::NAME => 'onLoadJobs'];
     }
 
     public function onLoadJobs(LoadJobsEvent $event): void

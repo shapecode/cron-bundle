@@ -7,6 +7,8 @@
     <arg name="tab-width" value="4"/>
     <arg name="cache" value="./.phpcs.cache"/>
 
+    <config name="php_version" value="70419"/>
+
     <file>src/</file>
     <file>tests/</file>
 

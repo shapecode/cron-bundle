@@ -13,6 +13,9 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
+use function assert;
+use function is_string;
+
 final class AnnotationJobLoaderListener implements EventSubscriberInterface
 {
     private Application $application;
@@ -26,29 +29,28 @@ final class AnnotationJobLoaderListener implements EventSubscriberInterface
     }
 
     /**
-     * @return array<string, string>
+     * @inheritdoc
      */
     public static function getSubscribedEvents(): array
     {
-        return [
-            LoadJobsEvent::NAME => 'onLoadJobs',
-        ];
+        return [LoadJobsEvent::NAME => 'onLoadJobs'];
     }
 
     public function onLoadJobs(LoadJobsEvent $event): void
     {
         foreach ($this->application->all() as $command) {
             // Check for an @CronJob annotation
-            $reflClass = new ReflectionClass($command);
+            $reflectionClass = new ReflectionClass($command);
 
-            foreach ($this->reader->getClassAnnotations($reflClass) as $annotation) {
+            foreach ($this->reader->getClassAnnotations($reflectionClass) as $annotation) {
                 if (! ($annotation instanceof CronJob)) {
                     continue;
                 }
 
-                $schedule     = $annotation->value;
                 $arguments    = $annotation->arguments;
                 $maxInstances = $annotation->maxInstances;
+                $schedule     = $annotation->value;
+                assert(is_string($schedule));
 
                 $meta = CronJobMetadata::createByCommand($schedule, $command, $arguments, $maxInstances);
                 $event->addJob($meta);

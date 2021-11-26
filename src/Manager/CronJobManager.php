@@ -10,7 +10,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class CronJobManager
 {
-    /** @var CronJobMetadata[]|null */
+    /** @var list<CronJobMetadata>|null */
     private ?array $jobs = null;
 
     private EventDispatcherInterface $eventDispatcher;
@@ -21,7 +21,7 @@ class CronJobManager
     }
 
     /**
-     * @return CronJobMetadata[]
+     * @return list<CronJobMetadata>
      */
     private function initJobs(): array
     {

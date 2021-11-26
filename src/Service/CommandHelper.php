@@ -9,8 +9,9 @@ use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\PhpExecutableFinder;
 
 use function file_exists;
+use function sprintf;
 
-final class CommandHelper
+class CommandHelper
 {
     private ?string $phpExecutable = null;
 
@@ -34,7 +35,7 @@ final class CommandHelper
 
         $projectDir = $this->kernel->getProjectDir();
 
-        $consolePath = $projectDir . '/bin/console';
+        $consolePath = sprintf('%s/bin/console', $projectDir);
 
         if (! file_exists($consolePath)) {
             throw new RuntimeException('Missing console binary');

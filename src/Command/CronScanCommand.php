@@ -47,7 +47,7 @@ final class CronScanCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new CronStyle($input, $output);
-        $io->comment('Scan for cronjobs started at ' . (new DateTime())->format('r'));
+        $io->comment(sprintf('Scan for cronjobs started at %s', (new DateTime())->format('r')));
         $io->title('scanning ...');
 
         $keepDeleted     = (bool) $input->getOption('keep-deleted');
@@ -84,10 +84,10 @@ final class CronScanCommand extends BaseCommand
                 $currentJob->setDescription($jobMetadata->getDescription());
                 $currentJob->setArguments($jobMetadata->getArguments());
 
-                $io->text('command: ' . $jobMetadata->getCommand());
-                $io->text('arguments: ' . $jobMetadata->getArguments());
-                $io->text('expression: ' . $jobMetadata->getClearedExpression());
-                $io->text('instances: ' . $jobMetadata->getMaxInstances());
+                $io->text(sprintf('command: %s', $jobMetadata->getCommand()));
+                $io->text(sprintf('arguments: %s', $jobMetadata->getArguments()));
+                $io->text(sprintf('expression: %s', $jobMetadata->getClearedExpression()));
+                $io->text(sprintf('instances: %s', $jobMetadata->getMaxInstances()));
 
                 if (
                     $currentJob->getPeriod() !== $jobMetadata->getClearedExpression() ||
@@ -114,7 +114,7 @@ final class CronScanCommand extends BaseCommand
 
             if (count($knownJobs) > 0) {
                 foreach ($knownJobs as $deletedJob) {
-                    $io->notice('Deleting job: ' . $deletedJob);
+                    $io->notice(sprintf('Deleting job: %s', $deletedJob));
                     $jobsToDelete = $jobRepo->findByCommand($deletedJob);
                     foreach ($jobsToDelete as $jobToDelete) {
                         $em->remove($jobToDelete);

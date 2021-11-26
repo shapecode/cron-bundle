@@ -10,10 +10,6 @@ use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 
 /**
- * @method CronJob|null find($id, ?int $lockMode = null, ?int $lockVersion = null)
- * @method CronJob[] findAll()
- * @method CronJob|null findOneBy(array $criteria, array $orderBy = null)
- * @method CronJob[] findBy(array $criteria, array $orderBy = null, ?int $limit = null, ?int $offset = null)
  * @extends EntityRepository<CronJob>
  */
 class CronJobRepository extends EntityRepository
@@ -27,7 +23,7 @@ class CronJobRepository extends EntityRepository
     }
 
     /**
-     * @return CronJob[]
+     * @return list<CronJob>
      */
     public function findByCommand(string $command): array
     {
@@ -35,7 +31,7 @@ class CronJobRepository extends EntityRepository
     }
 
     /**
-     * @return Collection<int, string>|string[]
+     * @return Collection<int, string>
      */
     public function getKnownJobs(): Collection
     {
