@@ -8,32 +8,16 @@ use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 
 use function str_replace;
-use function trim;
 
 final class CronJobMetadata
 {
-    private string $expression;
-
-    private string $command;
-
-    private ?string $description;
-
-    private ?string $arguments;
-
-    private int $maxInstances;
-
-    public function __construct(
-        string $expression,
-        string $command,
-        ?string $arguments = null,
-        int $maxInstances = 1,
-        ?string $description = null
+    private function __construct(
+        public readonly string $expression,
+        public readonly string $command,
+        public readonly ?string $arguments = null,
+        public readonly int $maxInstances = 1,
+        public readonly ?string $description = null
     ) {
-        $this->expression   = $expression;
-        $this->command      = $command;
-        $this->arguments    = $arguments;
-        $this->maxInstances = $maxInstances;
-        $this->description  = $description;
     }
 
     public static function createByCommand(
@@ -49,45 +33,11 @@ final class CronJobMetadata
         }
 
         return new self(
-            $expression,
+            str_replace('\\', '', $expression),
             $commandName,
             $arguments,
             $maxInstances,
             $command->getDescription()
         );
-    }
-
-    public function getExpression(): string
-    {
-        return $this->expression;
-    }
-
-    public function getClearedExpression(): string
-    {
-        return str_replace('\\', '', $this->getExpression());
-    }
-
-    public function getCommand(): string
-    {
-        return trim($this->command);
-    }
-
-    public function getArguments(): ?string
-    {
-        if ($this->arguments === null) {
-            return null;
-        }
-
-        return trim($this->arguments);
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getMaxInstances(): int
-    {
-        return $this->maxInstances;
     }
 }

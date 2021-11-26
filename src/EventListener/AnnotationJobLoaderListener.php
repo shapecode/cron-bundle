@@ -20,12 +20,11 @@ final class AnnotationJobLoaderListener implements EventSubscriberInterface
 {
     private Application $application;
 
-    private Reader $reader;
-
-    public function __construct(KernelInterface $kernel, Reader $reader)
-    {
+    public function __construct(
+        KernelInterface $kernel,
+        private readonly Reader $reader
+    ) {
         $this->application = new Application($kernel);
-        $this->reader      = $reader;
     }
 
     /**

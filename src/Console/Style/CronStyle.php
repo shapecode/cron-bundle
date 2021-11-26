@@ -11,6 +11,7 @@ final class CronStyle extends SymfonyStyle
     /**
      * @param string|array<mixed> $message
      */
+    // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
     public function info($message): void
     {
         $this->block($message, 'Info', 'fg=white;bg=blue', ' ', true);

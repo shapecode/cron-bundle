@@ -8,9 +8,9 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
-use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
 use Shapecode\Bundle\CronBundle\Service\CommandHelper;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
@@ -110,7 +110,7 @@ final class CronRunCommand extends BaseCommand
             $style->info('No jobs were executed. See reasons below.');
         }
 
-        return CronJobResult::EXIT_CODE_SUCCEEDED;
+        return Command::SUCCESS;
     }
 
     /**
@@ -122,19 +122,16 @@ final class CronRunCommand extends BaseCommand
 
         while (count($processes) > 0) {
             foreach ($processes as $key => $running) {
-                $process = $running->getProcess();
-
                 try {
-                    $process->checkTimeout();
+                    $running->process->checkTimeout();
 
-                    if ($process->isRunning() === true) {
+                    if ($running->process->isRunning() === true) {
                         break;
                     }
                 } catch (ProcessTimedOutException $e) {
                 }
 
-                $job = $running->getCronJob();
-                $job->decreaseRunningInstances();
+                $job = $running->cronJob->decreaseRunningInstances();
 
                 $em->persist($job);
                 $em->flush();
@@ -159,7 +156,7 @@ final class CronRunCommand extends BaseCommand
         $process->disableOutput();
 
         $timeout = $this->commandHelper->getTimeout();
-        if ($timeout !== null && $timeout > 0) {
+        if ($timeout > 0) {
             $process->setTimeout($timeout);
         }
 

@@ -8,14 +8,18 @@ use PHPUnit\Framework\TestCase;
 use Shapecode\Bundle\CronBundle\Event\LoadJobsEvent;
 use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class CronJobManagerTest extends TestCase
 {
     public function testGetApplicationJobs(): void
     {
-        $expression = '* * * * *';
-        $command    = 'value';
+        $expression  = '* * * * *';
+        $commandName = 'value';
+
+        $command = $this->createMock(Command::class);
+        $command->method('getName')->willReturn($commandName);
 
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $eventDispatcher
@@ -24,7 +28,7 @@ final class CronJobManagerTest extends TestCase
             ->willReturnCallback(
                 static function (LoadJobsEvent $event) use ($expression, $command): LoadJobsEvent {
                     $event->addJob(
-                        new CronJobMetadata($expression, $command)
+                        CronJobMetadata::createByCommand($expression, $command)
                     );
 
                     return $event;
@@ -36,14 +40,14 @@ final class CronJobManagerTest extends TestCase
         $jobs = $cronJobManager->getJobs();
 
         self::assertCount(1, $jobs);
-        self::assertEquals($command, $jobs[0]->getCommand());
-        self::assertEquals($expression, $jobs[0]->getExpression());
+        self::assertEquals($commandName, $jobs[0]->command);
+        self::assertEquals($expression, $jobs[0]->expression);
 
         // Run second time to assert the same result.
         $jobs = $cronJobManager->getJobs();
 
         self::assertCount(1, $jobs);
-        self::assertEquals($command, $jobs[0]->getCommand());
-        self::assertEquals($expression, $jobs[0]->getExpression());
+        self::assertEquals($commandName, $jobs[0]->command);
+        self::assertEquals($expression, $jobs[0]->expression);
     }
 }

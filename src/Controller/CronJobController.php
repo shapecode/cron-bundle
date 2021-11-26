@@ -12,11 +12,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 final class CronJobController
 {
-    private KernelInterface $kernel;
-
-    public function __construct(KernelInterface $kernel)
-    {
-        $this->kernel = $kernel;
+    public function __construct(
+        private readonly KernelInterface $kernel
+    ) {
     }
 
     public function runAction(): Response

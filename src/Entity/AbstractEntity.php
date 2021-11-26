@@ -14,10 +14,8 @@ abstract class AbstractEntity
      * @ORM\Column(type="bigint", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var string|int|null
      */
-    protected $id;
+    protected string|null $id = null;
 
     /** @ORM\Column(type="datetime") */
     protected DateTimeInterface $createdAt;
@@ -31,16 +29,12 @@ abstract class AbstractEntity
         $this->updatedAt = new DateTime();
     }
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
-        if ($this->id !== null) {
-            return (int) $this->id;
-        }
-
         return $this->id;
     }
 
-    public function setId(?int $id = null): void
+    public function setId(?string $id = null): void
     {
         $this->id = $id;
     }

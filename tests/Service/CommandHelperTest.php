@@ -9,6 +9,7 @@ use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\HttpKernel\Kernel;
 
 use function realpath;
+use function sprintf;
 
 use const PHP_BINARY;
 
@@ -23,7 +24,10 @@ class CommandHelperTest extends TestCase
 
         $helper = new CommandHelper($kernel);
 
-        self::assertEquals($path . '/bin/console', $helper->getConsoleBin());
+        self::assertEquals(
+            sprintf('%s/bin/console', $path),
+            $helper->getConsoleBin()
+        );
     }
 
     public function testGetPhpExecutable(): void
@@ -33,6 +37,9 @@ class CommandHelperTest extends TestCase
 
         $helper = new CommandHelper($kernel);
 
-        self::assertEquals(PHP_BINARY, $helper->getPhpExecutable());
+        self::assertEquals(
+            PHP_BINARY,
+            $helper->getPhpExecutable()
+        );
     }
 }

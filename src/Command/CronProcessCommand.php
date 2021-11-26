@@ -6,8 +6,10 @@ namespace Shapecode\Bundle\CronBundle\Command;
 
 use RuntimeException;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
+use Shapecode\Bundle\CronBundle\Domain\CronJobResultStatus;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\StringInput;
@@ -16,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 
-use function get_class;
 use function is_callable;
 use function number_format;
 use function sprintf;
@@ -53,14 +54,19 @@ final class CronProcessCommand extends BaseCommand
         $jobInput  = new StringInput($command);
         $jobOutput = new BufferedOutput();
 
-        if ($jobInput->hasParameterOption(['--quiet', '-q'], true) === true) {
+        if (
+            $jobInput->hasParameterOption([
+                '--quiet',
+                '-q',
+            ], true) === true
+        ) {
             $jobOutput->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
 
         $this->getStopWatch()->start($watch);
 
         if ($job->getRunningInstances() > $job->getMaxInstances()) {
-            $statusCode = CronJobResult::EXIT_CODE_SKIPPED;
+            $statusCode = Command::INVALID;
         } else {
             try {
                 $application = $this->getApplication();
@@ -71,33 +77,23 @@ final class CronProcessCommand extends BaseCommand
 
                 $statusCode = $application->doRun($jobInput, $jobOutput);
             } catch (Throwable $ex) {
-                $statusCode = CronJobResult::EXIT_CODE_FAILED;
-                $io->error(sprintf('Job execution failed with exception %s: %s', get_class($ex), $ex->getMessage()));
+                $statusCode = Command::FAILURE;
+                $io->error(sprintf('Job execution failed with exception %s: %s', $ex::class, $ex->getMessage()));
             }
         }
 
         $this->getStopWatch()->stop($watch);
 
-        switch ($statusCode) {
-            case 0:
-                $statusStr = CronJobResult::SUCCEEDED;
-                $block     = 'success';
-                break;
-            case 2:
-                $statusStr = CronJobResult::SKIPPED;
-                $block     = 'info';
-                break;
-            default:
-                $statusStr = CronJobResult::FAILED;
-                $block     = 'error';
-        }
-
+        $status   = CronJobResultStatus::fromCommandStatus($statusCode);
         $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
 
         $seconds = $duration > 0 ? number_format($duration / 1000, 4) : 0;
-        $message = sprintf('%s in %s seconds', $statusStr, $seconds);
+        $message = sprintf('%s in %s seconds', $status->getStatusMessage(), $seconds);
 
-        $callback = [$io, $block];
+        $callback = [
+            $io,
+            $status->getBlockName(),
+        ];
         if (is_callable($callback)) {
             $callback($message);
         }
@@ -112,7 +108,7 @@ final class CronProcessCommand extends BaseCommand
     {
         $cronJobResultManager = $this->getManager();
 
-        $buffer = $output->isQuiet() ? null :  $output->fetch();
+        $buffer = $output->isQuiet() ? null : $output->fetch();
 
         $result = new CronJobResult(
             $job,

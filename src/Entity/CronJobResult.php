@@ -19,10 +19,6 @@ class CronJobResult extends AbstractEntity
     public const FAILED    = 'failed';
     public const SKIPPED   = 'skipped';
 
-    public const EXIT_CODE_SUCCEEDED = 0;
-    public const EXIT_CODE_FAILED    = 1;
-    public const EXIT_CODE_SKIPPED   = 2;
-
     /** @ORM\Column(type="datetime") */
     private DateTimeInterface $runAt;
 

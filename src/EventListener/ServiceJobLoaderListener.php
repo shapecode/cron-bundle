@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class ServiceJobLoaderListener implements EventSubscriberInterface
 {
-    /** @var CronJobMetadata[] */
+    /** @var list<CronJobMetadata> */
     private array $jobs = [];
 
     public function addCommand(

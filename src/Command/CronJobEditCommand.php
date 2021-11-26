@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
-use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -42,7 +42,7 @@ final class CronJobEditCommand extends BaseCommand
         if (count($jobs) === 0) {
             $io->error(sprintf('Couldn\'t find a job by the name of %s', $jobName));
 
-            return CronJobResult::EXIT_CODE_FAILED;
+            return Command::FAILURE;
         }
 
         $enable = $input->getOption('enable') === 'y';
@@ -60,6 +60,6 @@ final class CronJobEditCommand extends BaseCommand
             $io->success('cron disabled');
         }
 
-        return CronJobResult::EXIT_CODE_SUCCEEDED;
+        return Command::SUCCESS;
     }
 }

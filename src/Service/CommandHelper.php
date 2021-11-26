@@ -17,53 +17,45 @@ class CommandHelper
 
     private ?string $consoleBin = null;
 
-    private ?float $timeout;
-
-    private KernelInterface $kernel;
-
-    public function __construct(KernelInterface $kernel, ?float $timeout = null)
-    {
-        $this->timeout = $timeout;
-        $this->kernel  = $kernel;
+    public function __construct(
+        private readonly KernelInterface $kernel,
+        private readonly?float $timeout = null
+    ) {
     }
 
     public function getConsoleBin(): string
     {
-        if ($this->consoleBin !== null) {
-            return $this->consoleBin;
+        if ($this->consoleBin === null) {
+            $projectDir = $this->kernel->getProjectDir();
+
+            $consolePath = sprintf('%s/bin/console', $projectDir);
+
+            if (! file_exists($consolePath)) {
+                throw new RuntimeException('Missing console binary');
+            }
+
+            $consoleBin = $consolePath;
+
+            $this->consoleBin = $consoleBin;
         }
 
-        $projectDir = $this->kernel->getProjectDir();
-
-        $consolePath = sprintf('%s/bin/console', $projectDir);
-
-        if (! file_exists($consolePath)) {
-            throw new RuntimeException('Missing console binary');
-        }
-
-        $consoleBin = $consolePath;
-
-        $this->consoleBin = $consoleBin;
-
-        return $consoleBin;
+        return $this->consoleBin;
     }
 
     public function getPhpExecutable(): string
     {
-        if ($this->phpExecutable !== null) {
-            return $this->phpExecutable;
+        if ($this->phpExecutable === null) {
+            $executableFinder = new PhpExecutableFinder();
+            $php              = $executableFinder->find();
+
+            if ($php === false) {
+                throw new RuntimeException('Unable to find the PHP executable.');
+            }
+
+            $this->phpExecutable = $php;
         }
 
-        $executableFinder = new PhpExecutableFinder();
-        $php              = $executableFinder->find();
-
-        if ($php === false) {
-            throw new RuntimeException('Unable to find the PHP executable.');
-        }
-
-        $this->phpExecutable = $php;
-
-        return $php;
+        return $this->phpExecutable;
     }
 
     public function getTimeout(): ?float

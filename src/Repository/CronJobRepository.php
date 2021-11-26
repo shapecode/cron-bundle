@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityRepository;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
+
+use function array_map;
 
 /**
  * @extends EntityRepository<CronJob>
@@ -31,14 +31,15 @@ class CronJobRepository extends EntityRepository
     }
 
     /**
-     * @return Collection<int, string>
+     * @return list<string>
      */
-    public function getKnownJobs(): Collection
+    public function getKnownJobs(): array
     {
-        $data = new ArrayCollection($this->findAll());
-
-        return $data->map(static function (CronJob $o): string {
-            return $o->getCommand();
-        });
+        return array_map(
+            static function (CronJob $o): string {
+                return $o->getCommand();
+            },
+            $this->findAll()
+        );
     }
 }

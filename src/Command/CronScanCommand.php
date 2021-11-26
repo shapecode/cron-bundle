@@ -8,9 +8,9 @@ use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
-use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -55,12 +55,12 @@ final class CronScanCommand extends BaseCommand
 
         // Enumerate the known jobs
         $jobRepo   = $this->getCronJobRepository();
-        $knownJobs = $jobRepo->getKnownJobs()->toArray();
+        $knownJobs = $jobRepo->getKnownJobs();
         $em        = $this->getManager();
 
         $counter = [];
         foreach ($this->cronJobManager->getJobs() as $jobMetadata) {
-            $command = $jobMetadata->getCommand();
+            $command = $jobMetadata->command;
 
             $io->section($command);
 
@@ -81,22 +81,22 @@ final class CronScanCommand extends BaseCommand
                     continue;
                 }
 
-                $currentJob->setDescription($jobMetadata->getDescription());
-                $currentJob->setArguments($jobMetadata->getArguments());
+                $currentJob->setDescription($jobMetadata->description);
+                $currentJob->setArguments($jobMetadata->arguments);
 
-                $io->text(sprintf('command: %s', $jobMetadata->getCommand()));
-                $io->text(sprintf('arguments: %s', $jobMetadata->getArguments()));
-                $io->text(sprintf('expression: %s', $jobMetadata->getClearedExpression()));
-                $io->text(sprintf('instances: %s', $jobMetadata->getMaxInstances()));
+                $io->text(sprintf('command: %s', $jobMetadata->command));
+                $io->text(sprintf('arguments: %s', $jobMetadata->arguments));
+                $io->text(sprintf('expression: %s', $jobMetadata->expression));
+                $io->text(sprintf('instances: %s', $jobMetadata->maxInstances));
 
                 if (
-                    $currentJob->getPeriod() !== $jobMetadata->getClearedExpression() ||
-                    $currentJob->getMaxInstances() !== $jobMetadata->getMaxInstances() ||
-                    $currentJob->getArguments() !== $jobMetadata->getArguments()
+                    $currentJob->getPeriod() !== $jobMetadata->expression ||
+                    $currentJob->getMaxInstances() !== $jobMetadata->maxInstances ||
+                    $currentJob->getArguments() !== $jobMetadata->arguments
                 ) {
-                    $currentJob->setPeriod($jobMetadata->getClearedExpression());
-                    $currentJob->setArguments($jobMetadata->getArguments());
-                    $currentJob->setMaxInstances($jobMetadata->getMaxInstances());
+                    $currentJob->setPeriod($jobMetadata->expression);
+                    $currentJob->setArguments($jobMetadata->arguments);
+                    $currentJob->setMaxInstances($jobMetadata->maxInstances);
 
                     $currentJob->calculateNextRun();
                     $io->notice('cronjob updated');
@@ -127,18 +127,18 @@ final class CronScanCommand extends BaseCommand
 
         $em->flush();
 
-        return CronJobResult::EXIT_CODE_SUCCEEDED;
+        return Command::SUCCESS;
     }
 
     private function newJobFound(CronStyle $io, CronJobMetadata $metadata, bool $defaultDisabled, int $counter): void
     {
         $newJob =
             CronJob::create(
-                $metadata->getCommand(),
-                $metadata->getClearedExpression()
+                $metadata->command,
+                $metadata->expression
             )
-            ->setArguments($metadata->getArguments())
-            ->setDescription($metadata->getDescription())
+            ->setArguments($metadata->arguments)
+            ->setDescription($metadata->description)
             ->setEnable(! $defaultDisabled)
             ->setNumber($counter)
             ->calculateNextRun();

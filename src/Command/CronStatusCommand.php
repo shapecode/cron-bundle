@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
-use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -54,6 +54,6 @@ final class CronStatusCommand extends BaseCommand
         $header = ['ID', 'Command', 'Next Schedule', 'Last run', 'Enabled'];
         $io->table($header, $tableContent);
 
-        return CronJobResult::EXIT_CODE_SUCCEEDED;
+        return Command::SUCCESS;
     }
 }

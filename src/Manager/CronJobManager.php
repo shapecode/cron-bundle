@@ -13,11 +13,9 @@ class CronJobManager
     /** @var list<CronJobMetadata>|null */
     private ?array $jobs = null;
 
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher
+    ) {
     }
 
     /**
