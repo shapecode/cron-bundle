@@ -98,6 +98,9 @@ final class CronProcessCommand extends BaseCommand
             $callback($message);
         }
 
+        // reload job entity - it might be detached from current entity manager by the command
+        $job = $this->getCronJobRepository()->find($job->getId());
+
         // Record the result
         $this->recordJobResult($job, $duration, $jobOutput, $statusCode);
 
