@@ -60,6 +60,7 @@
         "doctrine/coding-standard": "~9.0",
         "roave/security-advisories": "dev-master",
         "squizlabs/php_codesniffer": "~3.6",
+        "maglnet/composer-require-checker": "^3.8|^4.0",
         "phpstan/phpstan": "~1.2",
         "phpstan/phpstan-deprecation-rules": "~1.0",
         "phpstan/phpstan-phpunit": "~1.0",
@@ -86,6 +87,7 @@
             "@phpstan",
             "@phpunit"
         ],
+        "crc": "vendor/bin/composer-require-checker --config-file=./composer-require-checker.json",
         "phpstan": "phpstan analyse --memory-limit=-1 --ansi",
         "phpstan-update-baseline": "phpstan analyse --ansi --generate-baseline phpstan-baseline.neon",
         "phpunit": "phpunit --colors=always",
