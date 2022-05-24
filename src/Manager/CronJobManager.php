@@ -21,22 +21,17 @@ class CronJobManager
     /**
      * @return list<CronJobMetadata>
      */
-    private function initJobs(): array
-    {
-        $event = new LoadJobsEvent();
-
-        $this->eventDispatcher->dispatch($event, LoadJobsEvent::NAME);
-
-        return $event->getJobs();
-    }
-
-    /**
-     * @return CronJobMetadata[]
-     */
     public function getJobs(): array
     {
         if ($this->jobs === null) {
-            $this->jobs = $this->initJobs();
+            $event = new LoadJobsEvent();
+
+            // deprecated, use class name instead
+            $this->eventDispatcher->dispatch($event, LoadJobsEvent::NAME);
+
+            $this->eventDispatcher->dispatch($event);
+
+            $this->jobs = $event->getJobs();
         }
 
         return $this->jobs;

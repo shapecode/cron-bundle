@@ -6,35 +6,29 @@ namespace Shapecode\Bundle\CronBundle\Entity;
 
 use DateTime;
 use DateTimeInterface;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository;
 
 use function sprintf;
 
-/**
- * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository")
- */
+#[ORM\Entity(repositoryClass: CronJobResultRepository::class)]
 class CronJobResult extends AbstractEntity
 {
-    public const SUCCEEDED = 'succeeded';
-    public const FAILED    = 'failed';
-    public const SKIPPED   = 'skipped';
-
-    /** @ORM\Column(type="datetime") */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private DateTimeInterface $runAt;
 
-    /** @ORM\Column(type="float") */
+    #[ORM\Column(type: Types::FLOAT)]
     private float $runTime;
 
-    /** @ORM\Column(type="integer") */
+    #[ORM\Column(type: Types::INTEGER)]
     private int $statusCode;
 
-    /** @ORM\Column(type="text", nullable=true) */
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $output;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Shapecode\Bundle\CronBundle\Entity\CronJob", inversedBy="results", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: CronJob::class, cascade: ['persist'], inversedBy: 'results')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private CronJob $cronJob;
 
     public function __construct(

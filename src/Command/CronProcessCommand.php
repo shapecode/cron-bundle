@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Domain\CronJobResultStatus;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
+use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,14 +26,21 @@ use function number_format;
 use function sprintf;
 use function str_replace;
 
-final class CronProcessCommand extends BaseCommand
+#[AsCommand(
+    name: 'shapecode:cron:process'
+)]
+final class CronProcessCommand extends Command
 {
-    private ?Stopwatch $stopwatch = null;
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly CronJobRepository $cronJobRepository,
+        private readonly Stopwatch $stopwatch,
+    ) {
+        parent::__construct();
+    }
 
     protected function configure(): void
     {
-        $this->setName('shapecode:cron:process');
-
         $this->addArgument('cron', InputArgument::REQUIRED);
     }
 
@@ -38,12 +48,12 @@ final class CronProcessCommand extends BaseCommand
     {
         $io = new CronStyle($input, $output);
 
-        $job = $this->getCronJobRepository()->find($input->getArgument('cron'));
+        $job = $this->cronJobRepository->find($input->getArgument('cron'));
 
         if ($job === null) {
             $io->error('No job found');
 
-            return 1;
+            return Command::SUCCESS;
         }
 
         $command = sprintf('%s -n', $job->getFullCommand());
@@ -63,7 +73,7 @@ final class CronProcessCommand extends BaseCommand
             $jobOutput->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
 
-        $this->getStopWatch()->start($watch);
+        $this->stopwatch->start($watch);
 
         if ($job->getRunningInstances() > $job->getMaxInstances()) {
             $statusCode = Command::INVALID;
@@ -72,7 +82,7 @@ final class CronProcessCommand extends BaseCommand
                 $application = $this->getApplication();
 
                 if ($application === null) {
-                    throw new RuntimeException('application can not be bull');
+                    throw new RuntimeException('application can not be bull', 1653426731910);
                 }
 
                 $statusCode = $application->doRun($jobInput, $jobOutput);
@@ -82,10 +92,10 @@ final class CronProcessCommand extends BaseCommand
             }
         }
 
-        $this->getStopWatch()->stop($watch);
+        $this->stopwatch->stop($watch);
 
         $status   = CronJobResultStatus::fromCommandStatus($statusCode);
-        $duration = $this->getStopWatch()->getEvent($watch)->getDuration();
+        $duration = $this->stopwatch->getEvent($watch)->getDuration();
 
         $seconds = $duration > 0 ? number_format($duration / 1000, 4) : 0;
         $message = sprintf('%s in %s seconds', $status->getStatusMessage(), $seconds);
@@ -99,7 +109,7 @@ final class CronProcessCommand extends BaseCommand
         }
 
         // reload job entity - it might be detached from current entity manager by the command
-        $job = $this->getCronJobRepository()->find($job->getId());
+        $job = $this->cronJobRepository->find($job->getId());
         if ($job === null) {
             throw new RuntimeException('job not found', 1653421395730);
         }
@@ -112,8 +122,6 @@ final class CronProcessCommand extends BaseCommand
 
     private function recordJobResult(CronJob $job, float $timeTaken, BufferedOutput $output, int $statusCode): void
     {
-        $cronJobResultManager = $this->getManager();
-
         $buffer = $output->isQuiet() ? null : $output->fetch();
 
         $result = new CronJobResult(
@@ -123,16 +131,7 @@ final class CronProcessCommand extends BaseCommand
             $buffer
         );
 
-        $cronJobResultManager->persist($result);
-        $cronJobResultManager->flush();
-    }
-
-    private function getStopWatch(): Stopwatch
-    {
-        if ($this->stopwatch === null) {
-            $this->stopwatch = new Stopwatch();
-        }
-
-        return $this->stopwatch;
+        $this->entityManager->persist($result);
+        $this->entityManager->flush();
     }
 }

@@ -7,6 +7,8 @@ namespace Shapecode\Bundle\CronBundle\Annotation;
 use Doctrine\Common\Annotations\Annotation;
 
 /**
+ * @deprecated use AsCronJob attribute instead
+ *
  * @Annotation
  */
 final class CronJob extends Annotation

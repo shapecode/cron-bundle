@@ -4,19 +4,7 @@ services:
         autoconfigure: true
         public: false
 
-    Shapecode\Bundle\CronBundle\Controller\:
-        resource: '../../Controller/*'
-        tags: [ 'controller.service_arguments' ]
-
-    Shapecode\Bundle\CronBundle\Command\:
-        resource: '../../Command/*'
-
-    Shapecode\Bundle\CronBundle\Manager\CronJobManager: ~
-    Shapecode\Bundle\CronBundle\EventListener\EntitySubscriber:
-        tags: [ 'doctrine.event_subscriber' ]
-
-    Shapecode\Bundle\CronBundle\EventListener\:
-        resource: '../../EventListener/*'
-
-    # service
-    Shapecode\Bundle\CronBundle\Service\CommandHelper: ~
+    Shapecode\Bundle\CronBundle\:
+        resource: '../../*'
+        exclude:
+            - '../../{Annotation,Attribute,Console,DependencyInjection,Domain,Entity,Event,Model,Resources,ShapecodeCronBundle.php}'

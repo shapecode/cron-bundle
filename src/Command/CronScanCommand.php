@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use DateTime;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
+use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,25 +22,22 @@ use function count;
 use function in_array;
 use function sprintf;
 
-final class CronScanCommand extends BaseCommand
+#[AsCommand(
+    name: 'shapecode:cron:scan',
+    description: 'Scans for any new or deleted cron jobs'
+)]
+final class CronScanCommand extends Command
 {
-    private CronJobManager $cronJobManager;
-
     public function __construct(
-        CronJobManager $manager,
-        ManagerRegistry $registry
+        private readonly CronJobManager $cronJobManager,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly CronJobRepository $cronJobRepository,
     ) {
-        $this->cronJobManager = $manager;
-
-        parent::__construct($registry);
+        parent::__construct();
     }
 
     protected function configure(): void
     {
-        $this
-            ->setName('shapecode:cron:scan')
-            ->setDescription('Scans for any new or deleted cron jobs');
-
         $this
             ->addOption('keep-deleted', 'k', InputOption::VALUE_NONE, 'If set, deleted cron jobs will not be removed')
             ->addOption('default-disabled', 'd', InputOption::VALUE_NONE, 'If set, new jobs will be disabled by default');
@@ -54,9 +53,7 @@ final class CronScanCommand extends BaseCommand
         $defaultDisabled = (bool) $input->getOption('default-disabled');
 
         // Enumerate the known jobs
-        $jobRepo   = $this->getCronJobRepository();
-        $knownJobs = $jobRepo->getKnownJobs();
-        $em        = $this->getManager();
+        $knownJobs = $this->cronJobRepository->getKnownJobs();
 
         $counter = [];
         foreach ($this->cronJobManager->getJobs() as $jobMetadata) {
@@ -75,7 +72,7 @@ final class CronScanCommand extends BaseCommand
                 unset($knownJobs[array_search($command, $knownJobs, true)]);
 
                 // Update the job if necessary
-                $currentJob = $jobRepo->findOneByCommand($command, $counter[$command]);
+                $currentJob = $this->cronJobRepository->findOneByCommand($command, $counter[$command]);
 
                 if ($currentJob === null) {
                     continue;
@@ -115,9 +112,9 @@ final class CronScanCommand extends BaseCommand
             if (count($knownJobs) > 0) {
                 foreach ($knownJobs as $deletedJob) {
                     $io->notice(sprintf('Deleting job: %s', $deletedJob));
-                    $jobsToDelete = $jobRepo->findByCommand($deletedJob);
+                    $jobsToDelete = $this->cronJobRepository->findByCommand($deletedJob);
                     foreach ($jobsToDelete as $jobToDelete) {
-                        $em->remove($jobToDelete);
+                        $this->entityManager->remove($jobToDelete);
                     }
                 }
             } else {
@@ -125,7 +122,7 @@ final class CronScanCommand extends BaseCommand
             }
         }
 
-        $em->flush();
+        $this->entityManager->flush();
 
         return Command::SUCCESS;
     }
@@ -146,6 +143,6 @@ final class CronScanCommand extends BaseCommand
         $message = sprintf('Found new job: "%s" with period %s', $newJob->getFullCommand(), $newJob->getPeriod());
         $io->success($message);
 
-        $this->getManager()->persist($newJob);
+        $this->entityManager->persist($newJob);
     }
 }

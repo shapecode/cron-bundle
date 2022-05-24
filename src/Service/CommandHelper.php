@@ -19,7 +19,7 @@ class CommandHelper
 
     public function __construct(
         private readonly KernelInterface $kernel,
-        private readonly?float $timeout = null
+        private readonly ?float $timeout = null
     ) {
     }
 
@@ -31,12 +31,10 @@ class CommandHelper
             $consolePath = sprintf('%s/bin/console', $projectDir);
 
             if (! file_exists($consolePath)) {
-                throw new RuntimeException('Missing console binary');
+                throw new RuntimeException('Missing console binary', 1653426744265);
             }
 
-            $consoleBin = $consolePath;
-
-            $this->consoleBin = $consoleBin;
+            $this->consoleBin = $consolePath;
         }
 
         return $this->consoleBin;
@@ -45,11 +43,10 @@ class CommandHelper
     public function getPhpExecutable(): string
     {
         if ($this->phpExecutable === null) {
-            $executableFinder = new PhpExecutableFinder();
-            $php              = $executableFinder->find();
+            $php = (new PhpExecutableFinder())->find();
 
             if ($php === false) {
-                throw new RuntimeException('Unable to find the PHP executable.');
+                throw new RuntimeException('Unable to find the PHP executable.', 1653426749950);
             }
 
             $this->phpExecutable = $php;

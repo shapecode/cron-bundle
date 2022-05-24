@@ -8,53 +8,45 @@ use Cron\CronExpression;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
 
-/**
- * @ORM\Entity(repositoryClass="Shapecode\Bundle\CronBundle\Repository\CronJobRepository")
- */
+#[ORM\Entity(repositoryClass: CronJobRepository::class)]
 class CronJob extends AbstractEntity
 {
-    /** @ORM\Column(type="string") */
+    #[ORM\Column(type: Types::STRING)]
     private string $command;
 
-    /** @ORM\Column(type="string", nullable=true) */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $arguments = null;
 
-    /** @ORM\Column(type="string", nullable=true) */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $description = null;
 
-    /** @ORM\Column(type="integer", options={"unsigned": true, "default":0}) */
+    #[ORM\Column(type: Types::INTEGER, options: ['unsigned' => true, 'default' => 0])]
     private int $runningInstances = 0;
 
-    /** @ORM\Column(type="integer", options={"unsigned": true, "default":1}) */
+    #[ORM\Column(type: Types::INTEGER, options: ['unsigned' => true, 'default' => 1])]
     private int $maxInstances = 1;
 
-    /** @ORM\Column(type="integer", options={"unsigned": true, "default":1}) */
+    #[ORM\Column(type: Types::INTEGER, options: ['unsigned' => true, 'default' => 1])]
     private int $number = 1;
 
-    /** @ORM\Column(type="string") */
+    #[ORM\Column(type: Types::STRING)]
     private string $period;
 
-    /** @ORM\Column(type="datetime", nullable=true) */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $lastUse = null;
 
-    /** @ORM\Column(type="datetime") */
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private DateTimeInterface $nextRun;
 
-    /**
-     * @ORM\OneToMany(
-     *     targetEntity="Shapecode\Bundle\CronBundle\Entity\CronJobResult",
-     *     mappedBy="cronJob",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     *
-     * @var Collection<int, CronJobResult>
-     */
+    /** @var Collection<int, CronJobResult>*/
+    #[ORM\OneToMany(mappedBy: 'cronJob', targetEntity: CronJobResult::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $results;
 
-    /** @ORM\Column(type="boolean", options={"default"=1}) */
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     private bool $enable = true;
 
     public function __construct(

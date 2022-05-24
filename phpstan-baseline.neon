@@ -1,0 +1,22 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Fetching deprecated class constant NAME of class Shapecode\\\\Bundle\\\\CronBundle\\\\Event\\\\LoadJobsEvent\\.$#"
+			count: 1
+			path: src/Manager/CronJobManager.php
+
+		-
+			message: """
+				#^Fetching class constant class of deprecated class Shapecode\\\\Bundle\\\\CronBundle\\\\Annotation\\\\CronJob\\:
+				use AsCronJob attribute instead$#
+			"""
+			count: 1
+			path: tests/Annotation/CronJobTest.php
+
+		-
+			message: """
+				#^Instantiation of deprecated class Shapecode\\\\Bundle\\\\CronBundle\\\\Annotation\\\\CronJob\\:
+				use AsCronJob attribute instead$#
+			"""
+			count: 2
+			path: tests/Annotation/CronJobTest.php

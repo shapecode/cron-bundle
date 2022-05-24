@@ -6,9 +6,9 @@ namespace Shapecode\Bundle\CronBundle\EventListener;
 
 use DateTime;
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
-use Doctrine\Persistence\ObjectManager;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
 
 final class EntitySubscriber implements EventSubscriber
@@ -25,7 +25,7 @@ final class EntitySubscriber implements EventSubscriber
     }
 
     /**
-     * @param LifecycleEventArgs<ObjectManager> $args
+     * @param LifecycleEventArgs<EntityManagerInterface> $args
      */
     public function prePersist(LifecycleEventArgs $args): void
     {
@@ -33,7 +33,7 @@ final class EntitySubscriber implements EventSubscriber
     }
 
     /**
-     * @param LifecycleEventArgs<ObjectManager> $args
+     * @param LifecycleEventArgs<EntityManagerInterface> $args
      */
     public function preUpdate(LifecycleEventArgs $args): void
     {
@@ -41,7 +41,7 @@ final class EntitySubscriber implements EventSubscriber
     }
 
     /**
-     * @param LifecycleEventArgs<ObjectManager> $args
+     * @param LifecycleEventArgs<EntityManagerInterface> $args
      */
     private function setDates(LifecycleEventArgs $args): void
     {

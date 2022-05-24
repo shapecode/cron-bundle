@@ -23,7 +23,7 @@ final class CronJobManagerTest extends TestCase
 
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $eventDispatcher
-            ->expects(self::once())
+            ->expects(self::exactly(2))
             ->method('dispatch')
             ->willReturnCallback(
                 static function (LoadJobsEvent $event) use ($expression, $command): LoadJobsEvent {

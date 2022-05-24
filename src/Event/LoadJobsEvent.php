@@ -7,16 +7,19 @@ namespace Shapecode\Bundle\CronBundle\Event;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Contracts\EventDispatcher\Event;
 
+use function array_values;
+
 final class LoadJobsEvent extends Event
 {
+    /** @deprecated  */
     public const NAME = 'shapecode_cron.load_jobs';
 
-    /** @var list<CronJobMetadata> */
+    /** @var array<string, CronJobMetadata> */
     private array $jobs = [];
 
     public function addJob(CronJobMetadata $cronJobMetadata): void
     {
-        $this->jobs[] = $cronJobMetadata;
+        $this->jobs[$cronJobMetadata->command] = $cronJobMetadata;
     }
 
     /**
@@ -24,6 +27,6 @@ final class LoadJobsEvent extends Event
      */
     public function getJobs(): array
     {
-        return $this->jobs;
+        return array_values($this->jobs);
     }
 }

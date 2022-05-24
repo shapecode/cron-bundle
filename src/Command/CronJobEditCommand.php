@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
+use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,15 +19,24 @@ use function count;
 use function is_string;
 use function sprintf;
 
-final class CronJobEditCommand extends BaseCommand
+#[AsCommand(
+    name: 'shapecode:cron:edit',
+    description: 'Changes the status of a cron job'
+)]
+final class CronJobEditCommand extends Command
 {
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly CronJobRepository $cronJobRepository,
+    ) {
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
-        $this->setName('shapecode:cron:edit');
-        $this->setDescription('Changes the status of a cron job');
-
-        $this->addArgument('job', InputArgument::REQUIRED, 'Name of the job to disable');
-        $this->addOption('enable', null, InputOption::VALUE_REQUIRED, 'Enable or disable this cron (y or n)');
+        $this
+            ->addArgument('job', InputArgument::REQUIRED, 'Name of the job to disable')
+            ->addOption('enable', null, InputOption::VALUE_REQUIRED, 'Enable or disable this cron (y or n)');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -34,10 +46,7 @@ final class CronJobEditCommand extends BaseCommand
         $jobName = $input->getArgument('job');
         assert(is_string($jobName));
 
-        $jobRepo = $this->getCronJobRepository();
-        $jobs    = $jobRepo->findByCommand($jobName);
-
-        $em = $this->getManager();
+        $jobs = $this->cronJobRepository->findByCommand($jobName);
 
         if (count($jobs) === 0) {
             $io->error(sprintf('Couldn\'t find a job by the name of %s', $jobName));
@@ -49,10 +58,10 @@ final class CronJobEditCommand extends BaseCommand
 
         foreach ($jobs as $job) {
             $job->setEnable($enable);
-            $em->persist($job);
+            $this->entityManager->persist($job);
         }
 
-        $em->flush();
+        $this->entityManager->flush();
 
         if ($enable) {
             $io->success('cron enabled');

@@ -7,12 +7,20 @@ namespace Shapecode\Bundle\CronBundle\EventListener;
 use Shapecode\Bundle\CronBundle\Event\LoadJobsEvent;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
-final class ServiceJobLoaderListener implements EventSubscriberInterface
+#[AsEventListener()]
+final class ServiceJobLoaderListener
 {
     /** @var list<CronJobMetadata> */
     private array $jobs = [];
+
+    public function __invoke(LoadJobsEvent $event): void
+    {
+        foreach ($this->jobs as $job) {
+            $event->addJob($job);
+        }
+    }
 
     public function addCommand(
         string $expression,
@@ -21,20 +29,5 @@ final class ServiceJobLoaderListener implements EventSubscriberInterface
         int $maxInstances = 1
     ): void {
         $this->jobs[] = CronJobMetadata::createByCommand($expression, $command, $arguments, $maxInstances);
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [LoadJobsEvent::NAME => 'onLoadJobs'];
-    }
-
-    public function onLoadJobs(LoadJobsEvent $event): void
-    {
-        foreach ($this->jobs as $job) {
-            $event->addJob($job);
-        }
     }
 }

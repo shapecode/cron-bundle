@@ -17,18 +17,16 @@ final class CronJobController
     ) {
     }
 
-    public function runAction(): Response
+    public function __invoke(): Response
     {
         $application = new Application($this->kernel);
         $application->setAutoExit(false);
 
-        $input = new StringInput('shapecode:cron:run');
-
+        $input  = new StringInput('shapecode:cron:run');
         $output = new BufferedOutput();
+
         $application->run($input, $output);
 
-        $content = $output->fetch();
-
-        return new Response($content);
+        return new Response($output->fetch());
     }
 }

@@ -29,7 +29,7 @@ final class CronJobMetadata
         $commandName = $command->getName();
 
         if ($commandName === null) {
-            throw new RuntimeException('command has to have a name provided');
+            throw new RuntimeException('command has to have a name provided', 1653426725688);
         }
 
         return new self(

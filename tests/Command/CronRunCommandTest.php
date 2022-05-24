@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Tests\Command;
 
 use DateTime;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Shapecode\Bundle\CronBundle\Command\CronRunCommand;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
-use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
-use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository;
 use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -30,7 +27,7 @@ final class CronRunCommandTest extends TestCase
         $commandHelper->method('getPhpExecutable')->willReturn('php');
         $commandHelper->method('getTimeout')->willReturn(null);
 
-        $manager = $this->createMock(ObjectManager::class);
+        $manager = $this->createMock(EntityManagerInterface::class);
 
         $job = CronJob::create('pwd', '* * * * *');
         $job->setNextRun(new DateTime());
@@ -40,24 +37,10 @@ final class CronRunCommandTest extends TestCase
             $job,
         ]);
 
-        $cronJobResultRepo = $this->createMock(CronJobResultRepository::class);
-
-        $registry = $this->createMock(ManagerRegistry::class);
-        $registry->method('getManager')->willReturn($manager);
-        $registry->method('getRepository')->willReturnCallback(static function (string $param) use ($cronJobRepo, $cronJobResultRepo) {
-            if ($param === CronJob::class) {
-                return $cronJobRepo;
-            }
-
-            if ($param === CronJobResult::class) {
-                return $cronJobResultRepo;
-            }
-        });
-
         $input  = $this->createMock(InputInterface::class);
         $output = new BufferedOutput();
 
-        $command = new CronRunCommand($commandHelper, $registry);
+        $command = new CronRunCommand($manager, $cronJobRepo, $commandHelper);
         $command->run($input, $output);
 
         self::assertEquals('shapecode:cron:run', $command->getName());
@@ -73,7 +56,7 @@ final class CronRunCommandTest extends TestCase
         $commandHelper->method('getPhpExecutable')->willReturn('php');
         $commandHelper->method('getTimeout')->willReturn(30.0);
 
-        $manager = $this->createMock(ObjectManager::class);
+        $manager = $this->createMock(EntityManagerInterface::class);
 
         $job = CronJob::create('pwd', '* * * * *');
         $job->setNextRun(new DateTime());
@@ -83,24 +66,10 @@ final class CronRunCommandTest extends TestCase
             $job,
         ]);
 
-        $cronJobResultRepo = $this->createMock(CronJobResultRepository::class);
-
-        $registry = $this->createMock(ManagerRegistry::class);
-        $registry->method('getManager')->willReturn($manager);
-        $registry->method('getRepository')->willReturnCallback(static function (string $param) use ($cronJobRepo, $cronJobResultRepo) {
-            if ($param === CronJob::class) {
-                return $cronJobRepo;
-            }
-
-            if ($param === CronJobResult::class) {
-                return $cronJobResultRepo;
-            }
-        });
-
         $input  = $this->createMock(InputInterface::class);
         $output = new BufferedOutput();
 
-        $command = new CronRunCommand($commandHelper, $registry);
+        $command = new CronRunCommand($manager, $cronJobRepo, $commandHelper);
         $command->run($input, $output);
 
         self::assertEquals('shapecode:cron:run', $command->getName());

@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use DateTime;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
+use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
 use Shapecode\Bundle\CronBundle\Service\CommandHelper;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,32 +22,25 @@ use function count;
 use function sleep;
 use function sprintf;
 
-final class CronRunCommand extends BaseCommand
+#[AsCommand(
+    name: 'shapecode:cron:run',
+    description: 'Runs any currently schedule cron jobs'
+)]
+final class CronRunCommand extends Command
 {
-    private CommandHelper $commandHelper;
-
     public function __construct(
-        CommandHelper $commandHelper,
-        ManagerRegistry $registry
+        private readonly EntityManagerInterface $entityManager,
+        private readonly CronJobRepository $cronJobRepository,
+        private readonly CommandHelper $commandHelper,
     ) {
-        parent::__construct($registry);
-
-        $this->commandHelper = $commandHelper;
-    }
-
-    protected function configure(): void
-    {
-        $this
-            ->setName('shapecode:cron:run')
-            ->setDescription('Runs any currently schedule cron jobs');
+        parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jobRepo = $this->getCronJobRepository();
-        $style   = new CronStyle($input, $output);
+        $style = new CronStyle($input, $output);
 
-        $jobsToRun = $jobRepo->findAll();
+        $jobsToRun = $this->cronJobRepository->findAll();
 
         $jobCount = count($jobsToRun);
         $style->comment(sprintf('Cronjobs started at %s', (new DateTime())->format('r')));
@@ -58,7 +53,6 @@ final class CronRunCommand extends BaseCommand
 
         /** @var CronJobRunning[] $processes */
         $processes = [];
-        $em        = $this->getManager();
 
         foreach ($jobsToRun as $job) {
             sleep(1);
@@ -83,8 +77,8 @@ final class CronRunCommand extends BaseCommand
             $job->calculateNextRun();
             $job->setLastUse($now);
 
-            $em->persist($job);
-            $em->flush();
+            $this->entityManager->persist($job);
+            $this->entityManager->flush();
 
             $processes[] = new CronJobRunning($job, $process);
 
@@ -103,7 +97,7 @@ final class CronRunCommand extends BaseCommand
             $style->text('waiting for all running jobs ...');
 
             // wait for all processes
-            $this->waitProcesses($processes);
+            $this->waitProcesses(...$processes);
 
             $style->success('All jobs are finished.');
         } else {
@@ -113,13 +107,8 @@ final class CronRunCommand extends BaseCommand
         return Command::SUCCESS;
     }
 
-    /**
-     * @param CronJobRunning[] $processes
-     */
-    public function waitProcesses(array $processes): void
+    private function waitProcesses(CronJobRunning ...$processes): void
     {
-        $em = $this->getManager();
-
         while (count($processes) > 0) {
             foreach ($processes as $key => $running) {
                 try {
@@ -133,8 +122,8 @@ final class CronRunCommand extends BaseCommand
 
                 $job = $running->cronJob->decreaseRunningInstances();
 
-                $em->persist($job);
-                $em->flush();
+                $this->entityManager->persist($job);
+                $this->entityManager->flush();
 
                 unset($processes[$key]);
             }
