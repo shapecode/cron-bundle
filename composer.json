@@ -56,10 +56,11 @@
         "dragonmantank/cron-expression": "^3.1"
     },
     "require-dev":{
-        "icanhazstring/composer-unused": "~0.7",
+        "icanhazstring/composer-unused": "^0.7",
         "doctrine/coding-standard": "~9.0",
         "roave/security-advisories": "dev-master",
         "squizlabs/php_codesniffer": "~3.6",
+        "maglnet/composer-require-checker": "^3.8|^4.0",
         "phpstan/phpstan": "~1.2",
         "phpstan/phpstan-deprecation-rules": "~1.0",
         "phpstan/phpstan-phpunit": "~1.0",
@@ -88,7 +89,7 @@
             "@phpunit"
         ],
         "crc": "composer-require-checker --config-file=./composer-require-checker.json --ansi",
-        "phpstan": "phpstan analyse --ansi",
+        "phpstan": "phpstan analyse --memory-limit=-1 --ansi",
         "phpstan-update-baseline": "phpstan analyse --ansi --generate-baseline phpstan-baseline.neon",
         "phpunit": "phpunit --colors=always",
         "cs-check": "phpcs -s",
@@ -103,7 +104,11 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "icanhazstring/composer-unused": true
+        }
     },
     "funding": [
         {
