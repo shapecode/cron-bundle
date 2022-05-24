@@ -12,8 +12,6 @@ use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
 use Shapecode\Bundle\CronBundle\Repository\CronJobResultRepository;
 use Symfony\Component\Console\Command\Command;
 
-use function assert;
-
 abstract class BaseCommand extends Command
 {
     private ManagerRegistry $registry;
@@ -33,17 +31,11 @@ abstract class BaseCommand extends Command
 
     final protected function getCronJobRepository(): CronJobRepository
     {
-        $repo = $this->registry->getRepository(CronJob::class);
-        assert($repo instanceof CronJobRepository);
-
-        return $repo;
+        return $this->registry->getRepository(CronJob::class);
     }
 
     final protected function getCronJobResultRepository(): CronJobResultRepository
     {
-        $repo = $this->registry->getRepository(CronJobResult::class);
-        assert($repo instanceof CronJobResultRepository);
-
-        return $repo;
+        return $this->registry->getRepository(CronJobResult::class);
     }
 }
