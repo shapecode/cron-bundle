@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
+use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
 use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
@@ -32,6 +32,7 @@ final class CronScanCommand extends Command
         private readonly CronJobManager $cronJobManager,
         private readonly EntityManagerInterface $entityManager,
         private readonly CronJobRepository $cronJobRepository,
+        private readonly Clock $clock,
     ) {
         parent::__construct();
     }
@@ -46,7 +47,7 @@ final class CronScanCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new CronStyle($input, $output);
-        $io->comment(sprintf('Scan for cronjobs started at %s', (new DateTime())->format('r')));
+        $io->comment(sprintf('Scan for cronjobs started at %s', $this->clock->now()->format('r')));
         $io->title('scanning ...');
 
         $keepDeleted     = (bool) $input->getOption('keep-deleted');
@@ -112,7 +113,7 @@ final class CronScanCommand extends Command
             if (count($knownJobs) > 0) {
                 foreach ($knownJobs as $deletedJob) {
                     $io->notice(sprintf('Deleting job: %s', $deletedJob));
-                    $jobsToDelete = $this->cronJobRepository->findByCommand($deletedJob);
+                    $jobsToDelete = $this->cronJobRepository->findByCommandOrId($deletedJob);
                     foreach ($jobsToDelete as $jobToDelete) {
                         $this->entityManager->remove($jobToDelete);
                     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 
@@ -31,9 +32,20 @@ class CronJobRepository extends ServiceEntityRepository
     /**
      * @return list<CronJob>
      */
-    public function findByCommand(string $command): array
+    public function findByCommandOrId(string $commandOrId): array
     {
-        return $this->findBy(['command' => $command]);
+        $qb = $this->createQueryBuilder('p');
+
+        return $qb
+            ->andWhere(
+                $qb->expr()->orX(
+                    'p.command = :command',
+                    'p.id= :command',
+                )
+            )
+            ->setParameter('command', $commandOrId, Types::STRING)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

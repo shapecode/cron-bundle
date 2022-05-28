@@ -10,6 +10,7 @@ use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Domain\CronJobResultStatus;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
+use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -35,6 +36,7 @@ final class CronProcessCommand extends Command
         private readonly EntityManagerInterface $entityManager,
         private readonly CronJobRepository $cronJobRepository,
         private readonly Stopwatch $stopwatch,
+        private readonly Clock $clock,
     ) {
         parent::__construct();
     }
@@ -128,7 +130,8 @@ final class CronProcessCommand extends Command
             $job,
             $timeTaken,
             $statusCode,
-            $buffer
+            $buffer,
+            $this->clock->now()
         );
 
         $this->entityManager->persist($result);

@@ -53,8 +53,6 @@ class CronJob extends AbstractEntity
         string $command,
         string $period
     ) {
-        parent::__construct();
-
         $this->command = $command;
         $this->period  = $period;
         $this->results = new ArrayCollection();
@@ -204,6 +202,16 @@ class CronJob extends AbstractEntity
     public function isEnable(): bool
     {
         return $this->enable;
+    }
+
+    public function enable(): self
+    {
+        return $this->setEnable(true);
+    }
+
+    public function disable(): self
+    {
+        return $this->setEnable(false);
     }
 
     public function calculateNextRun(): self

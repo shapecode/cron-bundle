@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\EventListener;
 
-use DateTime;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
+use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 
 final class EntitySubscriber implements EventSubscriber
 {
+    public function __construct(
+        private readonly Clock $clock
+    ) {
+    }
+
     /**
      * @inheritDoc
      */
@@ -51,6 +56,12 @@ final class EntitySubscriber implements EventSubscriber
             return;
         }
 
-        $entity->setUpdatedAt(new DateTime());
+        $now = $this->clock->now();
+
+        if ($entity->getCreatedAt() === null) {
+            $entity->setCreatedAt($now);
+        }
+
+        $entity->setUpdatedAt($now);
     }
 }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
+use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
 use Shapecode\Bundle\CronBundle\Service\CommandHelper;
@@ -23,15 +23,18 @@ use function sleep;
 use function sprintf;
 
 #[AsCommand(
-    name: 'shapecode:cron:run',
+    name: CronRunCommand::NAME,
     description: 'Runs any currently schedule cron jobs'
 )]
 final class CronRunCommand extends Command
 {
+    public const NAME = 'shapecode:cron:run';
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CronJobRepository $cronJobRepository,
         private readonly CommandHelper $commandHelper,
+        private readonly Clock $clock
     ) {
         parent::__construct();
     }
@@ -39,17 +42,15 @@ final class CronRunCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style = new CronStyle($input, $output);
+        $now   = $this->clock->now();
 
         $jobsToRun = $this->cronJobRepository->findAll();
 
         $jobCount = count($jobsToRun);
-        $style->comment(sprintf('Cronjobs started at %s', (new DateTime())->format('r')));
+        $style->comment(sprintf('Cronjobs started at %s', $now->format('r')));
 
         $style->title('Execute cronjobs');
         $style->info(sprintf('Found %d jobs', $jobCount));
-
-        // Update the job with it's next scheduled time
-        $now = new DateTime();
 
         /** @var CronJobRunning[] $processes */
         $processes = [];

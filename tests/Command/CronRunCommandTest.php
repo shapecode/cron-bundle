@@ -6,9 +6,12 @@ namespace Shapecode\Bundle\CronBundle\Tests\Command;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Lcobucci\Clock\FrozenClock;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shapecode\Bundle\CronBundle\Command\CronRunCommand;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
+use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
 use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,61 +20,82 @@ use Symfony\Component\HttpKernel\Kernel;
 
 final class CronRunCommandTest extends TestCase
 {
+    private Kernel & MockObject $kernel;
+
+    private CommandHelper & MockObject $commandHelper;
+
+    private EntityManagerInterface & MockObject $manager;
+
+    private CronJobRepository & MockObject $cronJobRepo;
+
+    private CronRunCommand $command;
+
+    private InputInterface & MockObject $input;
+
+    private BufferedOutput $output;
+
+    private Clock $clock;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->kernel        = $this->createMock(Kernel::class);
+        $this->manager       = $this->createMock(EntityManagerInterface::class);
+        $this->commandHelper = $this->createMock(CommandHelper::class);
+        $this->cronJobRepo   = $this->createMock(CronJobRepository::class);
+        $this->input         = $this->createMock(InputInterface::class);
+        $this->output        = new BufferedOutput();
+
+        $this->clock = new Clock(FrozenClock::fromUTC());
+
+        $this->command = new CronRunCommand(
+            $this->manager,
+            $this->cronJobRepo,
+            $this->commandHelper,
+            $this->clock
+        );
+    }
+
     public function testRun(): void
     {
-        $kernel = $this->createMock(Kernel::class);
-        $kernel->method('getProjectDir')->willReturn(__DIR__);
+        $this->kernel->method('getProjectDir')->willReturn(__DIR__);
 
-        $commandHelper = $this->createMock(CommandHelper::class);
-        $commandHelper->method('getConsoleBin')->willReturn('/bin/console');
-        $commandHelper->method('getPhpExecutable')->willReturn('php');
-        $commandHelper->method('getTimeout')->willReturn(null);
-
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $this->commandHelper->method('getConsoleBin')->willReturn('/bin/console');
+        $this->commandHelper->method('getPhpExecutable')->willReturn('php');
+        $this->commandHelper->method('getTimeout')->willReturn(null);
 
         $job = CronJob::create('pwd', '* * * * *');
         $job->setNextRun(new DateTime());
 
-        $cronJobRepo = $this->createMock(CronJobRepository::class);
-        $cronJobRepo->method('findAll')->willReturn([
+        $this->cronJobRepo->method('findAll')->willReturn([
             $job,
         ]);
 
-        $input  = $this->createMock(InputInterface::class);
-        $output = new BufferedOutput();
+        $this->command->run($this->input, $this->output);
 
-        $command = new CronRunCommand($manager, $cronJobRepo, $commandHelper);
-        $command->run($input, $output);
-
-        self::assertEquals('shapecode:cron:run', $command->getName());
+        self::assertEquals('shapecode:cron:run', $this->command->getName());
     }
 
     public function testRunWithTimeout(): void
     {
-        $kernel = $this->createMock(Kernel::class);
-        $kernel->method('getProjectDir')->willReturn(__DIR__);
+        $this->kernel->method('getProjectDir')->willReturn(__DIR__);
 
-        $commandHelper = $this->createMock(CommandHelper::class);
-        $commandHelper->method('getConsoleBin')->willReturn('/bin/console');
-        $commandHelper->method('getPhpExecutable')->willReturn('php');
-        $commandHelper->method('getTimeout')->willReturn(30.0);
+        $this->commandHelper->method('getConsoleBin')->willReturn('/bin/console');
+        $this->commandHelper->method('getPhpExecutable')->willReturn('php');
+        $this->commandHelper->method('getTimeout')->willReturn(30.0);
 
-        $manager = $this->createMock(EntityManagerInterface::class);
+        $this->manager = $this->createMock(EntityManagerInterface::class);
 
         $job = CronJob::create('pwd', '* * * * *');
         $job->setNextRun(new DateTime());
 
-        $cronJobRepo = $this->createMock(CronJobRepository::class);
-        $cronJobRepo->method('findAll')->willReturn([
+        $this->cronJobRepo->method('findAll')->willReturn([
             $job,
         ]);
 
-        $input  = $this->createMock(InputInterface::class);
-        $output = new BufferedOutput();
+        $this->command->run($this->input, $this->output);
 
-        $command = new CronRunCommand($manager, $cronJobRepo, $commandHelper);
-        $command->run($input, $output);
-
-        self::assertEquals('shapecode:cron:run', $command->getName());
+        self::assertEquals('shapecode:cron:run', $this->command->getName());
     }
 }

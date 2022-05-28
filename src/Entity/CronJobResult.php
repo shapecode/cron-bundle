@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Entity;
 
-use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,15 +34,14 @@ class CronJobResult extends AbstractEntity
         CronJob $cronJob,
         float $runTime,
         int $statusCode,
-        ?string $output
+        ?string $output,
+        DateTimeInterface $runAt,
     ) {
-        parent::__construct();
-
         $this->runTime    = $runTime;
         $this->statusCode = $statusCode;
         $this->output     = $output;
         $this->cronJob    = $cronJob;
-        $this->runAt      = new DateTime();
+        $this->runAt      = $runAt;
     }
 
     public function getRunAt(): DateTimeInterface

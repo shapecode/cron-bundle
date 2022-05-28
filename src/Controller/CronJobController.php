@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Controller;
 
+use Shapecode\Bundle\CronBundle\Command\CronRunCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -22,7 +23,7 @@ final class CronJobController
         $application = new Application($this->kernel);
         $application->setAutoExit(false);
 
-        $input  = new StringInput('shapecode:cron:run');
+        $input  = new StringInput(CronRunCommand::NAME);
         $output = new BufferedOutput();
 
         $application->run($input, $output);

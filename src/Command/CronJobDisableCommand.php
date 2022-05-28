@@ -11,7 +11,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function assert;
@@ -20,10 +19,10 @@ use function is_string;
 use function sprintf;
 
 #[AsCommand(
-    name: 'shapecode:cron:edit',
-    description: 'Changes the status of a cron job'
+    name: 'shapecode:cron:disable',
+    description: 'Disables a cronjob'
 )]
-final class CronJobEditCommand extends Command
+final class CronJobDisableCommand extends Command
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
@@ -35,39 +34,32 @@ final class CronJobEditCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('job', InputArgument::REQUIRED, 'Name of the job to disable')
-            ->addOption('enable', null, InputOption::VALUE_REQUIRED, 'Enable or disable this cron (y or n)');
+            ->addArgument('job', InputArgument::REQUIRED, 'Name or id of the job to disable');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new CronStyle($input, $output);
 
-        $jobName = $input->getArgument('job');
-        assert(is_string($jobName));
+        $nameOrId = $input->getArgument('job');
+        assert(is_string($nameOrId));
 
-        $jobs = $this->cronJobRepository->findByCommand($jobName);
+        $jobs = $this->cronJobRepository->findByCommandOrId($nameOrId);
 
         if (count($jobs) === 0) {
-            $io->error(sprintf('Couldn\'t find a job by the name of %s', $jobName));
+            $io->error(sprintf('Couldn\'t find a job by the name or id of %s', $nameOrId));
 
             return Command::FAILURE;
         }
 
-        $enable = $input->getOption('enable') === 'y';
-
         foreach ($jobs as $job) {
-            $job->setEnable($enable);
+            $job->disable();
             $this->entityManager->persist($job);
         }
 
         $this->entityManager->flush();
 
-        if ($enable) {
-            $io->success('cron enabled');
-        } else {
-            $io->success('cron disabled');
-        }
+        $io->success('cron disabled');
 
         return Command::SUCCESS;
     }
