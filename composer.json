@@ -48,7 +48,6 @@
         "symfony/event-dispatcher-contracts": "^2.0|^3.0",
 
         "doctrine/doctrine-bundle": "^2.6",
-        "doctrine/annotations": "^1.8",
         "doctrine/event-manager": "^1.1",
         "doctrine/collections": "^1.6",
         "doctrine/persistence": "^2.0|^3.0",

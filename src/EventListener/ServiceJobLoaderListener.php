@@ -9,7 +9,7 @@ use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
-#[AsEventListener()]
+#[AsEventListener]
 final class ServiceJobLoaderListener
 {
     /** @var list<CronJobMetadata> */

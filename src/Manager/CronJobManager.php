@@ -27,6 +27,7 @@ class CronJobManager
             $event = new LoadJobsEvent();
 
             // deprecated, use class name instead
+            // @phpstan-ignore-next-line
             $this->eventDispatcher->dispatch($event, LoadJobsEvent::NAME);
 
             $this->eventDispatcher->dispatch($event);
