@@ -7,9 +7,8 @@ namespace Shapecode\Bundle\CronBundle\Repository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
+use Shapecode\Bundle\CronBundle\Collection\CronJobCollection;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
-
-use function array_map;
 
 /**
  * @extends ServiceEntityRepository<CronJob>
@@ -29,14 +28,16 @@ class CronJobRepository extends ServiceEntityRepository
         ]);
     }
 
-    /**
-     * @return list<CronJob>
-     */
-    public function findByCommandOrId(string $commandOrId): array
+    public function findAllCollection(): CronJobCollection
+    {
+        return new CronJobCollection(...$this->findAll());
+    }
+
+    public function findByCommandOrId(string $commandOrId): CronJobCollection
     {
         $qb = $this->createQueryBuilder('p');
 
-        return $qb
+        $result = $qb
             ->andWhere(
                 $qb->expr()->orX(
                     'p.command = :command',
@@ -46,18 +47,7 @@ class CronJobRepository extends ServiceEntityRepository
             ->setParameter('command', $commandOrId, Types::STRING)
             ->getQuery()
             ->getResult();
-    }
 
-    /**
-     * @return list<string>
-     */
-    public function getKnownJobs(): array
-    {
-        return array_map(
-            static function (CronJob $o): string {
-                return $o->getCommand();
-            },
-            $this->findAll()
-        );
+        return new CronJobCollection(...$result);
     }
 }

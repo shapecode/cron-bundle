@@ -14,7 +14,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function assert;
-use function count;
 use function is_string;
 use function sprintf;
 
@@ -46,7 +45,7 @@ final class CronJobDisableCommand extends Command
 
         $jobs = $this->cronJobRepository->findByCommandOrId($nameOrId);
 
-        if (count($jobs) === 0) {
+        if ($jobs->isEmpty()) {
             $io->error(sprintf('Couldn\'t find a job by the name or id of %s', $nameOrId));
 
             return Command::FAILURE;

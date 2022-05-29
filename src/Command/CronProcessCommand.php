@@ -28,10 +28,12 @@ use function sprintf;
 use function str_replace;
 
 #[AsCommand(
-    name: 'shapecode:cron:process'
+    name: CronProcessCommand::NAME
 )]
 final class CronProcessCommand extends Command
 {
+    public const NAME = 'shapecode:cron:process';
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CronJobRepository $cronJobRepository,

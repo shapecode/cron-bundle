@@ -7,4 +7,4 @@ services:
     Shapecode\Bundle\CronBundle\:
         resource: '../../*'
         exclude:
-            - '../../{Attribute,Console,DependencyInjection,Domain,Entity,Event,Model,Resources,ShapecodeCronBundle.php}'
+            - '../../{Attribute,Collection,Console,DependencyInjection,Domain,Entity,Event,Model,Resources,ShapecodeCronBundle.php}'

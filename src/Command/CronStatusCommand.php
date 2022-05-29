@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
+use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
+use function array_map;
 
 #[AsCommand(
     name: 'shapecode:cron:status',
@@ -29,34 +32,27 @@ final class CronStatusCommand extends Command
 
         $io->title('Cron job status');
 
-        $cronJobs = $this->cronJobRepository->findAll();
-
-        $tableContent = [];
-        foreach ($cronJobs as $cronJob) {
-            $row = [
+        $tableContent = array_map(
+            static fn (CronJob $cronJob): array => [
                 $cronJob->getId(),
                 $cronJob->getFullCommand(),
-            ];
+                $cronJob->isEnable() ? $cronJob->getNextRun()->format('r') : 'Not scheduled',
+                $cronJob->getLastUse() !== null ? $cronJob->getLastUse()->format('r') : 'This job has not yet been run',
+                $cronJob->isEnable() ? 'Enabled' : 'Disabled',
+            ],
+            $this->cronJobRepository->findAll()
+        );
 
-            if (! $cronJob->isEnable()) {
-                $row[] = 'Not scheduled';
-            } else {
-                $row[] = $cronJob->getNextRun()->format('r');
-            }
-
-            if ($cronJob->getLastUse() !== null) {
-                $row[] = $cronJob->getLastUse()->format('r');
-            } else {
-                $row[] = 'This job has not yet been run';
-            }
-
-            $row[] = $cronJob->isEnable() ? 'Enabled' : 'Disabled';
-
-            $tableContent[] = $row;
-        }
-
-        $header = ['ID', 'Command', 'Next Schedule', 'Last run', 'Enabled'];
-        $io->table($header, $tableContent);
+        $io->table(
+            [
+                'ID',
+                'Command',
+                'Next Schedule',
+                'Last run',
+                'Enabled',
+            ],
+            $tableContent
+        );
 
         return Command::SUCCESS;
     }

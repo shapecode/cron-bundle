@@ -6,6 +6,7 @@ namespace Shapecode\Bundle\CronBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
+use Shapecode\Bundle\CronBundle\Domain\CronJobCounter;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
@@ -17,9 +18,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function array_search;
-use function count;
-use function in_array;
 use function sprintf;
 
 #[AsCommand(
@@ -47,33 +45,30 @@ final class CronScanCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new CronStyle($input, $output);
-        $io->comment(sprintf('Scan for cronjobs started at %s', $this->clock->now()->format('r')));
+        $io->comment(sprintf('Scan for cron jobs started at %s', $this->clock->now()->format('r')));
         $io->title('scanning ...');
 
         $keepDeleted     = (bool) $input->getOption('keep-deleted');
         $defaultDisabled = (bool) $input->getOption('default-disabled');
 
         // Enumerate the known jobs
-        $knownJobs = $this->cronJobRepository->getKnownJobs();
+        $cronJobs  = $this->cronJobRepository->findAllCollection();
+        $knownJobs = $cronJobs->mapToCommand();
 
-        $counter = [];
+        $counter = new CronJobCounter();
         foreach ($this->cronJobManager->getJobs() as $jobMetadata) {
             $command = $jobMetadata->command;
 
             $io->section($command);
 
-            if (! isset($counter[$command])) {
-                $counter[$command] = 0;
-            }
+            $counter->increase($jobMetadata);
 
-            $counter[$command]++;
-
-            if (in_array($command, $knownJobs, true)) {
+            if ($knownJobs->contains($command)) {
                 // Clear it from the known jobs so that we don't try to delete it
-                unset($knownJobs[array_search($command, $knownJobs, true)]);
+                $knownJobs->remove($command);
 
                 // Update the job if necessary
-                $currentJob = $this->cronJobRepository->findOneByCommand($command, $counter[$command]);
+                $currentJob = $this->cronJobRepository->findOneByCommand($command, $counter->value($jobMetadata));
 
                 if ($currentJob === null) {
                     continue;
@@ -100,17 +95,17 @@ final class CronScanCommand extends Command
                     $io->notice('cronjob updated');
                 }
             } else {
-                $this->newJobFound($io, $jobMetadata, $defaultDisabled, $counter[$command]);
+                $this->newJobFound($io, $jobMetadata, $defaultDisabled, $counter->value($jobMetadata));
             }
         }
 
-        $io->success('Finished scanning for cronjobs');
+        $io->success('Finished scanning for cron jobs');
 
         // Clear any jobs that weren't found
         if ($keepDeleted === false) {
-            $io->title('remove cronjobs');
+            $io->title('remove cron jobs');
 
-            if (count($knownJobs) > 0) {
+            if (! $knownJobs->isEmpty()) {
                 foreach ($knownJobs as $deletedJob) {
                     $io->notice(sprintf('Deleting job: %s', $deletedJob));
                     $jobsToDelete = $this->cronJobRepository->findByCommandOrId($deletedJob);
@@ -141,8 +136,11 @@ final class CronScanCommand extends Command
             ->setNumber($counter)
             ->calculateNextRun();
 
-        $message = sprintf('Found new job: "%s" with period %s', $newJob->getFullCommand(), $newJob->getPeriod());
-        $io->success($message);
+        $io->success(sprintf(
+            'Found new job: "%s" with period %s',
+            $newJob->getFullCommand(),
+            $newJob->getPeriod()
+        ));
 
         $this->entityManager->persist($newJob);
     }

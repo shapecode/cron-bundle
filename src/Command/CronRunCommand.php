@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Shapecode\Bundle\CronBundle\Collection\CronJobRunningCollection;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
@@ -47,13 +48,12 @@ final class CronRunCommand extends Command
         $jobsToRun = $this->cronJobRepository->findAll();
 
         $jobCount = count($jobsToRun);
-        $style->comment(sprintf('Cronjobs started at %s', $now->format('r')));
+        $style->comment(sprintf('Cron jobs started at %s', $now->format('r')));
 
-        $style->title('Execute cronjobs');
+        $style->title('Execute cron jobs');
         $style->info(sprintf('Found %d jobs', $jobCount));
 
-        /** @var CronJobRunning[] $processes */
-        $processes = [];
+        $processes = new CronJobRunningCollection();
 
         foreach ($jobsToRun as $job) {
             sleep(1);
@@ -81,7 +81,7 @@ final class CronRunCommand extends Command
             $this->entityManager->persist($job);
             $this->entityManager->flush();
 
-            $processes[] = new CronJobRunning($job, $process);
+            $processes->add(new CronJobRunning($job, $process));
 
             if ($job->getRunningInstances() > $job->getMaxInstances()) {
                 $style->notice('cronjob will not be executed. The number of maximum instances has been exceeded.');
@@ -94,31 +94,32 @@ final class CronRunCommand extends Command
 
         $style->section('Summary');
 
-        if (count($processes) > 0) {
-            $style->text('waiting for all running jobs ...');
+        if ($processes->isEmpty()) {
+            $style->info('No jobs were executed.');
 
-            // wait for all processes
-            $this->waitProcesses(...$processes);
-
-            $style->success('All jobs are finished.');
-        } else {
-            $style->info('No jobs were executed. See reasons below.');
+            return Command::SUCCESS;
         }
+
+        $style->text('waiting for all running jobs ...');
+
+        $this->waitProcesses($processes);
+
+        $style->success('All jobs are finished.');
 
         return Command::SUCCESS;
     }
 
-    private function waitProcesses(CronJobRunning ...$processes): void
+    private function waitProcesses(CronJobRunningCollection $processes): void
     {
         while (count($processes) > 0) {
-            foreach ($processes as $key => $running) {
+            foreach ($processes as $running) {
                 try {
                     $running->process->checkTimeout();
 
                     if ($running->process->isRunning() === true) {
                         break;
                     }
-                } catch (ProcessTimedOutException $e) {
+                } catch (ProcessTimedOutException) {
                 }
 
                 $job = $running->cronJob->decreaseRunningInstances();
@@ -126,7 +127,7 @@ final class CronRunCommand extends Command
                 $this->entityManager->persist($job);
                 $this->entityManager->flush();
 
-                unset($processes[$key]);
+                $processes->remove($running);
             }
 
             sleep(1);
@@ -138,7 +139,7 @@ final class CronRunCommand extends Command
         $command = [
             $this->commandHelper->getPhpExecutable(),
             $this->commandHelper->getConsoleBin(),
-            'shapecode:cron:process',
+            CronProcessCommand::NAME,
             $job->getId(),
         ];
 

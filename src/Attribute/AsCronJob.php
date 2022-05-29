@@ -6,7 +6,7 @@ namespace Shapecode\Bundle\CronBundle\Attribute;
 
 use Attribute;
 
-#[Attribute(Attribute::TARGET_CLASS)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 final class AsCronJob
 {
     public function __construct(

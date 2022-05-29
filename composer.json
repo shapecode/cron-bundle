@@ -55,7 +55,8 @@
         "doctrine/dbal": "^3.3",
 
         "dragonmantank/cron-expression": "^3.1",
-        "lcobucci/clock": "^2.2"
+        "lcobucci/clock": "^2.2",
+        "ramsey/collection": "^1.2"
     },
     "require-dev":{
         "icanhazstring/composer-unused": "^0.8",

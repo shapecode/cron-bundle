@@ -26,7 +26,7 @@ abstract class AbstractEntity
         return $this->id;
     }
 
-    public function setCreatedAt(?DateTimeInterface $createdAt): static
+    public function setCreatedAt(DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
 
