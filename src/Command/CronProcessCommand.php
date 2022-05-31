@@ -104,10 +104,7 @@ final class CronProcessCommand extends Command
         $seconds = $duration > 0 ? number_format($duration / 1000, 4) : 0;
         $message = sprintf('%s in %s seconds', $status->getStatusMessage(), $seconds);
 
-        $callback = [
-            $io,
-            $status->getBlockName(),
-        ];
+        $callback = [$io, $status->getBlockName()];
         if (is_callable($callback)) {
             $callback($message);
         }
