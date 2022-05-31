@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\EventListener;
 
-use Doctrine\Common\EventSubscriber;
+use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
 use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 
-final class EntitySubscriber implements EventSubscriber
+final class EntitySubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private readonly Clock $clock

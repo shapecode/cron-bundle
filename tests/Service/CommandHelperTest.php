@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Tests\Service;
 
 use PHPUnit\Framework\TestCase;
-use Shapecode\Bundle\CronBundle\Service\CommandHelper;
+use Shapecode\Bundle\CronBundle\CronJob\CommandHelper;
 use Symfony\Component\HttpKernel\Kernel;
 
 use function realpath;

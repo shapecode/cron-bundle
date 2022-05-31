@@ -56,6 +56,7 @@
 
         "dragonmantank/cron-expression": "^3.1",
         "lcobucci/clock": "^2.2",
+        "stella-maris/clock": "^0.1",
         "ramsey/collection": "^1.2"
     },
     "require-dev":{

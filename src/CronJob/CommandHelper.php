@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shapecode\Bundle\CronBundle\Service;
+namespace Shapecode\Bundle\CronBundle\CronJob;
 
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Process\Exception\RuntimeException;

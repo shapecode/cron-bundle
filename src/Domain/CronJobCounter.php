@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Domain;
 
-use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
-
 use function array_key_exists;
 
 final class CronJobCounter

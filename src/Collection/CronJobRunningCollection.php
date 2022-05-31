@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Collection;
 
 use Ramsey\Collection\Collection;
-use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
+use Shapecode\Bundle\CronBundle\Domain\CronJobRunning;
 
 /**
  * @template-extends Collection<CronJobRunning>

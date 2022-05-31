@@ -6,11 +6,11 @@ namespace Shapecode\Bundle\CronBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
+use Shapecode\Bundle\CronBundle\CronJob\CronJobManager;
 use Shapecode\Bundle\CronBundle\Domain\CronJobCounter;
+use Shapecode\Bundle\CronBundle\Domain\CronJobMetadata;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
-use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
-use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

@@ -6,8 +6,8 @@ namespace Shapecode\Bundle\CronBundle\DependencyInjection;
 
 use Reflector;
 use Shapecode\Bundle\CronBundle\Attribute\AsCronJob;
+use Shapecode\Bundle\CronBundle\CronJob\CommandHelper;
 use Shapecode\Bundle\CronBundle\DependencyInjection\Compiler\CronJobCompilerPass;
-use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

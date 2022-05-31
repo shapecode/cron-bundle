@@ -16,10 +16,10 @@ abstract class AbstractEntity
     protected int|null $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    protected ?DateTimeInterface $createdAt;
+    protected ?DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    protected ?DateTimeInterface $updatedAt;
+    protected ?DateTimeInterface $updatedAt = null;
 
     public function getId(): ?int
     {

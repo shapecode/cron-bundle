@@ -7,11 +7,11 @@ namespace Shapecode\Bundle\CronBundle\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Shapecode\Bundle\CronBundle\Collection\CronJobRunningCollection;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
+use Shapecode\Bundle\CronBundle\CronJob\CommandHelper;
+use Shapecode\Bundle\CronBundle\Domain\CronJobRunning;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
-use Shapecode\Bundle\CronBundle\Model\CronJobRunning;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
-use Shapecode\Bundle\CronBundle\Service\CommandHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,8 +56,6 @@ final class CronRunCommand extends Command
         $processes = new CronJobRunningCollection();
 
         foreach ($jobsToRun as $job) {
-            sleep(1);
-
             $style->section(sprintf('Running "%s"', $job->getFullCommand()));
 
             if (! $job->isEnable()) {
@@ -89,8 +87,6 @@ final class CronRunCommand extends Command
                 $style->success('cronjob started successfully and is running in background');
             }
         }
-
-        sleep(1);
 
         $style->section('Summary');
 

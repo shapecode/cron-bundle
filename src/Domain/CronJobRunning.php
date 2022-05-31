@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shapecode\Bundle\CronBundle\Model;
+namespace Shapecode\Bundle\CronBundle\Domain;
 
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 use Symfony\Component\Process\Process;

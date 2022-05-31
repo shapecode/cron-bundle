@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Shapecode\Bundle\CronBundle\Tests\Manager;
+namespace Shapecode\Bundle\CronBundle\Tests\CronJob;
 
 use PHPUnit\Framework\TestCase;
+use Shapecode\Bundle\CronBundle\CronJob\CronJobManager;
+use Shapecode\Bundle\CronBundle\Domain\CronJobMetadata;
 use Shapecode\Bundle\CronBundle\Event\LoadJobsEvent;
-use Shapecode\Bundle\CronBundle\Manager\CronJobManager;
-use Shapecode\Bundle\CronBundle\Model\CronJobMetadata;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -40,14 +40,14 @@ final class CronJobManagerTest extends TestCase
         $jobs = $cronJobManager->getJobs();
 
         self::assertCount(1, $jobs);
-        self::assertEquals($commandName, $jobs[0]->command);
-        self::assertEquals($expression, $jobs[0]->expression);
+        self::assertEquals($commandName, $jobs->first()->command);
+        self::assertEquals($expression, $jobs->first()->expression);
 
         // Run second time to assert the same result.
         $jobs = $cronJobManager->getJobs();
 
         self::assertCount(1, $jobs);
-        self::assertEquals($commandName, $jobs[0]->command);
-        self::assertEquals($expression, $jobs[0]->expression);
+        self::assertEquals($commandName, $jobs->first()->command);
+        self::assertEquals($expression, $jobs->first()->expression);
     }
 }
