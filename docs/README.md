@@ -53,13 +53,13 @@ declare(strict_types=1);
 
 namespace App\DemoBundle\Command;
 
-use Shapecode\Bundle\CronBundle\Annotation\CronJob;
+use Shapecode\Bundle\CronBundle\Attribute\AsCronJob;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCronJob("*\/5 * * * *", null, 1)]
 /**
- * @CronJob("*\/5 * * * *")
  * Will be executed every 5 minutes
  */
 class DemoCommand extends Command
