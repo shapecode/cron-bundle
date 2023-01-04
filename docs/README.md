@@ -53,15 +53,12 @@ declare(strict_types=1);
 
 namespace App\DemoBundle\Command;
 
-use Shapecode\Bundle\CronBundle\Annotation\CronJob;
+use Shapecode\Bundle\CronBundle\Attribute\AsCronJob;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @CronJob("*\/5 * * * *")
- * Will be executed every 5 minutes
- */
+#[AsCronJob('*/5 * * * *')]
 class DemoCommand extends Command
 {
     
@@ -102,11 +99,11 @@ This will schedule your tasks to run at almost every 5 minutes - for instance, t
 
 This bundle allows you to easily disable and enable individual scheduled CronJobs from the command-line.
 
-To <strong>disable</strong> a CronJob, run: `bin/console shapecode:cron:edit your:cron:job --enable n`, where `your:cron:job` is the name of the CronJob in your project you would like to disable.
+To <strong>disable</strong> a CronJob, run: `bin/console shapecode:cron:disable your:cron:job`, where `your:cron:job` is the name of the CronJob in your project you would like to disable.
 
 Running the above will disable your CronJob until you manually enable it again. Please note that even though the `next_run` field on the `cron_job` table will still hold a datetime value, your disabled cronjob will not be run.
 
-To <strong>enable</strong> a cron job, run: `bin/console shapecode:cron:edit your:cron:job --enable y`, where `your:cron:job` is the name of the CronJob in your project you would like to enable.
+To <strong>enable</strong> a cron job, run: `bin/console shapecode:cron:enable your:cron:job`, where `your:cron:job` is the name of the CronJob in your project you would like to enable.
 
 ## Config
 
