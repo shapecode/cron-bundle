@@ -16,12 +16,12 @@ abstract class AbstractEntity
     protected int|null $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    protected ?DateTimeInterface $createdAt = null;
+    protected DateTimeInterface|null $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    protected ?DateTimeInterface $updatedAt = null;
+    protected DateTimeInterface|null $updatedAt = null;
 
-    public function getId(): ?int
+    public function getId(): int|null
     {
         return $this->id;
     }
@@ -33,7 +33,7 @@ abstract class AbstractEntity
         return $this;
     }
 
-    public function getCreatedAt(): ?DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface|null
     {
         return $this->createdAt;
     }
@@ -45,7 +45,7 @@ abstract class AbstractEntity
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTimeInterface
+    public function getUpdatedAt(): DateTimeInterface|null
     {
         return $this->updatedAt;
     }

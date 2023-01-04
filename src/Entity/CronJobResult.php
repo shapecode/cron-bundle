@@ -24,7 +24,7 @@ class CronJobResult extends AbstractEntity
     private int $statusCode;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $output;
+    private string|null $output;
 
     #[ORM\ManyToOne(targetEntity: CronJob::class, cascade: ['persist'], inversedBy: 'results')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -34,7 +34,7 @@ class CronJobResult extends AbstractEntity
         CronJob $cronJob,
         float $runTime,
         int $statusCode,
-        ?string $output,
+        string|null $output,
         DateTimeInterface $runAt,
     ) {
         $this->runTime    = $runTime;
@@ -59,7 +59,7 @@ class CronJobResult extends AbstractEntity
         return $this->statusCode;
     }
 
-    public function getOutput(): ?string
+    public function getOutput(): string|null
     {
         return $this->output;
     }
@@ -74,7 +74,7 @@ class CronJobResult extends AbstractEntity
         return sprintf(
             '%s - %s',
             $this->getCronJob()->getCommand(),
-            $this->getRunAt()->format('d.m.Y H:i P')
+            $this->getRunAt()->format('d.m.Y H:i P'),
         );
     }
 }

@@ -11,7 +11,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 final class LoadJobsEvent extends Event
 {
     public function __construct(
-        private readonly CronJobMetadataCollection $metadataCollection
+        private readonly CronJobMetadataCollection $metadataCollection,
     ) {
     }
 

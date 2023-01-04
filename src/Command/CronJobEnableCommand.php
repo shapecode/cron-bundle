@@ -19,7 +19,7 @@ use function sprintf;
 
 #[AsCommand(
     name: 'shapecode:cron:enable',
-    description: 'Enables a cronjob'
+    description: 'Enables a cronjob',
 )]
 final class CronJobEnableCommand extends Command
 {

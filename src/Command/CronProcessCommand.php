@@ -28,7 +28,7 @@ use function sprintf;
 use function str_replace;
 
 #[AsCommand(
-    name: CronProcessCommand::NAME
+    name: CronProcessCommand::NAME,
 )]
 final class CronProcessCommand extends Command
 {
@@ -130,7 +130,7 @@ final class CronProcessCommand extends Command
             $timeTaken,
             $statusCode,
             $buffer,
-            $this->clock->now()
+            $this->clock->now(),
         );
 
         $this->entityManager->persist($result);

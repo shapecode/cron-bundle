@@ -10,9 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Collection\CronJobCollection;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
 
-/**
- * @extends ServiceEntityRepository<CronJob>
- */
+/** @extends ServiceEntityRepository<CronJob> */
 class CronJobRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -20,7 +18,7 @@ class CronJobRepository extends ServiceEntityRepository
         parent::__construct($registry, CronJob::class);
     }
 
-    public function findOneByCommand(string $command, int $number = 1): ?CronJob
+    public function findOneByCommand(string $command, int $number = 1): CronJob|null
     {
         return $this->findOneBy([
             'command' => $command,
@@ -42,7 +40,7 @@ class CronJobRepository extends ServiceEntityRepository
                 $qb->expr()->orX(
                     'p.command = :command',
                     'p.id= :command',
-                )
+                ),
             )
             ->setParameter('command', $commandOrId, Types::STRING)
             ->getQuery()

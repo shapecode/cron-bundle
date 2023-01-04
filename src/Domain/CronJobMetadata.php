@@ -14,17 +14,17 @@ final class CronJobMetadata
     private function __construct(
         public readonly string $expression,
         public readonly string $command,
-        public readonly ?string $arguments = null,
+        public readonly string|null $arguments = null,
         public readonly int $maxInstances = 1,
-        public readonly ?string $description = null
+        public readonly string|null $description = null,
     ) {
     }
 
     public static function createByCommand(
         string $expression,
         Command $command,
-        ?string $arguments = null,
-        int $maxInstances = 1
+        string|null $arguments = null,
+        int $maxInstances = 1,
     ): CronJobMetadata {
         $commandName = $command->getName();
 
@@ -37,7 +37,7 @@ final class CronJobMetadata
             $commandName,
             $arguments,
             $maxInstances,
-            $command->getDescription()
+            $command->getDescription(),
         );
     }
 }

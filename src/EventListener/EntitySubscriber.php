@@ -14,13 +14,11 @@ use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 final class EntitySubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly Clock $clock
+        private readonly Clock $clock,
     ) {
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function getSubscribedEvents(): array
     {
         return [
@@ -29,25 +27,19 @@ final class EntitySubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param LifecycleEventArgs<EntityManagerInterface> $args
-     */
+    /** @param LifecycleEventArgs<EntityManagerInterface> $args */
     public function prePersist(LifecycleEventArgs $args): void
     {
         $this->setDates($args);
     }
 
-    /**
-     * @param LifecycleEventArgs<EntityManagerInterface> $args
-     */
+    /** @param LifecycleEventArgs<EntityManagerInterface> $args */
     public function preUpdate(LifecycleEventArgs $args): void
     {
         $this->setDates($args);
     }
 
-    /**
-     * @param LifecycleEventArgs<EntityManagerInterface> $args
-     */
+    /** @param LifecycleEventArgs<EntityManagerInterface> $args */
     private function setDates(LifecycleEventArgs $args): void
     {
         $entity = $args->getObject();

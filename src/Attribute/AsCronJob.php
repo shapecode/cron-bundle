@@ -11,7 +11,7 @@ final class AsCronJob
 {
     public function __construct(
         public readonly string $schedule,
-        public readonly ?string $arguments = null,
+        public readonly string|null $arguments = null,
         public readonly int $maxInstances = 1,
     ) {
     }

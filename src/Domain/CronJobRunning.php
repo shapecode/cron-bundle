@@ -11,7 +11,7 @@ final class CronJobRunning
 {
     public function __construct(
         public readonly CronJob $cronJob,
-        public readonly Process $process
+        public readonly Process $process,
     ) {
     }
 }

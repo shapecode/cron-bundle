@@ -13,7 +13,7 @@ class CronJobManager
     private CronJobMetadataCollection $metadataCollection;
 
     public function __construct(
-        private readonly EventDispatcherInterface $eventDispatcher
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
         $this->metadataCollection = new CronJobMetadataCollection();
     }

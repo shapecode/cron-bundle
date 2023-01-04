@@ -9,9 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Shapecode\Bundle\CronBundle\Entity\CronJobResult;
 
-/**
- * @extends ServiceEntityRepository<CronJobResult>
- */
+/** @extends ServiceEntityRepository<CronJobResult> */
 class CronJobResultRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -25,7 +23,7 @@ class CronJobResultRepository extends ServiceEntityRepository
             <<<'DQL'
                 DELETE FROM Shapecode\Bundle\CronBundle\Entity\CronJobResult d
                 WHERE d.createdAt <= :createdAt
-            DQL
+            DQL,
         )
             ->setParameter('createdAt', $time)
             ->execute();

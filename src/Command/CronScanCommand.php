@@ -22,7 +22,7 @@ use function sprintf;
 
 #[AsCommand(
     name: 'shapecode:cron:scan',
-    description: 'Scans for any new or deleted cron jobs'
+    description: 'Scans for any new or deleted cron jobs',
 )]
 final class CronScanCommand extends Command
 {
@@ -128,7 +128,7 @@ final class CronScanCommand extends Command
         $newJob =
             CronJob::create(
                 $metadata->command,
-                $metadata->expression
+                $metadata->expression,
             )
             ->setArguments($metadata->arguments)
             ->setDescription($metadata->description)
@@ -139,7 +139,7 @@ final class CronScanCommand extends Command
         $io->success(sprintf(
             'Found new job: "%s" with period %s',
             $newJob->getFullCommand(),
-            $newJob->getPeriod()
+            $newJob->getPeriod(),
         ));
 
         $this->entityManager->persist($newJob);

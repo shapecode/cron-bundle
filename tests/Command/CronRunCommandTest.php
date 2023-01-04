@@ -53,7 +53,7 @@ final class CronRunCommandTest extends TestCase
             $this->manager,
             $this->cronJobRepo,
             $this->commandHelper,
-            $this->clock
+            $this->clock,
         );
     }
 

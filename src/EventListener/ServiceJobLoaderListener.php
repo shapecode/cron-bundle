@@ -30,11 +30,11 @@ final class ServiceJobLoaderListener
     public function addCommand(
         string $expression,
         Command $command,
-        ?string $arguments = null,
-        int $maxInstances = 1
+        string|null $arguments = null,
+        int $maxInstances = 1,
     ): void {
         $this->metadataCollection->add(
-            CronJobMetadata::createByCommand($expression, $command, $arguments, $maxInstances)
+            CronJobMetadata::createByCommand($expression, $command, $arguments, $maxInstances),
         );
     }
 }

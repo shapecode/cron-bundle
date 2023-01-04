@@ -28,11 +28,11 @@ final class CronJobManagerTest extends TestCase
             ->willReturnCallback(
                 static function (LoadJobsEvent $event) use ($expression, $command): LoadJobsEvent {
                     $event->addJob(
-                        CronJobMetadata::createByCommand($expression, $command)
+                        CronJobMetadata::createByCommand($expression, $command),
                     );
 
                     return $event;
-                }
+                },
             );
 
         $cronJobManager = new CronJobManager($eventDispatcher);

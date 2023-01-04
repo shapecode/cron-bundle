@@ -16,7 +16,7 @@ use function array_map;
 
 #[AsCommand(
     name: 'shapecode:cron:status',
-    description: 'Displays the current status of cron jobs'
+    description: 'Displays the current status of cron jobs',
 )]
 final class CronStatusCommand extends Command
 {
@@ -37,10 +37,10 @@ final class CronStatusCommand extends Command
                 $cronJob->getId(),
                 $cronJob->getFullCommand(),
                 $cronJob->isEnable() ? $cronJob->getNextRun()->format('r') : 'Not scheduled',
-                $cronJob->getLastUse() !== null ? $cronJob->getLastUse()->format('r') : 'This job has not yet been run',
+                $cronJob->getLastUse()?->format('r') ?? 'This job has not yet been run',
                 $cronJob->isEnable() ? 'Enabled' : 'Disabled',
             ],
-            $this->cronJobRepository->findAll()
+            $this->cronJobRepository->findAll(),
         );
 
         $io->table(
@@ -51,7 +51,7 @@ final class CronStatusCommand extends Command
                 'Last run',
                 'Enabled',
             ],
-            $tableContent
+            $tableContent,
         );
 
         return Command::SUCCESS;

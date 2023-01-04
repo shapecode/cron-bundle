@@ -26,7 +26,7 @@ class CommandHelperTest extends TestCase
 
         self::assertEquals(
             sprintf('%s/bin/console', $path),
-            $helper->getConsoleBin()
+            $helper->getConsoleBin(),
         );
     }
 
@@ -39,7 +39,7 @@ class CommandHelperTest extends TestCase
 
         self::assertEquals(
             PHP_BINARY,
-            $helper->getPhpExecutable()
+            $helper->getPhpExecutable(),
         );
     }
 }

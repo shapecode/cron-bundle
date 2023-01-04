@@ -19,10 +19,10 @@ class CronJob extends AbstractEntity
     private string $command;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    private ?string $arguments = null;
+    private string|null $arguments = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    private ?string $description = null;
+    private string|null $description = null;
 
     #[ORM\Column(type: Types::INTEGER, options: ['unsigned' => true, 'default' => 0])]
     private int $runningInstances = 0;
@@ -37,7 +37,7 @@ class CronJob extends AbstractEntity
     private string $period;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?DateTimeInterface $lastUse = null;
+    private DateTimeInterface|null $lastUse = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private DateTimeInterface $nextRun;
@@ -51,7 +51,7 @@ class CronJob extends AbstractEntity
 
     public function __construct(
         string $command,
-        string $period
+        string $period,
     ) {
         $this->command = $command;
         $this->period  = $period;
@@ -81,24 +81,24 @@ class CronJob extends AbstractEntity
         return $this->getCommand() . $arguments;
     }
 
-    public function getArguments(): ?string
+    public function getArguments(): string|null
     {
         return $this->arguments;
     }
 
-    public function setArguments(?string $arguments): self
+    public function setArguments(string|null $arguments): self
     {
         $this->arguments = $arguments;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getDescription(): string|null
     {
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string|null $description): self
     {
         $this->description = $description;
 
@@ -160,7 +160,7 @@ class CronJob extends AbstractEntity
         return $this;
     }
 
-    public function getLastUse(): ?DateTimeInterface
+    public function getLastUse(): DateTimeInterface|null
     {
         return $this->lastUse;
     }
@@ -184,9 +184,7 @@ class CronJob extends AbstractEntity
         return $this->nextRun;
     }
 
-    /**
-     * @return Collection<int, CronJobResult>
-     */
+    /** @return Collection<int, CronJobResult> */
     public function getResults(): Collection
     {
         return $this->results;

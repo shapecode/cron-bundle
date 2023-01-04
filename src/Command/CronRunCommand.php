@@ -25,7 +25,7 @@ use function sprintf;
 
 #[AsCommand(
     name: CronRunCommand::NAME,
-    description: 'Runs any currently schedule cron jobs'
+    description: 'Runs any currently schedule cron jobs',
 )]
 final class CronRunCommand extends Command
 {
@@ -35,7 +35,7 @@ final class CronRunCommand extends Command
         private readonly EntityManagerInterface $entityManager,
         private readonly CronJobRepository $cronJobRepository,
         private readonly CommandHelper $commandHelper,
-        private readonly Clock $clock
+        private readonly Clock $clock,
     ) {
         parent::__construct();
     }

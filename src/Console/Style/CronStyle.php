@@ -8,18 +8,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class CronStyle extends SymfonyStyle
 {
-    /**
-     * @param string|array<mixed> $message
-     */
+    /** @param string|array<mixed> $message */
     // phpcs:ignore SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
     public function info($message): void
     {
         $this->block($message, 'Info', 'fg=white;bg=blue', ' ', true);
     }
 
-    /**
-     * @param string|list<string> $message
-     */
+    /** @param string|list<string> $message */
     public function notice($message): void
     {
         $this->block($message, 'Note', 'fg=black;bg=yellow', ' ', true);

@@ -16,9 +16,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 final class ShapecodeCronExtension extends ConfigurableExtension
 {
-    /**
-     * @param array<mixed> $mergedConfig
-     */
+    /** @param array<mixed> $mergedConfig */
     protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
     {
         $locator = new FileLocator(__DIR__ . '/../Resources/config');
@@ -36,7 +34,7 @@ final class ShapecodeCronExtension extends ConfigurableExtension
                     'arguments' => $attribute->arguments,
                     'maxInstances' => $attribute->maxInstances,
                 ]);
-            }
+            },
         );
     }
 }

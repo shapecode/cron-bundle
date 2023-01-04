@@ -13,13 +13,13 @@ use function sprintf;
 
 class CommandHelper
 {
-    private ?string $phpExecutable = null;
+    private string|null $phpExecutable = null;
 
-    private ?string $consoleBin = null;
+    private string|null $consoleBin = null;
 
     public function __construct(
         private readonly KernelInterface $kernel,
-        private readonly ?float $timeout = null
+        private readonly float|null $timeout = null,
     ) {
     }
 
@@ -55,7 +55,7 @@ class CommandHelper
         return $this->phpExecutable;
     }
 
-    public function getTimeout(): ?float
+    public function getTimeout(): float|null
     {
         return $this->timeout;
     }
