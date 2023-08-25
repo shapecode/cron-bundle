@@ -4,27 +4,20 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\EventListener;
 
-use Doctrine\Bundle\DoctrineBundle\EventSubscriber\EventSubscriberInterface;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
 use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 
-final class EntitySubscriber implements EventSubscriberInterface
+#[AsDoctrineListener(Events::prePersist)]
+#[AsDoctrineListener(Events::preUpdate)]
+final class EntitySubscriber
 {
     public function __construct(
         private readonly Clock $clock,
     ) {
-    }
-
-    /** @inheritDoc */
-    public function getSubscribedEvents(): array
-    {
-        return [
-            Events::prePersist,
-            Events::preUpdate,
-        ];
     }
 
     /** @param LifecycleEventArgs<EntityManagerInterface> $args */
