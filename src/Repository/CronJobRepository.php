@@ -35,11 +35,12 @@ class CronJobRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p');
 
+        /** @var list<CronJob> $result */
         $result = $qb
             ->andWhere(
                 $qb->expr()->orX(
                     'p.command = :command',
-                    'p.id= :command',
+                    'p.id = :command',
                 ),
             )
             ->setParameter('command', $commandOrId, Types::STRING)
