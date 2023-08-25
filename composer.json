@@ -47,17 +47,17 @@
         "symfony/event-dispatcher": "^5.4|^6.0",
         "symfony/event-dispatcher-contracts": "^2.5|^3.2",
 
-        "doctrine/doctrine-bundle": "^2.8",
-        "doctrine/event-manager": "^1.2|^2.0",
-        "doctrine/collections": "^1.8|^2.1",
-        "doctrine/persistence": "^2.5|^3.1",
-        "doctrine/orm": "^2.14|^3.0",
-        "doctrine/dbal": "^2.13|^3.3",
+        "doctrine/doctrine-bundle": "^2.10",
+        "doctrine/event-manager": "^2.0",
+        "doctrine/collections": "^2.1",
+        "doctrine/persistence": "^3.2",
+        "doctrine/orm": "^2.16",
+        "doctrine/dbal": "^3.6",
 
         "psr/clock": "^1.0",
 
         "dragonmantank/cron-expression": "^3.3",
-        "lcobucci/clock": "^3.0",
+        "lcobucci/clock": "^3.1",
         "ramsey/collection": "^2.0"
     },
     "require-dev":{
