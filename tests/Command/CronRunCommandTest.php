@@ -6,14 +6,13 @@ namespace Shapecode\Bundle\CronBundle\Tests\Command;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Lcobucci\Clock\FrozenClock;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shapecode\Bundle\CronBundle\Command\CronRunCommand;
 use Shapecode\Bundle\CronBundle\CronJob\CommandHelper;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
-use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
+use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpKernel\Kernel;
@@ -34,7 +33,7 @@ final class CronRunCommandTest extends TestCase
 
     private BufferedOutput $output;
 
-    private Clock $clock;
+    private MockClock $clock;
 
     protected function setUp(): void
     {
@@ -47,7 +46,7 @@ final class CronRunCommandTest extends TestCase
         $this->input         = $this->createMock(InputInterface::class);
         $this->output        = new BufferedOutput();
 
-        $this->clock = new Clock(FrozenClock::fromUTC());
+        $this->clock = new MockClock();
 
         $this->command = new CronRunCommand(
             $this->manager,
