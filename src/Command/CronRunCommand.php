@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Clock\ClockInterface;
 use Shapecode\Bundle\CronBundle\Collection\CronJobRunningCollection;
 use Shapecode\Bundle\CronBundle\Console\Style\CronStyle;
 use Shapecode\Bundle\CronBundle\CronJob\CommandHelper;
 use Shapecode\Bundle\CronBundle\Domain\CronJobRunning;
 use Shapecode\Bundle\CronBundle\Entity\CronJob;
-use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 use Shapecode\Bundle\CronBundle\Repository\CronJobRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -35,7 +35,7 @@ final class CronRunCommand extends Command
         private readonly EntityManagerInterface $entityManager,
         private readonly CronJobRepository $cronJobRepository,
         private readonly CommandHelper $commandHelper,
-        private readonly Clock $clock,
+        private readonly ClockInterface $clock,
     ) {
         parent::__construct();
     }

@@ -8,15 +8,15 @@ use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Psr\Clock\ClockInterface;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
-use Shapecode\Bundle\CronBundle\Infrastructure\Clock;
 
 #[AsDoctrineListener(Events::prePersist)]
 #[AsDoctrineListener(Events::preUpdate)]
 final class EntitySubscriber
 {
     public function __construct(
-        private readonly Clock $clock,
+        private readonly ClockInterface $clock,
     ) {
     }
 
