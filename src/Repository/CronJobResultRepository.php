@@ -19,7 +19,7 @@ class CronJobResultRepository extends ServiceEntityRepository
 
     public function deleteOldLogs(DateTimeInterface $time): void
     {
-        $this->_em->createQuery(
+        $this->getEntityManager()->createQuery(
             <<<'DQL'
                 DELETE FROM Shapecode\Bundle\CronBundle\Entity\CronJobResult d
                 WHERE d.createdAt <= :createdAt
