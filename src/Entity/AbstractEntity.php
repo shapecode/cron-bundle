@@ -15,10 +15,10 @@ abstract class AbstractEntity
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected int|null $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     protected DateTimeInterface|null $createdAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     protected DateTimeInterface|null $updatedAt = null;
 
     public function getId(): int|null
