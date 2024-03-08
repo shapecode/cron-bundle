@@ -36,7 +36,7 @@ class CronJob extends AbstractEntity
     #[ORM\Column(type: Types::STRING)]
     private string $period;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private DateTimeInterface|null $lastUse = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

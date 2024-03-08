@@ -14,7 +14,7 @@ use function sprintf;
 #[ORM\Entity(repositoryClass: CronJobResultRepository::class)]
 class CronJobResult extends AbstractEntity
 {
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeInterface $runAt;
 
     #[ORM\Column(type: Types::FLOAT)]
