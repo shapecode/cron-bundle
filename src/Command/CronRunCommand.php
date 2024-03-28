@@ -117,7 +117,11 @@ final class CronRunCommand extends Command
                 } catch (ProcessTimedOutException) {
                 }
 
-                $job = $running->cronJob->decreaseRunningInstances()->calculateNextRun();
+                $job = $running->cronJob->decreaseRunningInstances();
+
+                if ($job->getRunningInstances() == 0) {
+                    $job->calculateNextRun();
+                }
 
                 $this->entityManager->persist($job);
                 $this->entityManager->flush();
