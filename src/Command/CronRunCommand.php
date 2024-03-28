@@ -70,6 +70,11 @@ final class CronRunCommand extends Command
                 continue;
             }
 
+            if ($job->getRunningInstances() >= $job->getMaxInstances()) {
+                $style->notice('cronjob will not be executed. The number of maximum instances has been exceeded.');
+                continue;
+            }
+
             $job->increaseRunningInstances();
             $process = $this->runJob($job);
 
@@ -80,11 +85,7 @@ final class CronRunCommand extends Command
 
             $processes->add(new CronJobRunning($job, $process));
 
-            if ($job->getRunningInstances() > $job->getMaxInstances()) {
-                $style->notice('cronjob will not be executed. The number of maximum instances has been exceeded.');
-            } else {
-                $style->success('cronjob started successfully and is running in background');
-            }
+            $style->success('cronjob started successfully and is running in background');
         }
 
         $style->section('Summary');
@@ -112,12 +113,14 @@ final class CronRunCommand extends Command
                     $running->process->checkTimeout();
 
                     if ($running->process->isRunning() === true) {
-                        break;
+                        continue;
                     }
                 } catch (ProcessTimedOutException) {
                 }
 
-                $job = $running->cronJob->decreaseRunningInstances();
+                $job = $running->cronJob;
+                $this->entityManager->refresh($job);
+                $job->decreaseRunningInstances();
 
                 if ($job->getRunningInstances() == 0) {
                     $job->calculateNextRun();
