@@ -40,10 +40,11 @@ class CronJobRepository extends ServiceEntityRepository
             ->andWhere(
                 $qb->expr()->orX(
                     'p.command = :command',
-                    'p.id = :command',
+                    'p.id = :commandInt',
                 ),
             )
             ->setParameter('command', $commandOrId, Types::STRING)
+            ->setParameter('commandInt', (int) $commandOrId, Types::INTEGER)
             ->getQuery()
             ->getResult();
 
