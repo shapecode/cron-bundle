@@ -37,7 +37,7 @@ jobs:
           composer-options: --prefer-dist --no-scripts
 
       - name: Composer Dependency Analyser
-      - run: composer cda
+        run: composer cda
 
       - name: CS Check
         run: composer cs-check
