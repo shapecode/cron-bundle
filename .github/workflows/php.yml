@@ -3,9 +3,9 @@ name: PHP Composer
 on:
   push:
     branches:
-    - master
-    - 'releases/**'
-    - 'feature/**'
+      - master
+      - 'releases/**'
+      - 'feature/**'
   pull_request:
     branches:
       - master
@@ -19,17 +19,31 @@ jobs:
         php-versions: [ '8.2', '8.3', '8.4' ]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-            php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.php-versions }}
 
-      - run: composer install --prefer-dist --no-progress --no-suggest
-      - run: composer validate
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict -n
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: ${{ matrix.php-versions }}
+          composer-options: --prefer-dist --no-scripts
+
       - run: composer crc
       - run: composer unuse
-      - run: composer cs-check
-      - run: composer phpstan
-      - run: composer phpunit
+
+      - name: CS Check
+        run: composer cs-check
+
+      - name: PHPStan
+        run: composer phpstan
+
+      - name: PHPUnit
+        run: composer phpunit
