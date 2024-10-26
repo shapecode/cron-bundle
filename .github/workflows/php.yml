@@ -36,7 +36,7 @@ jobs:
           dependency-versions: ${{ matrix.php-versions }}
           composer-options: --prefer-dist --no-scripts
 
-      - run: Composer Dependency Analyser
+      - name: Composer Dependency Analyser
       - run: composer cda
 
       - name: CS Check
