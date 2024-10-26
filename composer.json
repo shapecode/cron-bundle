@@ -69,7 +69,7 @@
         "phpstan/phpstan-strict-rules": "^1.6",
         "phpstan/phpstan-symfony": "^1.4",
         "phpstan/phpstan-doctrine": "^1.5",
-        "phpunit/phpunit": "^10.5",
+        "phpunit/phpunit": "^11.4",
         "symfony/var-dumper": "^7.1",
         "symfony/clock": "^7.1"
     },
