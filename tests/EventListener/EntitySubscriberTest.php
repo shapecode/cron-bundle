@@ -8,6 +8,7 @@ use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
@@ -16,7 +17,7 @@ use stdClass;
 
 class EntitySubscriberTest extends TestCase
 {
-    private ClockInterface $clock;
+    private ClockInterface & MockObject $clock;
 
     private EntitySubscriber $subscriber;
 
@@ -33,13 +34,13 @@ class EntitySubscriberTest extends TestCase
 
         $entity = $this->createMock(AbstractEntity::class);
 
-        $entity->expects($this->once())
+        $entity->expects(self::once())
             ->method('setCreatedAt')
-            ->with($this->isInstanceOf(DateTime::class));
+            ->with(self::isInstanceOf(DateTime::class));
 
-        $entity->expects($this->once())
+        $entity->expects(self::once())
             ->method('setUpdatedAt')
-            ->with($this->isInstanceOf(DateTime::class));
+            ->with(self::isInstanceOf(DateTime::class));
 
         $entity->method('getCreatedAt')->willReturn(null);
 
@@ -56,12 +57,12 @@ class EntitySubscriberTest extends TestCase
 
         $entity = $this->createMock(AbstractEntity::class);
 
-        $entity->expects($this->never())
+        $entity->expects(self::never())
             ->method('setCreatedAt');
 
-        $entity->expects($this->once())
+        $entity->expects(self::once())
             ->method('setUpdatedAt')
-            ->with($this->isInstanceOf(DateTime::class));
+            ->with(self::isInstanceOf(DateTime::class));
 
         $entity->method('getCreatedAt')->willReturn(new DateTime());
 
@@ -81,6 +82,6 @@ class EntitySubscriberTest extends TestCase
         $this->subscriber->prePersist($args);
         $this->subscriber->preUpdate($args);
 
-        $this->assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 }
