@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Clock\ClockInterface;
 use Shapecode\Bundle\CronBundle\Collection\CronJobRunningCollection;
@@ -43,7 +44,7 @@ final class CronRunCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $style = new CronStyle($input, $output);
-        $now   = $this->clock->now();
+        $now   = DateTime::createFromImmutable($this->clock->now());
 
         $jobsToRun = $this->cronJobRepository->findAll();
 
