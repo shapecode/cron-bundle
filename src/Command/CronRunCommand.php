@@ -41,8 +41,10 @@ final class CronRunCommand extends Command
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output,
+    ): int {
         $style = new CronStyle($input, $output);
         $now   = DateTime::createFromImmutable($this->clock->now());
 
@@ -123,7 +125,7 @@ final class CronRunCommand extends Command
                 $this->entityManager->refresh($job);
                 $job->decreaseRunningInstances();
 
-                if ($job->getRunningInstances() == 0) {
+                if ($job->getRunningInstances() === 0) {
                     $job->calculateNextRun();
                 }
 

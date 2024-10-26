@@ -48,8 +48,10 @@ final class CronProcessCommand extends Command
         $this->addArgument('cron', InputArgument::REQUIRED);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output,
+    ): int {
         $io = new CronStyle($input, $output);
 
         $job = $this->cronJobRepository->find($input->getArgument('cron'));
@@ -121,8 +123,12 @@ final class CronProcessCommand extends Command
         return $statusCode;
     }
 
-    private function recordJobResult(CronJob $job, float $timeTaken, BufferedOutput $output, int $statusCode): void
-    {
+    private function recordJobResult(
+        CronJob $job,
+        float $timeTaken,
+        BufferedOutput $output,
+        int $statusCode,
+    ): void {
         $buffer = $output->isQuiet() ? null : $output->fetch();
 
         $result = new CronJobResult(

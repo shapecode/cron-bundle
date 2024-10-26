@@ -31,4 +31,10 @@
             <property name="lineLimit" value="160"/>
         </properties>
     </rule>
+
+    <rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature">
+        <properties>
+            <property name="minParametersCount" value="2"/>
+        </properties>
+    </rule>
 </ruleset>

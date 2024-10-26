@@ -42,8 +42,10 @@ final class CronScanCommand extends Command
             ->addOption('default-disabled', 'd', InputOption::VALUE_NONE, 'If set, new jobs will be disabled by default');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output,
+    ): int {
         $io = new CronStyle($input, $output);
         $io->comment(sprintf('Scan for cron jobs started at %s', $this->clock->now()->format('r')));
         $io->title('scanning ...');
@@ -123,8 +125,12 @@ final class CronScanCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function newJobFound(CronStyle $io, CronJobMetadata $metadata, bool $defaultDisabled, int $counter): void
-    {
+    private function newJobFound(
+        CronStyle $io,
+        CronJobMetadata $metadata,
+        bool $defaultDisabled,
+        int $counter,
+    ): void {
         $newJob =
             CronJob::create(
                 $metadata->command,

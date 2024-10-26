@@ -60,8 +60,10 @@ class CronJob extends AbstractEntity
         $this->calculateNextRun();
     }
 
-    public static function create(string $command, string $period): self
-    {
+    public static function create(
+        string $command,
+        string $period,
+    ): self {
         return new self($command, $period);
     }
 

@@ -17,8 +17,10 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 final class ShapecodeCronExtension extends ConfigurableExtension
 {
     /** @param array<mixed> $mergedConfig */
-    protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
-    {
+    protected function loadInternal(
+        array $mergedConfig,
+        ContainerBuilder $container,
+    ): void {
         $locator = new FileLocator(__DIR__ . '/../Resources/config');
         $loader  = new Loader\YamlFileLoader($container, $locator);
         $loader->load('services.yml');

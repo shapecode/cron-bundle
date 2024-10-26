@@ -26,8 +26,10 @@ final class CronStatusCommand extends Command
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output,
+    ): int {
         $io = new CronStyle($input, $output);
 
         $io->title('Cron job status');

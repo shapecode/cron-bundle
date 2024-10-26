@@ -36,8 +36,10 @@ final class CronJobEnableCommand extends Command
             ->addArgument('job', InputArgument::REQUIRED, 'Name or id of the job to disable');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output,
+    ): int {
         $io = new CronStyle($input, $output);
 
         $nameOrId = $input->getArgument('job');
