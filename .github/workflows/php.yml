@@ -17,6 +17,7 @@ jobs:
     strategy:
       matrix:
         php-versions: [ '8.2', '8.3', '8.4' ]
+        dependencies: [ 'locked', 'latest' ]
 
     steps:
       - name: Checkout Repository
@@ -33,7 +34,7 @@ jobs:
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v3
         with:
-          dependency-versions: ${{ matrix.php-versions }}
+          dependency-versions: ${{ matrix.dependencies }}
           composer-options: --prefer-dist --no-scripts
 
       - name: Composer Dependency Analyser
