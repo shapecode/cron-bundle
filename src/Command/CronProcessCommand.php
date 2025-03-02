@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shapecode\Bundle\CronBundle\Command;
 
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Clock\ClockInterface;
 use RuntimeException;
@@ -137,7 +136,7 @@ final class CronProcessCommand extends Command
             $timeTaken,
             $statusCode,
             $buffer,
-            DateTime::createFromImmutable($this->clock->now()),
+            $this->clock->now(),
         );
 
         $this->entityManager->persist($result);
