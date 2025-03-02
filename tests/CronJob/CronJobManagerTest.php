@@ -40,14 +40,14 @@ final class CronJobManagerTest extends TestCase
         $jobs = $cronJobManager->getJobs();
 
         self::assertCount(1, $jobs);
-        self::assertEquals($commandName, $jobs->first()->command);
-        self::assertEquals($expression, $jobs->first()->expression);
+        self::assertSame($commandName, $jobs->first()->command);
+        self::assertSame($expression, $jobs->first()->expression);
 
         // Run second time to assert the same result.
         $jobs = $cronJobManager->getJobs();
 
         self::assertCount(1, $jobs);
-        self::assertEquals($commandName, $jobs->first()->command);
-        self::assertEquals($expression, $jobs->first()->expression);
+        self::assertSame($commandName, $jobs->first()->command);
+        self::assertSame($expression, $jobs->first()->expression);
     }
 }

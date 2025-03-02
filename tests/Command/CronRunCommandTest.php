@@ -73,7 +73,7 @@ final class CronRunCommandTest extends TestCase
 
         $this->command->run($this->input, $this->output);
 
-        self::assertEquals('shapecode:cron:run', $this->command->getName());
+        self::assertSame('shapecode:cron:run', $this->command->getName());
     }
 
     public function testRunWithTimeout(): void
@@ -95,6 +95,6 @@ final class CronRunCommandTest extends TestCase
 
         $this->command->run($this->input, $this->output);
 
-        self::assertEquals('shapecode:cron:run', $this->command->getName());
+        self::assertSame('shapecode:cron:run', $this->command->getName());
     }
 }

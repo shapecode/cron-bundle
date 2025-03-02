@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+use function is_array;
+
 final class CronJobCompilerPass implements CompilerPassInterface
 {
     public const CRON_JOB_TAG_ID = 'shapecode_cron.cron_job';
@@ -22,6 +24,10 @@ final class CronJobCompilerPass implements CompilerPassInterface
 
         foreach ($tagged as $id => $configs) {
             foreach ($configs as $config) {
+                if (! is_array($config)) {
+                    throw new RuntimeException('config must be an array', 1740941125172);
+                }
+
                 if (! isset($config['expression'])) {
                     throw new RuntimeException('missing expression config', 1653426737628);
                 }
