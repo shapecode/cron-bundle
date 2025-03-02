@@ -91,8 +91,8 @@
             "@phpunit"
         ],
         "cda": "vendor/bin/composer-dependency-analyser --config=./composer-dependency-analyser.php",
-        "phpstan": "phpstan analyse --memory-limit=-1 --ansi",
-        "phpstan-update-baseline": "phpstan analyse --ansi --generate-baseline phpstan-baseline.neon",
+        "phpstan": "phpstan analyse --configuration=./phpstan.php --memory-limit=-1 --ansi",
+        "phpstan-update-baseline": "@phpstan --generate-baseline phpstan-baseline.php --allow-empty-baseline",
         "phpunit": "phpunit --colors=always",
         "cs-check": "phpcs -s",
         "cs-fix": "phpcbf"
