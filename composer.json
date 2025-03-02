@@ -34,7 +34,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
 
         "symfony/framework-bundle": "^6.4 || ^7.0",
         "symfony/dependency-injection": "^6.4 || ^7.0",
@@ -49,7 +49,7 @@
 
         "doctrine/doctrine-bundle": "^2.13",
         "doctrine/collections": "^2.2",
-        "doctrine/persistence": "^3.4",
+        "doctrine/persistence": "^3.4 || ^4.0",
         "doctrine/orm": "^2.20 || ^3.3",
         "doctrine/dbal": "^3.9 || ^4.2",
 
@@ -69,7 +69,7 @@
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
         "phpstan/phpstan-doctrine": "^2.0",
-        "phpunit/phpunit": "^11.5",
+        "phpunit/phpunit": "^12.0",
         "symfony/var-dumper": "^7.2",
         "symfony/clock": "^7.2"
     },
