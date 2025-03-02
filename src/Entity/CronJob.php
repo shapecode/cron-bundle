@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shapecode\Bundle\CronBundle\Entity;
 
 use Cron\CronExpression;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -43,7 +44,7 @@ class CronJob extends AbstractEntity
     private DateTimeInterface $nextRun;
 
     /** @var Collection<int, CronJobResult>*/
-    #[ORM\OneToMany(mappedBy: 'cronJob', targetEntity: CronJobResult::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: CronJobResult::class, mappedBy: 'cronJob', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $results;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
@@ -169,14 +170,14 @@ class CronJob extends AbstractEntity
 
     public function setLastUse(DateTimeInterface $lastUse): self
     {
-        $this->lastUse = $lastUse;
+        $this->lastUse = DateTime::createFromInterface($lastUse);
 
         return $this;
     }
 
     public function setNextRun(DateTimeInterface $nextRun): self
     {
-        $this->nextRun = $nextRun;
+        $this->nextRun = DateTime::createFromInterface($nextRun);
 
         return $this;
     }
