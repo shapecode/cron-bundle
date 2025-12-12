@@ -14,7 +14,7 @@ use function is_array;
 
 final class CronJobCompilerPass implements CompilerPassInterface
 {
-    public const CRON_JOB_TAG_ID = 'shapecode_cron.cron_job';
+    public const string CRON_JOB_TAG_ID = 'shapecode_cron.cron_job';
 
     public function process(ContainerBuilder $container): void
     {

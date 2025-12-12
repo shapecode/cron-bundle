@@ -9,14 +9,14 @@ use Symfony\Component\Console\Command\Command;
 
 use function str_replace;
 
-final class CronJobMetadata
+final readonly class CronJobMetadata
 {
     private function __construct(
-        public readonly string $expression,
-        public readonly string $command,
-        public readonly string|null $arguments = null,
-        public readonly int $maxInstances = 1,
-        public readonly string|null $description = null,
+        public string $expression,
+        public string $command,
+        public string|null $arguments = null,
+        public int $maxInstances = 1,
+        public string|null $description = null,
     ) {
     }
 

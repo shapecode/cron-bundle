@@ -11,9 +11,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 #[AsEventListener]
-final class ServiceJobLoaderListener
+final readonly class ServiceJobLoaderListener
 {
-    private readonly CronJobMetadataCollection $metadataCollection;
+    private CronJobMetadataCollection $metadataCollection;
 
     public function __construct()
     {

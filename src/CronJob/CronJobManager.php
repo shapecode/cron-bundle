@@ -8,7 +8,7 @@ use Shapecode\Bundle\CronBundle\Collection\CronJobMetadataCollection;
 use Shapecode\Bundle\CronBundle\Event\LoadJobsEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class CronJobManager
+final class CronJobManager
 {
     private CronJobMetadataCollection $metadataCollection;
 

@@ -30,7 +30,7 @@ use function sprintf;
 )]
 final class CronRunCommand extends Command
 {
-    public const NAME = 'shapecode:cron:run';
+    public const string NAME = 'shapecode:cron:run';
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

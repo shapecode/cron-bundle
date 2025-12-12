@@ -14,10 +14,10 @@ use Shapecode\Bundle\CronBundle\Entity\AbstractEntity;
 
 #[AsDoctrineListener(Events::prePersist)]
 #[AsDoctrineListener(Events::preUpdate)]
-final class EntitySubscriber
+final readonly class EntitySubscriber
 {
     public function __construct(
-        private readonly ClockInterface $clock,
+        private ClockInterface $clock,
     ) {
     }
 

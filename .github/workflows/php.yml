@@ -16,8 +16,8 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: [ '8.3', '8.4' ]
-        dependencies: [ 'locked', 'latest' ]
+        php-versions: [ '8.4', '8.5' ]
+        dependencies: [ 'locked', 'latest']
 
     steps:
       - name: Checkout Repository

@@ -32,7 +32,7 @@ use function str_replace;
 )]
 final class CronProcessCommand extends Command
 {
-    public const NAME = 'shapecode:cron:process';
+    public const string NAME = 'shapecode:cron:process';
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,

@@ -6,7 +6,7 @@ namespace Shapecode\Bundle\CronBundle\Tests\Command;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Shapecode\Bundle\CronBundle\Command\CronRunCommand;
 use Shapecode\Bundle\CronBundle\CronJob\CommandHelper;
@@ -19,17 +19,17 @@ use Symfony\Component\HttpKernel\Kernel;
 
 final class CronRunCommandTest extends TestCase
 {
-    private Kernel & MockObject $kernel;
+    private Kernel&Stub $kernel;
 
-    private CommandHelper & MockObject $commandHelper;
+    private CommandHelper&Stub $commandHelper;
 
-    private EntityManagerInterface & MockObject $manager;
+    private EntityManagerInterface&Stub $manager;
 
-    private CronJobRepository & MockObject $cronJobRepo;
+    private CronJobRepository&Stub $cronJobRepo;
 
     private CronRunCommand $command;
 
-    private InputInterface & MockObject $input;
+    private InputInterface&Stub $input;
 
     private BufferedOutput $output;
 
@@ -39,11 +39,11 @@ final class CronRunCommandTest extends TestCase
     {
         parent::setUp();
 
-        $this->kernel        = $this->createMock(Kernel::class);
-        $this->manager       = $this->createMock(EntityManagerInterface::class);
-        $this->commandHelper = $this->createMock(CommandHelper::class);
-        $this->cronJobRepo   = $this->createMock(CronJobRepository::class);
-        $this->input         = $this->createMock(InputInterface::class);
+        $this->kernel        = self::createStub(Kernel::class);
+        $this->manager       = self::createStub(EntityManagerInterface::class);
+        $this->commandHelper = self::createStub(CommandHelper::class);
+        $this->cronJobRepo   = self::createStub(CronJobRepository::class);
+        $this->input         = self::createStub(InputInterface::class);
         $this->output        = new BufferedOutput();
 
         $this->clock = new MockClock();
@@ -84,7 +84,7 @@ final class CronRunCommandTest extends TestCase
         $this->commandHelper->method('getPhpExecutable')->willReturn('php');
         $this->commandHelper->method('getTimeout')->willReturn(30.0);
 
-        $this->manager = $this->createMock(EntityManagerInterface::class);
+        $this->manager = self::createStub(EntityManagerInterface::class);
 
         $job = CronJob::create('pwd', '* * * * *');
         $job->setNextRun(new DateTime());

@@ -18,12 +18,12 @@ final class CronJobManagerTest extends TestCase
         $expression  = '* * * * *';
         $commandName = 'value';
 
-        $command = $this->createMock(Command::class);
+        $command = self::createStub(Command::class);
         $command->method('getName')->willReturn($commandName);
 
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $eventDispatcher
-            ->expects(self::once())
+            ->expects($this->once())
             ->method('dispatch')
             ->willReturnCallback(
                 static function (LoadJobsEvent $event) use ($expression, $command): LoadJobsEvent {
